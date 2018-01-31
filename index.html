@@ -88,12 +88,12 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>get the fuck execption message “ERROR sending ‘cluster slots’ command to redis server: {‘host’: ‘127.0.0.1’, ‘port’: 6379}”</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">startup_nodes = [</span><br><span class="line">		&#123;<span class="string">'host'</span>: <span class="string">'127.0.0.1'</span>, <span class="string">'port'</span>: <span class="number">6379</span>&#125;</span><br><span class="line">]</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">		app.redisconn = StrictRedisCluster(startup_nodes=startup_nodes, decode_responses=<span class="keyword">True</span>)</span><br><span class="line">		<span class="keyword">with</span> pytest.raises(RedisClusterException) <span class="keyword">as</span> e:</span><br><span class="line">				app.redisconn.initialize()</span><br><span class="line">		app.redisconn.set(<span class="string">'name'</span>, <span class="string">'admin'</span>)</span><br><span class="line">		app.redisconn.set(<span class="string">'age'</span>, <span class="number">18</span>)</span><br><span class="line"><span class="keyword">except</span> RedisClusterException, e:</span><br><span class="line">		<span class="keyword">print</span> e.message</span><br><span class="line">		<span class="comment">#sys.exit(1)</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">startup_nodes = [</span><br><span class="line">		&#123;<span class="string">'host'</span>: <span class="string">'127.0.0.1'</span>, <span class="string">'port'</span>: <span class="number">6379</span>&#125;</span><br><span class="line">]</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">		app.redisconn = StrictRedisCluster(startup_nodes=startup_nodes, decode_responses=<span class="keyword">True</span>)</span><br><span class="line">		<span class="keyword">with</span> pytest.raises(RedisClusterException) <span class="keyword">as</span> e:</span><br><span class="line">				app.redisconn.initialize()</span><br><span class="line">		app.redisconn.set(<span class="string">'name'</span>, <span class="string">'admin'</span>)</span><br><span class="line">		app.redisconn.set(<span class="string">'age'</span>, <span class="number">18</span>)</span><br><span class="line"><span class="keyword">except</span> RedisClusterException, e:</span><br><span class="line">		<span class="keyword">print</span> e.message</span><br><span class="line">		<span class="comment"># sys.exit(1)</span></span><br></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/31/Got "ERROR sending 'cluster slots' command to redis server: {'host': '127.0.0.1', 'port': 6379}" when i use StrictRedisCluster connection/" data-id="cjd2uyc8o00004ywpqkmb9zdu" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/01/31/Got "ERROR sending 'cluster slots' command to redis server: {'host': '127.0.0.1', 'port': 6379}" when i use StrictRedisCluster connection/" data-id="cjd2v1b3u0000a3wpdw6658ax" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -135,7 +135,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/30/openresty_log_by_lua_file/" data-id="cjd2uyc8x00044ywp2w7xmvjg" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/01/30/openresty_log_by_lua_file/" data-id="cjd2v1b470005a3wp4yn5rrdp" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -177,7 +177,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/30/openresty_balancer_by_lua_file/" data-id="cjd2uyc8w00034ywph7rmxvvk" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/01/30/openresty_balancer_by_lua_file/" data-id="cjd2v1b440003a3wpesjrpaxr" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -223,7 +223,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/30/一些牛人/" data-id="cjd2uyc9100074ywpjxpwzt5w" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/01/30/一些牛人/" data-id="cjd2v1b490007a3wptm0xyjtr" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -270,7 +270,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/29/弘毅投资观点/" data-id="cjd2uyc9200084ywp4tex2mnk" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/01/29/弘毅投资观点/" data-id="cjd2v1b4a0008a3wpxmn9alja" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -314,7 +314,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/29/聪明的投资者/" data-id="cjd2uyc93000b4ywpwfja1fc0" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/01/29/聪明的投资者/" data-id="cjd2v1b4c000ba3wplskefgah" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -361,7 +361,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/28/一些指标/" data-id="cjd2uyc8y00054ywp9fx83ymo" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/01/28/一些指标/" data-id="cjd2v1b450004a3wp65vrivmi" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -410,7 +410,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/26/hello-world/" data-id="cjd2uyc8s00014ywpkcrqwdil" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/01/26/hello-world/" data-id="cjd2v1b400001a3wpp0bq1siz" class="article-share-link">Teilen</a>
       
       
     </footer>
