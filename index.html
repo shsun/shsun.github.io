@@ -61,6 +61,48 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Got &#34;ERROR sending &#39;cluster slots&#39; command to redis server: {&#39;host&#39;: &#39;127.0.0.1&#39;, &#39;port&#39;: 6379}&#34; when i use StrictRedisCluster connection" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/31/Got "ERROR sending 'cluster slots' command to redis server: {'host': '127.0.0.1', 'port': 6379}" when i use StrictRedisCluster connection/" class="article-date">
+  <time datetime="2018-01-31T09:11:36.000Z" itemprop="datePublished">2018-01-31</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/technique/">technique</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/01/31/Got "ERROR sending 'cluster slots' command to redis server: {'host': '127.0.0.1', 'port': 6379}" when i use StrictRedisCluster connection/">Got &#34;ERROR sending &#39;cluster slots&#39; command to redis server&#34;</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>get the fuck execption message “ERROR sending ‘cluster slots’ command to redis server: {‘host’: ‘127.0.0.1’, ‘port’: 6379}”</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">startup_nodes = [</span><br><span class="line">		&#123;<span class="string">'host'</span>: <span class="string">'127.0.0.1'</span>, <span class="string">'port'</span>: <span class="number">6379</span>&#125;</span><br><span class="line">]</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">		app.redisconn = StrictRedisCluster(startup_nodes=startup_nodes, decode_responses=<span class="keyword">True</span>)</span><br><span class="line">		<span class="keyword">with</span> pytest.raises(RedisClusterException) <span class="keyword">as</span> e:</span><br><span class="line">				app.redisconn.initialize()</span><br><span class="line">		app.redisconn.set(<span class="string">'name'</span>, <span class="string">'admin'</span>)</span><br><span class="line">		app.redisconn.set(<span class="string">'age'</span>, <span class="number">18</span>)</span><br><span class="line"><span class="keyword">except</span> RedisClusterException, e:</span><br><span class="line">		<span class="keyword">print</span> e.message</span><br><span class="line">		<span class="comment">#sys.exit(1)</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/01/31/Got "ERROR sending 'cluster slots' command to redis server: {'host': '127.0.0.1', 'port': 6379}" when i use StrictRedisCluster connection/" data-id="cjd2uyc8o00004ywpqkmb9zdu" class="article-share-link">Teilen</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-openresty_log_by_lua_file" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/01/30/openresty_log_by_lua_file/" class="article-date">
@@ -93,7 +135,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/30/openresty_log_by_lua_file/" data-id="cjd1rjos600035pwp1atnaoz5" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/01/30/openresty_log_by_lua_file/" data-id="cjd2uyc8x00044ywp2w7xmvjg" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -135,7 +177,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/30/openresty_balancer_by_lua_file/" data-id="cjd1rjos300015pwpfilcm2sj" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/01/30/openresty_balancer_by_lua_file/" data-id="cjd2uyc8w00034ywph7rmxvvk" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -181,7 +223,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/30/一些牛人/" data-id="cjd1rjosa00055pwpxg61na22" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/01/30/一些牛人/" data-id="cjd2uyc9100074ywpjxpwzt5w" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -228,7 +270,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/29/弘毅投资观点/" data-id="cjd1rjosd00075pwpe1er52hx" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/01/29/弘毅投资观点/" data-id="cjd2uyc9200084ywp4tex2mnk" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -272,7 +314,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/29/聪明的投资者/" data-id="cjd1rjose00085pwpvc0k7k1d" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/01/29/聪明的投资者/" data-id="cjd2uyc93000b4ywpwfja1fc0" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -319,7 +361,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/28/一些指标/" data-id="cjd1rjos800045pwpsjsdvjwa" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/01/28/一些指标/" data-id="cjd2uyc8y00054ywp9fx83ymo" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -368,7 +410,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/26/hello-world/" data-id="cjd1rjory00005pwpu4xozl4j" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/01/26/hello-world/" data-id="cjd2uyc8s00014ywpkcrqwdil" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -416,6 +458,10 @@
       <ul>
         
           <li>
+            <a href="/2018/01/31/Got "ERROR sending 'cluster slots' command to redis server: {'host': '127.0.0.1', 'port': 6379}" when i use StrictRedisCluster connection/">Got &#34;ERROR sending &#39;cluster slots&#39; command to redis server&#34;</a>
+          </li>
+        
+          <li>
             <a href="/2018/01/30/openresty_log_by_lua_file/">openresty_log_by_lua_file</a>
           </li>
         
@@ -429,10 +475,6 @@
         
           <li>
             <a href="/2018/01/29/弘毅投资观点/">弘毅投资观点</a>
-          </li>
-        
-          <li>
-            <a href="/2018/01/29/聪明的投资者/">聪明的投资者</a>
           </li>
         
       </ul>
