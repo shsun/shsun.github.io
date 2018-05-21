@@ -50,7 +50,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -61,10 +61,151 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-阿里云SLB显示用户真实IP" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/21/阿里云SLB显示用户真实IP/" class="article-date">
+  <time datetime="2018-05-21T12:28:41.000Z" itemprop="datePublished">2018-05-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/technique/">technique</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/21/阿里云SLB显示用户真实IP/">阿里云SLB显示用户真实IP</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>其实解决方法挺简单的，配合Nginx的Realip模块就行，主要是配置问题，我之前折腾CDN的时候就搞过，不过来源IP各家都有所不同，所以这边记录下吧，辣鸡阿里云自己的文档里都不写，简直智障。</p>
+<p>①首先确保你的Nginx安装了realip模块，nginx -V然后看看有没有http_realip_module就行，没有的话需要重新编译安装，在./configure后面添加–with-http_realip_module 然后一顿操作就行</p>
+<p>②修改nginx.conf配置文件，在http区块部分添加如下内容（如果你还是不知道是哪部分，那就找一堆fastcgi那边，在最后一行fastcgi下面添加）</p>
+<p>set_real_ip_from 127.0.0.1;<br>set_real_ip_from 10.49.0.0/16;<br>set_real_ip_from 10.158.0.0/16;<br>set_real_ip_from 10.159.0.0/16;<br>set_real_ip_from 100.64.0.0/10;<br>real_ip_header X-Forwarded-For;<br>real_ip_recursive on;</p>
+<p>然后重启下nginx就行，这个对lnmpa也行，在nginx里面会显示真实ip，在apache那儿会显示127.0.0.1+真实ip</p>
+<p>直接使用apache处理的情况下需要安装mod_rpaf这个模块，我就不多提了，网上搜下就有然后重启下nginx就行，这个对lnmpa也行，在nginx里面会显示真实ip，在apache那儿会显示127.0.0.1+真实ip</p>
+<p>直接使用apache处理的情况下需要安装mod_rpaf这个模块，我就不多提了，网上搜下就有</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/05/21/阿里云SLB显示用户真实IP/" data-id="cjhg8i8da0022jbs6s9cjvb5k" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Nginx获取真实IP方案" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/21/Nginx获取真实IP方案/" class="article-date">
+  <time datetime="2018-05-21T12:27:09.000Z" itemprop="datePublished">2018-05-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/technique/">technique</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/21/Nginx获取真实IP方案/">Nginx获取真实IP方案</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>问题根源：<br>基于七层的负载均衡系统，获取IP的原理都是通过XRI和XFF进行处理，从中选出“正常情况下”的源头IP，然而这两个Header都是普通的HTTP头，任何代理程序都可以轻易修改伪造它们，使得获取IP的逻辑失效。<br>解决依据：<br>TCP协议需要建立真实的网络链路，因此其信息可以认为是真实可靠难以伪造的。根据阿里SLB文档中获取真实IP的方法（<a href="https://help.aliyun.com/document_detail/slb/best-practice/get-real-ipaddress.html）得知，如果采用四层负载均衡，则SLB的后端系统可直接通过" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/slb/best-practice/get-real-ipaddress.html）得知，如果采用四层负载均衡，则SLB的后端系统可直接通过</a> remote address 获取到IP，如果采用七层负载均衡，后续系统需配合 http_realip_module 使用。<br>设置步骤：<br>1、在阿里SLB中将负载均衡模式设置为四层，并且打开获取真实IP的选项（默认打开）；<br>2、在SLB后端的转发 nginx 中使用 $remote_addr 参数填写 XRI 和 XFF；<br>3、在应用中即可可通过 XRI 或 XFF 获取真实 IP；<br>试验环境：<br>客户端：Chrome ＋ Postman<br>本地模拟：本地 nginx ＋ 测试环境 nginx ＋ 测试环境 app<br>四层负载均衡：阿里 SLB ＋ 测试环境 nginx ＋ 测试环境 app<br>七层负载均衡：阿里 SLB ＋ release nginx ＋ release app<br>试验步骤：<br>1、在测试环境 customer 应用中部署 test.jsp，内容为获取 request 信息；<br>2、双 nginx 模拟<br>2.1、在测试环境 nginx 中设置 XFF 规则如下：<br>proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;<br>2.2、在本地 nginx 中设置负载均衡到测试环境 nginx 地址，XFF 规则同上；<br>2.3、使用 Postman 直接发送请求：</p>
+<p>可以发现XFF的第一个IP是正确的地址（由于本试验中本地 nginx 是系统的一部分，所以127.0.0.1算正确IP）；<br>2.4、在请求中加入伪造的 XFF：</p>
+<p>发现此时获取到的 XFF 已经被污染。<br>3、四层SLB测试<br>3.1、将测试环境 nginx 中的 XFF 规则设置为：<br>proxy_set_header X-Forwarded-For $remote_addr;<br>3.2、正常发送请求</p>
+<p>发现获取了正确的 IP；<br>3.3、伪造 XFF 请求：</p>
+<p>发现依然可以获取到正确的 IP；<br>4、七层SLB + http_realip_module 模块测试<br>4.1、将 release 环境 nginx 相关配置修改为（其中100.97.0.0/16为SLB所在网段）：<br>set_real_ip_from 100.97.0.0/16;<br>real_ip_header X-Forwarded-For;<br>real_ip_recursive on;<br>4.2、伪造XFF请求：</p>
+<p>可以发现：HTTP头中多了一个 remoteip 的字段，其值始终为正确的客户 IP；同时，XFF 字段保留了所有代理链路信息（包括伪造的部分）。<br>试验总结：<br>1、无论哪种方案其实核心原理大同小异，都是利用四层TCP的连接信息获取实际IP参数，区别只在于：获取到的这个IP在何时、用何种方式传递到后面系统，以及后面系统如何接收该参数。<br>2、双 nginx 只是为了在可控环境模拟 HTTP IP 欺骗的原理；<br>3、四层 SLB 负载均衡方案思路是在整个系统入口（即SLB的四层处）覆盖掉原始的 XRI 或 XFF，在系统的后面部分便可充分信任这些参数；<br>4、七层 SLB 负载均衡方案思路是把系统入口处拿到的真实IP放在独立的 remoteip 参数中（当然如果需要也可在后续nginx中用该参数覆写 XRI 或 XFF，和上一个方案相同）；<br>参考资料：<br>阿里云SLB获取真实IP的配置方法：<br><a href="https://help.aliyun.com/document_detail/slb/best-practice/get-real-ipaddress.html" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/slb/best-practice/get-real-ipaddress.html</a><br>http_realip_module官方文档：<br><a href="http://nginx.org/en/docs/http/ngx_http_realip_module.html" target="_blank" rel="noopener">http://nginx.org/en/docs/http/ngx_http_realip_module.html</a><br>http_realip_module实现代码：<br><a href="https://github.com/nginx/nginx/blob/master/src/http/modules/ngx_http_realip_module.c" target="_blank" rel="noopener">https://github.com/nginx/nginx/blob/master/src/http/modules/ngx_http_realip_module.c</a><br>阿里SLB原理：<br><a href="http://blog.aliyun.com/149" target="_blank" rel="noopener">http://blog.aliyun.com/149</a><br>SLB官负载均衡配置：<br><a href="https://help.aliyun.com/document_detail/slb/slb-use-guide/slb-listen-config.html" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/slb/slb-use-guide/slb-listen-config.html</a></p>
+<p>测试用页面代码：<br>复制代码<br>&lt;%@page contentType=”text/html” pageEncoding=”GBK”%&gt;<br>&lt;%@page import=”java.util.*”%&gt;<!--使用Enumeration导入此包--></p>
+<html><br><head><br>    <title>接收全部请求参数的名称及对应的内容</title><br></head><br><body><br>&lt;%<br>    Enumeration enu=request.getHeaderNames();//取得全部头信息<br>    while(enu.hasMoreElements()){//以此取出头信息<br>        String headerName=(String)enu.nextElement();<br>        String headerValue=request.getHeader(headerName);//取出头信息内容<br>%&gt;<br>        <h5>&lt;%=headerName%&gt;<font color="red">–&gt;</font><br>        <font color="blue">&lt;%=headerValue%&gt;</font></h5><br>&lt;%<br>    }<br>%&gt;<br></body><br></html>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/05/21/Nginx获取真实IP方案/" data-id="cjhg8i8ce0003jbs6ik1bj68x" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-一些牛人" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/02/21/一些牛人/" class="article-date">
+  <time datetime="2018-02-21T14:15:44.000Z" itemprop="datePublished">2018-02-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/economics/">economics</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/21/一些牛人/">一些牛人</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">陈元</span><br><span class="line">刘鹤</span><br><span class="line">朱云来</span><br><span class="line">靳海涛</span><br><span class="line">吴晓灵</span><br><span class="line">周小川</span><br><span class="line">祁斌</span><br><span class="line">华生</span><br><span class="line">李青原</span><br><span class="line">高西庆</span><br><span class="line">钱颖一</span><br><span class="line">国家税务总局原副局长、联办财经研究院院长、中国经济50人论坛学术委员会成员 许善达</span><br><span class="line">顾南九</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">邱国鹭</span><br><span class="line">高瓴资本张磊</span><br><span class="line">窦玉明</span><br><span class="line">杨爱斌</span><br><span class="line">钟朋荣</span><br><span class="line">中金梁红</span><br><span class="line">史正富</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">刘央		 --- 投资文化领域, 华数传媒 华谊兄弟 光线传媒</span><br><span class="line">史玉柱		--- 保险,民生银行</span><br><span class="line">郭广昌		--- 重点是保险领域</span><br><span class="line">李驰</span><br><span class="line">许小年</span><br><span class="line">樊纲</span><br></pre></td></tr></table></figure>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">兴业全球杨东</span><br><span class="line">兴业吕琪</span><br></pre></td></tr></table></figure>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">安红军</span><br><span class="line">水晶苍蝇拍</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">安红军</span><br><span class="line">水晶苍蝇拍</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/02/21/一些牛人/" data-id="cjhg8i8ck000cjbs6s4oz7biy" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-不畏浮云遮望眼：黄江南关于十九大的四个解读和十个判断" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/02/21/不畏浮云遮望眼：黄江南关于十九大的四个解读和十个判断/" class="article-date">
-  <time datetime="2018-02-21T13:45:03.000Z" itemprop="datePublished">2018-02-21</time>
+  <time datetime="2018-02-21T14:03:10.000Z" itemprop="datePublished">2018-02-21</time>
 </a>
     
   <div class="article-category">
@@ -138,7 +279,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/21/不畏浮云遮望眼：黄江南关于十九大的四个解读和十个判断/" data-id="cjdx5vhqh000c66wp1uxld94m" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/21/不畏浮云遮望眼：黄江南关于十九大的四个解读和十个判断/" data-id="cjhg8i8cl000fjbs61lzacnxj" class="article-share-link">Share</a>
       
       
     </footer>
@@ -151,7 +292,7 @@
     <article id="post-高粱：两种根本不同的经济改革观" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/02/21/高粱：两种根本不同的经济改革观/" class="article-date">
-  <time datetime="2018-02-21T13:39:00.000Z" itemprop="datePublished">2018-02-21</time>
+  <time datetime="2018-02-21T13:52:00.000Z" itemprop="datePublished">2018-02-21</time>
 </a>
     
   <div class="article-category">
@@ -214,7 +355,125 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/21/高粱：两种根本不同的经济改革观/" data-id="cjdx5vhra002266wpzl2el4br" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/21/高粱：两种根本不同的经济改革观/" data-id="cjhg8i8da0024jbs61nkld8yb" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-从市盈率看创业板" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/02/21/从市盈率看创业板/" class="article-date">
+  <time datetime="2018-02-21T13:51:59.000Z" itemprop="datePublished">2018-02-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/economics/">economics</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/21/从市盈率看创业板/">从市盈率看创业板</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>美国纳斯卡克平均市盈率为    34</p>
+<p>中国创业板平均市盈率为         45</p>
+<ol>
+<li>无论是技术创新性 还是制度创新, 都远不及纳斯达克</li>
+<li>全世界的创业板也只有纳斯达克成功了, 其他国家的创业板均无成功案例</li>
+</ol>
+<p>综合以上两点, 站在极其乐观的角度去看, 中国创业板PE怎么也得30以下才可能值得参与. 即1000点出头.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/02/21/从市盈率看创业板/" data-id="cjhg8i8cm000hjbs66zvd7v4h" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-华生--01--改革最忌欲速而不达，成功取决于路径和方法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/02/21/华生--01--改革最忌欲速而不达，成功取决于路径和方法/" class="article-date">
+  <time datetime="2018-02-21T13:51:57.000Z" itemprop="datePublished">2018-02-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/economics/">economics</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/21/华生--01--改革最忌欲速而不达，成功取决于路径和方法/">华生--01--改革最忌欲速而不达，成功取决于路径和方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>原文题目：《改革最忌欲速而不达，成功取决于路径和方法》 (2016-04-20 08:30:20)<br><a href="http://blog.sina.com.cn/s/blog_48e91e520102xfpf.html" target="_blank" rel="noopener">http://blog.sina.com.cn/s/blog_48e91e520102xfpf.html</a></p>
+<p>其实重要的在谈注册制和借壳重组问题，今天转载的三篇文章几乎都在讲，现在证监会有采纳他的建议意向，值得关注言论！</p>
+<p>注册制内涵不清</p>
+<h4 id="《财经》：今年的政府工作报告不再提注册制，市场理解为可能暂缓。对此，您怎么看？"><a href="#《财经》：今年的政府工作报告不再提注册制，市场理解为可能暂缓。对此，您怎么看？" class="headerlink" title="《财经》：今年的政府工作报告不再提注册制，市场理解为可能暂缓。对此，您怎么看？"></a>《财经》：今年的政府工作报告不再提注册制，市场理解为可能暂缓。对此，您怎么看？</h4><p>华生：暂缓是肯定了。我觉得主要是由于去年股市的异常波动所致。<br>说明中国股市对整个经济社会的影响还是非常广泛的，包括在经济下行的情况下，影响各方面包括国际上对中国经济的信心。<br>这场波动后，应当说高层在思想上有调整，希望减少市场震荡、增强人们对中国经济稳定发展的信心。<br>所以，宁可放慢注册制推进的步伐，也希望能有一个相对稳定的市场。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">延续了我国改革的一贯作风, 稳字当先.</span><br></pre></td></tr></table></figure></p>
+<h4 id="《财经》：有一段时间，一提注册制市场就下跌，注册制真有这么恐怖么？市场为什么这么惧怕注册制？"><a href="#《财经》：有一段时间，一提注册制市场就下跌，注册制真有这么恐怖么？市场为什么这么惧怕注册制？" class="headerlink" title="《财经》：有一段时间，一提注册制市场就下跌，注册制真有这么恐怖么？市场为什么这么惧怕注册制？"></a>《财经》：有一段时间，一提注册制市场就下跌，注册制真有这么恐怖么？市场为什么这么惧怕注册制？</h4><p>华生：我在注册制刚提时就指出，注册制的提法先天不足，本身有很多问题。<br>我当时提的是二次股改。<br>其内容很清楚，<font color="#FF4500">一次股改解决了产权界定问题，二次股改就是要解决发行制度的市场化。</font><br>我们所谓的注册制也是为了推进发行制度的市场化。</p>
+<p>但用注册制这名字问题在哪？<br>主要是注册制的含义并不清楚，包括今天大家还不是很清楚。<br>是美国的注册制么？因为香港也不是注册制。<br>那我们是否要抄美国的注册制？</p>
+<p>应当说注册制的内涵并不清楚，也没有经过充分的论证。</p>
+<p>这两年，注册制的概念也是在不断修改。<br>开始说注册制多好，好像能解决所有问题。<br>后来又说注册制也不是随便就可以上市。</p>
+<p>那注册制是什么？换了一个形式的审批制？还是把审批从证监会换一个地方到交易所？</p>
+<p>世界上市场化发行的制度多种多样。只有美国，被有人称之注册制。</p>
+<p>但美国是大进大出，每年新上几百家企业，退市的企业也有几百家。<br>我们现在几年退一家企业都很难，还敢讲注册制？<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">改革继续稳字当先,</span><br><span class="line">我国大概率不会发生大规模退市的情况, 那样容易引起社会不稳定, 投资失败者滋事.</span><br><span class="line">更可能的是大部分中小股票反复寻底, 出现几毛钱 几分钱的无人问津的仙股, 类似香港市场.</span><br></pre></td></tr></table></figure></p>
+<p>其实美国也不是随便到那儿注册都能上的。我们知道许多中国公司去美国上市也并不容易，费用很高，要求也不低。</p>
+<p>所以注册制是不是洪水猛兽，取决要做的是个什么样的注册制。<br>如果真如市场上很多人理解的那样，不管什么企业，盈利与否，只要如实披露就可以上。<br>以中国股市今天这么高的市盈率，人人都眼红的高估值，连已经在美国上市的中概股都花大钱退市回来上市，中国自己可以和想上市的企业更是以万家计。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">全球化的时代, 资产价格也需要全球化,</span><br><span class="line"></span><br><span class="line">A股因为审批制使得股票供给不足, 造成价格堰塞湖,</span><br><span class="line">长远角度来看, 绝大部分中小股票会向欧美市场靠拢, 反复寻底. 创业板市盈率至少要<span class="number">30</span>以下, 甚至<span class="number">20</span>, <span class="number">15</span>都有可能.</span><br><span class="line"></span><br><span class="line">如果想保持指数不过于难看, 有<span class="number">2</span>种办法</span><br><span class="line"><span class="number">1.</span> 经济方面要高速发展; 人为拉高上市门槛, 确保供给不要过快增加.</span><br><span class="line"><span class="number">2.</span> 国家托市, 拉抬大蓝筹. 稳住指数.</span><br><span class="line">目前来看, 似乎<span class="number">2</span>种办法都采用了, 尤其是办法<span class="number">2</span>的比例较多.</span><br></pre></td></tr></table></figure></p>
+<p>这么多人把A股市场当作提款机，那么沪指2000点肯定是守不住的，大家做好准备承受了吗？（评：也许证监会参考了华生言论，才讨论中概回归问题）<br>改革要对症下药</p>
+<h4 id="《财经》：注册制的本质是要搞发行制度的市场化。但这跟股权分置改革一样，是个高难度的事情，需要大智慧以及高度的技巧去设计路径。您对路径的设计有何建议？"><a href="#《财经》：注册制的本质是要搞发行制度的市场化。但这跟股权分置改革一样，是个高难度的事情，需要大智慧以及高度的技巧去设计路径。您对路径的设计有何建议？" class="headerlink" title="《财经》：注册制的本质是要搞发行制度的市场化。但这跟股权分置改革一样，是个高难度的事情，需要大智慧以及高度的技巧去设计路径。您对路径的设计有何建议？"></a>《财经》：注册制的本质是要搞发行制度的市场化。但这跟股权分置改革一样，是个高难度的事情，需要大智慧以及高度的技巧去设计路径。您对路径的设计有何建议？</h4><p>华生：对，如果把注册制理解为比较彻底的市场化发行，那么注册制就是发行市场化改革的目标和终点而不是起点。<br>就像上世纪80年代我们搞价格改革，目标是从完全僵死的计划经济价格过渡到市场价格，但一步过渡就会天下大乱、经济崩溃，这样就要有方法和路径，让大家有个学习和适应的过程。</p>
+<p>股市发行市场化改革也是这样，首先要看清中国证券市场过渡期面临的障碍和困难是什么。</p>
+<font size="4" color="#FF4500"><br>A股市场在股权分置改革后的最基本国情，就是大盘股低估、中小盘股高估的扭曲股价结构。<br>国际市场都是大盘股估值高，小盘股比较低。<br></font><br>一切改革措施不从这个基本国情入手都会事与愿违、碰得头破血流。<br><br>为什么唯独A股市场形成了中小盘股、垃圾股高溢价的股价结构？<br>将此归结于中国人的投机文化显然有失偏颇。香港市场台湾市场也是中华文化，市场估值结构就与国际成熟市场趋同。<br>A股的问题<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">一是供给端的管制；</span><br><span class="line">二是中国特色的资产重组制度，即所谓的壳资源重组。前者是病根，后者火上浇油。</span><br></pre></td></tr></table></figure><br><br>一个个垃圾股变黄金、乌鸦变凤凰的案例推动了市场如蝇逐臭的投机文化。<br><font size="8" color="#FF4500"><br>市场化改革确实会打击大多数中小盘股的估值。<br>市场化改革只要往前推，中小盘股的估值就得大幅度下降。<br>这是全世界的普遍规律。<br></font><br>由于中国是以散户为主体的市场，而且绝大多数都买的是中小盘股，这就有个市场的承受力问题。这是改革的难点所在。（评：看的清）<br><br>#### 《财经》：但是资产重组是证券市场的重要功能，收购兼并在国际成熟市场也极其普遍。去年证监会鼓励并购重组，也是基于整个经济转型的大背景下，促进上市公司深入推进行业整合和产业升级。<br><br>华生：这是混淆了国际成熟市场上以产业整合为基础的收购兼并与我国借壳重组（评：近期热门，不妨参考）的本质区别。<br>西方成熟市场上的收购重组一般是同行业兼并，都是有产业背景和以优化资源配置为基础的。<br>所以我们经常看到如美国市场上的收购兼并常常是强强合并，购并额动辄几百亿、几千亿美元。<br>他们的市场上绝不会有优质企业去借壳垃圾企业，因为好企业肯定自己直接上市，不会去给别人分利。<br><br>中国特色的资产重组则是由于上市排队时间太长，一些好企业不能不去借壳已经衰败的企业，这就像不断把年轻人的血输给老年人，不惜代价让垂死的人再返老还童。<br><br>由于这些并不是基于产业背景的购并重组，对于实体经济毫无意义，并没有任何真实的产业整合、规模扩大和资源使用的优化。<br>但对上市公司而言却像打了一针强心剂，乌鸦一下子变凤凰，或者至少是暂时打扮漂亮，可以迷惑人了，至于不行了以后还可以反复再重组。<br>这让辛辛苦苦做基本面研究和价值投资还不如赌重组来得容易。<br><br>这样就扭曲了市场估值。本来的烂变成了好，丑变成了美。好企业估值不高，烂企业估值不低，投资标准严重混乱，从而极大助长了市场的投机性。（评：这段话说的棒，乌鸦变凤凰，不行了反复可以重组，基本面研究不如赌重组，谁还搞企业研究，证监会要对壳股出手，貌似真的是听了华生的）<br><br>#### 《财经》：其实退市制度之所以推得那么难，一方面企业上市很不容易，一旦退市，无论是对地方政府还是投资者的打击都会很大，尤其是投资者，所以退的路上不停地有救。<br><br>华生：现在很多人说退市不容易，退市会来自地方政府的压力等。其实许多壳公司是民企，跟地方政府的关系真没那么大。我们有一段时间也下了不少，到老三板去的。关键是没有把规矩划严。<br><br>当然，美国是一个机构为主的市场，这和我国散户为主的市场不同。其实，退市只是净化市场的最后手段而不宜作为常规手段。严格地说，退市主要惩罚的是中小投资者，让他们用血的代价去认识小盘绩差股的风险。<br><br><font size="8" color="#FF4500"><br>退市制度的实质是什么？其实不是退，而是让价格反映它的价值。<br>可以像美国那样一年退几百家，也可以像香港那样不退也行。<br><br>改革的实质是让市场发挥作用，让值一分钱的东西就是一分钱，这时退不退本身就不重要了。<br></font>
+
+<h4 id="《财经》：那您觉得退市如此的难的深层次原因是什么？"><a href="#《财经》：那您觉得退市如此的难的深层次原因是什么？" class="headerlink" title="《财经》：那您觉得退市如此的难的深层次原因是什么？"></a>《财经》：那您觉得退市如此的难的深层次原因是什么？</h4><p>华生：就是因为壳可以重组，还很值钱，有大量散户投资者在里面，有几十亿市值在那儿，就像要对年轻人说死亡一样，当然就很残酷、就很难。<br>所以执行起来总是留了大量的政策空间。</p>
+<p>为什么留呢？另一个深层次的原因是政府急功近利的短期行为，为了维持眼下的繁荣，希望市场在我这先繁荣着再说，深层次问题以后再解决。<br>投资者也迎合这个，先能炒作赚钱再说，制度合理不合理与我无关。这是深刻的国情。</p>
+<p><font size="8" color="#FF4500"><br>退市的核心问题取决两个，<br>一是取决于监管层的决心有多大；<br>另外，资产重组政策是个风向标。<br></font><br>根本还是决策人的决心和取向问题。允许重组的话，再烂的企业也总有办法救活。<br>好几年才搞一两个当样子，以证明有退市。那啥问题也不解决。（评：这段话深刻，形象，看证监会决心了，继续关注借壳问题）</p>
+<p>路径和方法</p>
+<h4 id="《财经》：发行市场化改革的突破点应该从哪里开始？"><a href="#《财经》：发行市场化改革的突破点应该从哪里开始？" class="headerlink" title="《财经》：发行市场化改革的突破点应该从哪里开始？"></a>《财经》：发行市场化改革的突破点应该从哪里开始？</h4><p>华生：先从刚才说的几个问题的纠正开始。<br>比如壳资源重组。应该禁止没有产业整合背景的壳资源重组。<br>可以给半年、一年的过渡期，跟历史衔接。<br>照顾市场的既得利益，使投资者有调整和退出的时间和机会。（评：这要真执行，大家要注意手里的票）此后一个都不准借壳重组或变相重组。<br>现在的创业板说是不允许借壳了，但变相借壳依然很多。<br>其实，相当于还是允许。<br>如果真的严格执行了，会让此后所有的壳资源、中小盘下跌。<br>其实，下跌就对了。这样股价结构的扭曲才能改善，资本市场的功能才能发挥。<br>而我们现在的资本市场是鼓励做坏的企业。企业经营再坏了没关系，卖壳还值大价钱。这种市场能搞好才怪。</p>
+<p>中小盘股的估值跟大盘股的价格扭曲，是当下中国资本市场最大的国情。一切措施不从这入手都会碰得头破血流。（评：中小盘股的估值跟大盘股的价格扭曲，是当下中国资本市场最大的国情。这句话直击高层内心，国家队手里大把大盘股，哈哈）</p>
+<h4 id="《财经》：既然注册制是方向，那什么情况下算是准备好了？"><a href="#《财经》：既然注册制是方向，那什么情况下算是准备好了？" class="headerlink" title="《财经》：既然注册制是方向，那什么情况下算是准备好了？"></a>《财经》：既然注册制是方向，那什么情况下算是准备好了？</h4><p>华生：市场化改革本来没有是否准备好的问题，只要方法路径正确，时不我待。现在首先是要在资本市场上拨乱反正。（评：拨乱反正来了，注意了各位，看好方法，证监会可能真采取哦！）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">第一步：先把中国特色的资产重组给废了。让市场上好企业有好的价格，坏企业有坏的价格。</span><br><span class="line">不能借壳重组，壳资源没价值，价格自然回归。</span><br><span class="line">价格信号要正确，这是市场经济的起点。</span><br><span class="line"></span><br><span class="line">第二步：如果想市场化，先从难度较小的再融资市场化开始。</span><br><span class="line">先学走，再学跑，风险小的还没开始，不能上来就搞个大的。</span><br><span class="line">世界上虽然没有新股可以自由上市的备案制，但已上市公司的股权和债权私募再融资的备案制却是真正的国际惯例。</span><br><span class="line">再融资的市场化是发行市场化的逻辑起点。</span><br><span class="line">已经上市公司的再融资都不能市场化，就大讲未上市、想上市企业进场的市场化，这是自相矛盾的大话空话。</span><br><span class="line"></span><br><span class="line">第三步：发行价格和发行节奏的市场化要周密规划，分步实施，各个击破。</span><br><span class="line"></span><br><span class="line">总之，发行市场化的内容很多，要分解分散风险，逐一突破，才能最终达到目标。</span><br><span class="line">不能笼而统之就喊一个谁也解释不清的注册制，霸王硬上弓，那样反而会事倍功半，反复折腾。</span><br></pre></td></tr></table></figure>
+<h3 id="《财经》：其实要说困难，之前的股权分置改革不比这个容易。十多年前，您较早提出了股权分置改革，并积极参与和推动了整个股改过程。您觉得有什么可以吸取的经验？"><a href="#《财经》：其实要说困难，之前的股权分置改革不比这个容易。十多年前，您较早提出了股权分置改革，并积极参与和推动了整个股改过程。您觉得有什么可以吸取的经验？" class="headerlink" title="《财经》：其实要说困难，之前的股权分置改革不比这个容易。十多年前，您较早提出了股权分置改革，并积极参与和推动了整个股改过程。您觉得有什么可以吸取的经验？"></a>《财经》：其实要说困难，之前的股权分置改革不比这个容易。十多年前，您较早提出了股权分置改革，并积极参与和推动了整个股改过程。您觉得有什么可以吸取的经验？</h3><p>华生：三年前注册制刚提出时，我就拿国有股减持的案例提醒过。为什么当初的国有股减持会失败，就是开始对于困难估计不足，后来市场反应非常剧烈，发现没那么简单，又退回来。最后损失的还是市场参与者，政府的威信也受损。结果这次注册制还是重复了这种弯路。所以，以后决策一定要慎重，万一有问题，就像去年的熔断一样，发现不对要赶紧改，不能要面子。（评：听了华生的话？）</p>
+<p>股权分置改革的成功则是经过了充分的酝酿。<br>从民间开始讨论了很多年。经过广泛的争论最后才进入国务院的文件。<br>充分地集中了民间的智慧。<br>它的过渡路径设计的也比较好，不是一下子放开。<br>其实，国家一开始也想通过国有股减持硬闯。<br>结果失败了，才开始重新讨论设计。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">尚福林 李青原 王波明 等人做出了巨大贡献</span><br></pre></td></tr></table></figure></p>
+<p>注册制改革现在的关键反而是千万不要因为去年的挫折动摇了市场化改革的决心和方向。<br>希望这次能广泛吸收各方面的智慧，拿出确实可行的过渡办法，切实解决发行制度市场化中的各种挑战和问题。<br>发行市场化改革老停在这儿也不行，目前这种炒作严格地说只是饮鸩止渴，而资本市场不健康不能发挥其功能会制约和影响中国经济前进的步伐，这样会误了大事。</p>
+<h4 id="《财经》：对于注册制的路径设计，您有什么建议？"><a href="#《财经》：对于注册制的路径设计，您有什么建议？" class="headerlink" title="《财经》：对于注册制的路径设计，您有什么建议？"></a>《财经》：对于注册制的路径设计，您有什么建议？</h4><p>华生：现在新主席也到位了，的确要好好设计一个方向明确、符合国情的而不是顾头不顾尾的方案。</p>
+<p><font color="#FF4500"><br>当前中国经济面临下行的很大压力，本来资本市场是撬动经济发展的重要推动力。<br>但现在资本市场起不了这个作用，甚至还帮倒忙，这是很可惜的。关键是路径方法要正确。<br></font><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">第一，注册制的提法既然用了也不必轻易改，但需要给一个明确的定义。</span><br><span class="line">我们想搞的注册制到底是什么，不是什么，让大家明确目标。</span><br><span class="line"></span><br><span class="line">第二，把当前的情况分析清楚。</span><br><span class="line">我们离那个制度相差多远，其中有哪几个主要障碍，怎样一一攻克，这样才能为注册制以后有可能的实行扫清障碍。</span><br><span class="line"></span><br><span class="line">第三，每走一步都要看到政府、市场、投资者的承受力和我们行动能力的边界。</span><br><span class="line">一步一个脚印，避免进一步、退两步，那样损失代价反而更大。</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/02/21/华生--01--改革最忌欲速而不达，成功取决于路径和方法/" data-id="cjhg8i8co000kjbs6aa7za6y9" class="article-share-link">Share</a>
       
       
     </footer>
@@ -227,7 +486,7 @@
     <article id="post-华生--怎样建设一个强大的资本市场" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/02/20/华生--怎样建设一个强大的资本市场/" class="article-date">
-  <time datetime="2018-02-20T12:28:02.000Z" itemprop="datePublished">2018-02-20</time>
+  <time datetime="2018-02-20T12:51:08.000Z" itemprop="datePublished">2018-02-20</time>
 </a>
     
   <div class="article-category">
@@ -298,230 +557,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/20/华生--怎样建设一个强大的资本市场/" data-id="cjdx5vhqp000q66wpijwfyoj8" class="article-share-link">Teilen</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-深圳证券交易所发展战略规划纲要(2018-2020)" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/02/12/深圳证券交易所发展战略规划纲要(2018-2020)/" class="article-date">
-  <time datetime="2018-02-12T02:38:30.000Z" itemprop="datePublished">2018-02-12</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/economics/">economics</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/12/深圳证券交易所发展战略规划纲要(2018-2020)/">深圳证券交易所发展战略规划纲要(2018-2020)</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在习近平新时代中国特色社会主义思想指引下，为贯彻落实党的十九大精神和中央关于经济和金融工作的重要部署要求，深圳证券交易所（以下简称深交所）制定本战略规划纲要。</p>
-<h1 id="一、深交所发展面临的新形势"><a href="#一、深交所发展面临的新形势" class="headerlink" title="一、深交所发展面临的新形势"></a>一、深交所发展面临的新形势</h1><p>党的十九大指出，中国特色社会主义进入新时代，我国社会主要矛盾已经转化为人民日益增长的美好生活需要和不平衡不充分的发展之间的矛盾，这是我国发展新的历史方位。<br>在全国金融工作会议上，习近平总书记强调，要尽快形成融资功能完备、基础制度扎实、市场监管有效、投资者合法权益得到充分保护的多层次市场体系。<br>“十三五”规划明确，要积极培育公开透明、健康发展的资本市场，提高直接融资比重，降低杠杆率。<br>2017年底的中央经济工作会议提出了习近平新时代中国特色社会主义经济思想，并确定今后三年要重点打好防范化解重大风险、精准脱贫、<font color="#FF4500">污染防治</font>三大攻坚战。<br>在这个重要历史节点上，深交所发展面临新的形势。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">防治污染, 环保新能源类受益, 弘毅投资的上海环境是固废处理的第一名</span><br></pre></td></tr></table></figure></p>
-<p>资本市场和深交所正处于重要的战略机遇期。对标十九大“分两步走”全面建成社会主义现代化强国的宏伟蓝图，迫切需要建设与现代化强国相匹配、具有国际竞争力的强大资本市场。<br>我国经济已由高速增长转向高质量发展，正处在转变发展方式、优化经济结构、转换增长动力的攻坚期，迫切需要加速资本形成。<br>融资结构中直接融资尤其是股权融资占比长期偏低，制约了去杠杆的进程，迫切需要发挥多层次资本市场作用，深化供给侧结构性改革，提高经济金融体系的稳定性。<br>加快建设创新型国家，深入推进产业转型升级，迫切需要资本市场为创业创新提供支持，推进产业并购整合。<br>调整优化居民金融资产配置，迫切需要资本市场拓宽投资渠道，让广大人民群众分享中国经济成长的成果。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">居民金融资产配置比例非常低(我国<span class="number">30</span>%左右, 欧美<span class="number">70</span>%左右),</span><br><span class="line">如果想提高金融资产配置, 需要长期稳定丰厚的分红机制(大于定期银行存款利率)或长期慢牛盈利示范效应,</span><br><span class="line">因此, 理论上讲, A股需要走出一轮慢&amp;长牛. 理论仅仅是理论, 实际上怎么走 还需要观察</span><br></pre></td></tr></table></figure></p>
-<p>构建全方位对外开放新格局，助力“一带一路”建设，迫切需要以资本为纽带，推动中国经济与全球经济更深层次的融合。</p>
-<p>交易所作为资本市场的核心运营机构和一线监管部门，本身也在发生深刻变革。<br>一方面，从全球交易所发展趋势看，交易所之间互联互通、并购整合以及纵向一体化已经成为潮流，还出现了向私募市场拓展、向技术提供商和服务供应商转变等新业务模式。<br>近年，信息技术变革日新月异，大数据、云计算、人工智能、区块链等新技术的发展应用，也在深刻改变着交易所行业的组织形态、业务模式，交易所的功能和边界正在被重新定义。<br>另一方面，国内资本市场监管体制改革也在进行中，《证券法》等相关法律法规正在修订，将对交易所履行一线监管的职责和任务提出更高要求。<br>交易所一线监管还存在制度供给不足、技术手段有限、会员作用发挥不充分等局限。<br>全国金融工作会议指出，资本市场是金融体系的短板。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">新证券法还没出台, 出台之后市场将发生一些变化, 总得来说是更国际化.</span><br></pre></td></tr></table></figure></p>
-<p>十九大指出，要“深化金融体制改革，增强金融服务实体经济能力，提高直接融资比重，促进多层次资本市场健康发展”。<br>交易所的使命更加光荣，责任更加重大，任务更加艰巨。<br>深交所既要充分发挥系统重要性金融机构的作用，勇于担当，坚决履行一线监管法定职责，筑牢防范风险的第一道防线，又要稳中求进，积极改革创新，强化资本市场基础性功能的发挥。</p>
-<h1 id="二、深交所的发展基础与面临的挑战"><a href="#二、深交所的发展基础与面临的挑战" class="headerlink" title="二、深交所的发展基础与面临的挑战"></a>二、深交所的发展基础与面临的挑战</h1><p>深交所诞生于中国改革开放的前沿阵地——深圳。在党中央国务院的高度重视下，在中国证监会的领导下，经过近30年的探索和努力，深交所构建了多层次资本市场以及相应的监管、技术和服务体系，上市公司市值、融资金额、成交量等主要指标逐步跻身全球交易所前列。<br>在长期发展历程中，深交所逐步形成了自身的特色、优势和市场建设理念，得到了市场各方的广泛认可，也为今后的进一步发展奠定了坚实基础。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">龙头创投公司股迎来真正的春天, 如深创投, 弘毅投资...</span><br><span class="line">垂直类的创投公司也值得关注, 如紫光集团, 城投控股...</span><br></pre></td></tr></table></figure></p>
-<h2 id="（一）坚持党的领导，具有坚强政治优势。"><a href="#（一）坚持党的领导，具有坚强政治优势。" class="headerlink" title="（一）坚持党的领导，具有坚强政治优势。"></a>（一）坚持党的领导，具有坚强政治优势。</h2><p>深交所是在中国共产党的领导下发展、壮大起来的。深交所的改革发展成就证明，坚持党的领导是我国交易所的独特优势，不断加强党的建设是交易所的制胜法宝。只有在党的领导下，才能确保未来改革发展不偏离正确方向，确保交易所发展始终以人民为本，以国家利益为归依，以“公平公正公开”为原则，不受商业利益主导，确保中央和证监会决策部署落实到位。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">正面角度看是统一方向, 资本市场也是一个单元, 为国家大局服务.</span><br><span class="line">反面看是人为干预比较重, 扭曲方向.</span><br></pre></td></tr></table></figure></p>
-<h2 id="（二）立足创新驱动，板块特色初步形成。"><a href="#（二）立足创新驱动，板块特色初步形成。" class="headerlink" title="（二）立足创新驱动，板块特色初步形成。"></a>（二）立足创新驱动，板块特色初步形成。</h2><p>在推动国有资本做强做大，形成支撑国家支柱产业和国计民生的大型蓝筹股群体基础上，深交所致力于服务国家经济转型和创新驱动战略，注重支持科技企业和中小企业。十多年来，通过强化中小企业板和创业板建设，深交所走出了一条差异化的发展道路，高新技术企业和成长性企业构成了深交所上市公司的主体。深市成为中国新经济的代表，市场特色明显，充满生机和活力。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">沪交所大蓝筹类公司会做大做强</span><br><span class="line">深交所主要服务新经济, 属于高风险高收益的板块</span><br></pre></td></tr></table></figure></p>
-<h2 id="（三）立足投资者保护，一线监管持续强化。"><a href="#（三）立足投资者保护，一线监管持续强化。" class="headerlink" title="（三）立足投资者保护，一线监管持续强化。"></a>（三）立足投资者保护，一线监管持续强化。</h2><p>深交所始终坚持依法全面从严监管理念，认真履行一线监管职责，针对深交所上市公司群体和投资者的特点，基本形成了完整的规则体系和严密的监管机制，建立了“六位一体”的投资者服务平台，切实维护市场公平正义，塑造良好的资本市场生态。</p>
-<h2 id="（四）立足市场导向，服务品牌广受认可。"><a href="#（四）立足市场导向，服务品牌广受认可。" class="headerlink" title="（四）立足市场导向，服务品牌广受认可。"></a>（四）立足市场导向，服务品牌广受认可。</h2><p>深交所始终坚持“市场至上、服务为本”理念，主动贴近市场一线，深入了解各方实际需求，秉承开放、包容、共赢的理念，与政府部门、金融机构和中介机构广泛合作，发挥专业、技术、人才、平台多元优势，形成了各方共建、覆盖全国、面向不同市场参与者的服务体系。</p>
-<h2 id="（五）立足自主研发，技术系统业界领先。"><a href="#（五）立足自主研发，技术系统业界领先。" class="headerlink" title="（五）立足自主研发，技术系统业界领先。"></a>（五）立足自主研发，技术系统业界领先。</h2><p>深交所始终以自主可控为原则，持续完善技术支持体系，注重通过技术手段突破市场的发展瓶颈，保障市场的安全平稳运行和各项业务的高效有序开展。<br>目前第五代交易系统运行能力达到一流水平，行业信息化基础设施建设处于国内领先地位，深交所的业务运行高度电子化、信息化，有力支持了市场的稳定、创新和发展。<br>必须清醒地认识到，与新形势下服务国家发展全局的要求相比，深交所对新经济的支持还不够。与境外成熟市场交易所相比，深交所还存在着不少薄弱环节。主要挑战是：</p>
-<h2 id="（一）市场规模与实体经济需求不匹配。"><a href="#（一）市场规模与实体经济需求不匹配。" class="headerlink" title="（一）市场规模与实体经济需求不匹配。"></a>（一）市场规模与实体经济需求不匹配。</h2><p>深交所多层次资本市场建设初具规模，但与中国经济发展的需求仍不匹配。特别是近年来创业创新活动深入开展，创新型企业大批涌现，深交所需要适应新形势，加快改革创新，壮大发展规模，全面提升对实体经济的服务支持能力。</p>
-<h2 id="（二）市场板块功能需要进一步发挥。"><a href="#（二）市场板块功能需要进一步发挥。" class="headerlink" title="（二）市场板块功能需要进一步发挥。"></a>（二）市场板块功能需要进一步发挥。</h2><p>深市主板、中小板和创业板定位、服务对象各有侧重，但还不够清晰，需要在中国资本市场的整体格局下，进一步梳理市场和板块功能，突出特色，明确今后工作方向与重点。</p>
-<h2 id="（三）市场结构不均衡。深交所债券、衍生产品等市场发展不足，缺乏风险管理工具，尚未形成全面均衡的市场格局。"><a href="#（三）市场结构不均衡。深交所债券、衍生产品等市场发展不足，缺乏风险管理工具，尚未形成全面均衡的市场格局。" class="headerlink" title="（三）市场结构不均衡。深交所债券、衍生产品等市场发展不足，缺乏风险管理工具，尚未形成全面均衡的市场格局。"></a>（三）市场结构不均衡。深交所债券、衍生产品等市场发展不足，缺乏风险管理工具，尚未形成全面均衡的市场格局。</h2><p>同时，国际影响力仍显不足，国际化进程不能满足国家“一带一路”建设的需求，有待进一步加速。</p>
-<h2 id="（四）风险防控和一线监管能力亟需加强。"><a href="#（四）风险防控和一线监管能力亟需加强。" class="headerlink" title="（四）风险防控和一线监管能力亟需加强。"></a>（四）风险防控和一线监管能力亟需加强。</h2><p>随着市场的日益庞大、复杂与开放，跨机构、跨产品、跨市场和跨境的风险传递不断加快，交易所维护市场秩序、防控市场风险的责任更为重大，维护投资者合法权益的任务更为艰巨，需要加快改革以往在产品简单、运行封闭、个人投资者为主体的市场环境下形成的一线监管和风险防控机制。</p>
-<h2 id="（五）基础制度建设需要与时俱进。"><a href="#（五）基础制度建设需要与时俱进。" class="headerlink" title="（五）基础制度建设需要与时俱进。"></a>（五）基础制度建设需要与时俱进。</h2><p>近年资本市场出现了一些新问题、新变化，深刻反映出当前制度不适应、投资者救济不足、信息安全防范不够、保障能力建设有缺陷等问题，有必要从市场基础性制度、交易系统、风险防控、技术创新、内部管理等多个角度，持续有计划地开展梳理、规划和完善工作。</p>
-<h1 id="三、指导思想、基本原则和发展目标"><a href="#三、指导思想、基本原则和发展目标" class="headerlink" title="三、指导思想、基本原则和发展目标"></a>三、指导思想、基本原则和发展目标</h1><h2 id="（一）指导思想"><a href="#（一）指导思想" class="headerlink" title="（一）指导思想"></a>（一）指导思想</h2><p>高举中国特色社会主义伟大旗帜，以习近平新时代中国特色社会主义思想和习近平新时代中国特色社会主义经济思想为指导，坚决贯彻落实党的十九大精神和中央关于经济和金融工作的重要部署要求，提高政治站位，紧紧围绕服务实体经济、防控金融风险、深化金融改革三项核心任务，全面加强党的领导，深化多层次资本市场体系改革，始终坚持依法全面从严监管，着力提高和改进监管能力，保护投资者合法权益，为全面建成小康社会和实现“两个一百年”奋斗目标作出应有贡献。</p>
-<h2 id="（二）基本原则"><a href="#（二）基本原则" class="headerlink" title="（二）基本原则"></a>（二）基本原则</h2><ul>
-<li><p>1．坚持服务实体。紧紧围绕供给侧结构性改革这条主线，把深交所的发展融入到稳增长、调结构、转方式、促改革、惠民生的大背景中去谋划，提升多层次资本市场直接融资能力，助力经济高质量发展。</p>
-</li>
-<li><p>2．坚持一线监管。把握稳中求进工作总基调，坚决扛起一线监管的责任，强化风险监测预警，完善风险应急管理体系，打好防范化解风险攻坚战，守住不发生系统性金融风险的底线。</p>
-</li>
-<li><p>3．坚持深化改革。深化创业板改革，梳理各板块功能定位，加大市场改革创新力度，构建支持服务创业创新的资本市场生态体系，增加创新产品市场供给。</p>
-</li>
-<li><p>4．坚持市场化导向。发挥市场在资源配置中的决定性作用，勇于直面问题，促进深市产权有效激励、要素自由流动、价格反应灵活、竞争公平有序、企业优胜劣汰。</p>
-</li>
-<li><p>5．坚持创新特色。从资本市场的总体格局着眼，从现有的发展基础着手，突出创新资本形成，突出新经济特征，不断探索深交所的差异化发展道路，强化深市的创新特色和品牌。</p>
-</li>
-<li><p>6．坚持透明规范。切实维护交易所的市场公信力，增强法治观念，持续推进监管信息公开，增强交易所透明度。积极改进适合深交所的治理模式，不断完善内控制度，提高治理水平。</p>
-</li>
-<li><p>7．坚持面向世界。紧密跟踪全球资本市场发展趋势，以世界一流交易所为标杆，抓住中国经济全球化和资本市场双向开放的历史机遇，提升深交所的长远竞争力和全球影响力。</p>
-</li>
-</ul>
-<h2 id="（三）发展目标"><a href="#（三）发展目标" class="headerlink" title="（三）发展目标"></a>（三）发展目标</h2><p>坚持以人民为中心的发展思想，打好防范化解重大风险、精准脱贫、污染防治的攻坚战，提升人民群众获得感，让广大投资者分享经济发展红利。<br>坚持市场化法治化国际化的发展方向，提高上市公司质量，推动形成投融资功能完备、基础制度扎实、市场监管有效、投资者合法权益得到充分保护的多层次资本市场。<br>坚持创新引领、科技引领，努力实现一线监管、市场服务、技术支持和内部管理能力的全面领先。<br>持续提升市场竞争力和监管公信力，努力成为国际领先的创新资本形成中心，打造世界一流证券交易所。</p>
-<p>具体而言，要实现以下四个方面目标：</p>
-<h3 id="一是形成领先的创新支持市场体系，国家级高新技术企业占比、中小创企业成长性领先全球新兴市场。"><a href="#一是形成领先的创新支持市场体系，国家级高新技术企业占比、中小创企业成长性领先全球新兴市场。" class="headerlink" title="一是形成领先的创新支持市场体系，国家级高新技术企业占比、中小创企业成长性领先全球新兴市场。"></a>一是形成领先的创新支持市场体系，国家级高新技术企业占比、中小创企业成长性领先全球新兴市场。</h3><p>未来3年，新增上市公司中国家级高新技术企业占比处于领先。到2020年，深交所多层次市场定位更加清晰，板块功能充分发挥，中小创企业成长性突出，从现货到衍生品的产品线更加完整，市场投融资功能更加完备，对创业创新和高科技企业更加包容，吸引力显著提高，力争成为中国科创企业的首选上市地。<br>深证系列指数成为反映中国新兴行业发展的引领性指数，深市上市公司数量、总市值稳步提升，全球竞争力名列前茅。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">总市值稳步上升导致扩容, 供求关系决定中小股票价格继续下跌, 尤其是创业板股票</span><br></pre></td></tr></table></figure></p>
-<h3 id="二是形成领先的创新资本生态圈，重点区域覆盖率、创新产业链覆盖率和行业组织话语权适应实体经济发展需要。"><a href="#二是形成领先的创新资本生态圈，重点区域覆盖率、创新产业链覆盖率和行业组织话语权适应实体经济发展需要。" class="headerlink" title="二是形成领先的创新资本生态圈，重点区域覆盖率、创新产业链覆盖率和行业组织话语权适应实体经济发展需要。"></a>二是形成领先的创新资本生态圈，重点区域覆盖率、创新产业链覆盖率和行业组织话语权适应实体经济发展需要。</h3><p>到2020年，实现东南亚国家跨境服务全覆盖，燧石星火（V-next）平台投资及专业服务机构会员数量突破、质量提升，投融资服务对接金额大幅提高。<br>到2020年，与中介机构、投资机构、市场平台等的合作进一步加强，与地方创新支持体系的合作进一步拓展，与全球市场特别是“一带一路”沿线国家的合作进一步深化，适应创新资源配置全球化趋势，形成与发达市场互联互通、在发展中市场拓展产品服务、在前沿市场布局多样化合作、在行业国际组织拥有话语权的国际化格局。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">发展成区域性市场, 面向东南亚</span><br></pre></td></tr></table></figure></p>
-<h3 id="三是形成领先的市场监管与风控体系，投资者满意度、退市情况和重大风险防控率持续改善。"><a href="#三是形成领先的市场监管与风控体系，投资者满意度、退市情况和重大风险防控率持续改善。" class="headerlink" title="三是形成领先的市场监管与风控体系，投资者满意度、退市情况和重大风险防控率持续改善。"></a>三是形成领先的市场监管与风控体系，投资者满意度、退市情况和重大风险防控率持续改善。</h3><p>到2020年，一线监管的适应性更强，风险监测、预警和应急处置能力进一步提升。<br>到2020年，投资者教育服务覆盖面不断扩大，投资者教育服务满意度继续提升，在适当性管理、法律救济和信息服务方面迈出新步伐，在退市机制常态化等方面取得新突破，在监管技术和智能化方面做出新成就，在重大风险防控方面达到新水平。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">投资者成熟度较低, 亏钱怨政府. 这也是政府多年来在资本市场大包大揽形成的副作用.</span><br><span class="line"></span><br><span class="line">从稳定大局的角度来看, 我国中产阶级占少数, 且话语权较低, 一有经济危机就常常成为被牺牲的首选, 牺牲少部分保全大部分也的确是很自然的选择.</span><br><span class="line">在我国中产阶级占据人口的大多数之前, 这个倾向不会有大的改变.</span><br></pre></td></tr></table></figure></p>
-<h3 id="四是形成领先的市场基础设施和制度体系，市场绩效、规则完备性与核心系统安全性等指标领先全球。"><a href="#四是形成领先的市场基础设施和制度体系，市场绩效、规则完备性与核心系统安全性等指标领先全球。" class="headerlink" title="四是形成领先的市场基础设施和制度体系，市场绩效、规则完备性与核心系统安全性等指标领先全球。"></a>四是形成领先的市场基础设施和制度体系，市场绩效、规则完备性与核心系统安全性等指标领先全球。</h3><p>到2020年，形成科学规范、运行有效的制度体系，交易系统持续改进，在市场规模、系统自主可控能力、安全可用性等方面保持全球第一梯队，持续实现安全生产零事故，运维监控自动化程度进一步提高。<br>到2020年，深市绩效保持较高水平，整体运行稳定，在运用大数据、人工智能等前沿技术方面走在全球交易所前列，更加适应交易所的监管、服务和内部管理等各项业务的需求，在交易结算机制和制度方面持续进行评估和改进，更加适应不同产品特性、不同投资者结构和跨市场跨境的需要。</p>
-<h1 id="四、重点任务"><a href="#四、重点任务" class="headerlink" title="四、重点任务"></a>四、重点任务</h1><h2 id="（一）加快形成功能完整、运行高效有序的市场体系"><a href="#（一）加快形成功能完整、运行高效有序的市场体系" class="headerlink" title="（一）加快形成功能完整、运行高效有序的市场体系"></a>（一）加快形成功能完整、运行高效有序的市场体系</h2><h3 id="1．深入推进多层次股票市场建设"><a href="#1．深入推进多层次股票市场建设" class="headerlink" title="1．深入推进多层次股票市场建设"></a>1．深入推进多层次股票市场建设</h3><p>大力推进创业板改革，优化多层次市场体系。在资本市场总体布局的框架内优化创业板的定位和制度安排，着力吸纳一批龙头创新企业登陆创业板。<br>推动完善IPO发行上市条件，不断扩大创业板包容性。优化创业板再融资制度，继续支持可转债、优先股等新型融资方式的发展。梳理多层次市场的板块体系，统筹三个板块，进一步明确定位，形成特色更加鲜明的市场体系，实现各个板块的协同发展。<br>构建支持创业创新的私募股权平台。全面深化燧石星火（V-next）平台和区域性市场服务平台建设，形成覆盖全国高新区和区域性市场的两张网络。<br>创新市场运营方式，积极运用金融科技进行业务创新，构建支持创业创新的私募股权服务平台，有力支持大众创业、万众创新和新旧发展动能的接续转换。</p>
-<h3 id="2．实现股票、债券、基金和衍生品市场均衡发展"><a href="#2．实现股票、债券、基金和衍生品市场均衡发展" class="headerlink" title="2．实现股票、债券、基金和衍生品市场均衡发展"></a>2．实现股票、债券、基金和衍生品市场均衡发展</h3><p>结合深市特点与优势，加大固定收益产品发展力度。完善债券发行制度，推动债券市场标准统一，加强对发行人和投资者群体的培育，扩大深市债券市场规模，提高流动性。丰富债券市场交易品种，推动资产支持证券和债券品种创新，积极发展创新创业债券（含私募可转换债券）、熊猫债券、项目收益债券、可续期债券，加大固定收益产品对中小微企业、创业创新、“一带一路”等重点领域的支持力度。实现政策性金融债、地方债等高信用等级债券的常态化发行，推动铁道债等政府支持机构债券在深交所上市，提升深交所债券市场支持实体经济的能力。</p>
-<p>研究推进REITs产品，形成具有深市特色的REITs板块。全力开展REITs产品创新，为住房租赁、政府和社会资本合作（PPP）项目、保障性住房建设、商业物业等领域提供金融支持。探索发行公募REITs，引入多元化投资者。配合研究制定REITs相关配套规则，推动相关主管部门出台税收优惠等政策，营造良好市场环境。</p>
-<p>保持基金品种和数量领先，打造一站式资产配置平台。研究开发国企改革、“一带一路”等相关主题的基金产品。积极推动跨境市场债券ETF等新产品开发，丰富基金产品线，提升服务实体经济的能力和水平。立足深市市场优势和特色，以ETF期权推出为契机，打造深100ETF、创业板ETF、中小板ETF、深成指ETF、沪深300ETF等一批特色鲜明、规模较大、流动性高、影响力大的优势产品。充分发挥ETF和LOF双平台优势，引入全球主要市场旗舰指数和特色指数产品，形成投资标的覆盖境内外主要市场和大类资产的产品体系，打造具有创新市场特色的一站式全球资产配置和财富管理平台。</p>
-<p>衍生品试点突破，补上衍生品市场短板。推动深市股票ETF期权成功试点，逐步形成以场内标准化产品为核心的衍生品体系，充分发挥衍生品风险管理工具作用，为科技型、成长型企业提供更加稳定的投融资环境，促进深市创新资本形成中心建设。同时，为债券市场发展提供风险缓释和管理工具，满足债券投资者风险管理需求。</p>
-<p>构建“1+2”指数格局，形成国际品牌。将深成指打造成为代表中国新兴成长性企业的核心指数，将深证100和创业板指数分别打造成为代表中国新兴蓝筹企业和创业创新企业的标尺性指数，构建“1+2”指数格局，为基金和衍生品市场的发展提供标的支持，把深证指数打造成中国新经济的标志，提升深证指数体系的品牌和影响力。</p>
-<h3 id="3．促进市场高效有序运行"><a href="#3．促进市场高效有序运行" class="headerlink" title="3．促进市场高效有序运行"></a>3．促进市场高效有序运行</h3><p>完善市场基础性运行机制。完善市场化并购重组机制，助推上市公司通过市场化方式进行资源整合，鼓励企业运用多样化融资工具，提升上市公司资本配置效率。充分发挥上市委员会的作用，强化交易所上市审核职能，提高证券上市审核工作的质量和透明度。用好用足法定退市监管和决定权，推动修订并严格执行相关退市制度、标准及程序，探索完善退市公司股份转让机制，实现退市常态化。推动上市公司通过引入战略投资者、实施股权激励和员工持股等方式改善治理结构。</p>
-<p>优化完善交易机制。健全市场运行绩效的监测机制，持续评估和改进交易制度，健全符合股票、基金、债券、衍生品等不同产品特性和投资者结构的交易机制。探索差异化流动性机制、价格稳定机制和灵活的杠杆管理机制，推动建立结算周期灵活、交收方式多样的结算制度，不断优化市场微观结构，提高市场的广度、深度和流动性。</p>
-<p>强化投资者适当性管理和教育保护工作。严格评估并制定相应的投资者适当性制度，推动经营机构落实“投资者分类、产品分级和适当性匹配”的管理要求。深化投资者教育主题活动，推出深交所投教服务号，持续制作投资者能够看得懂、记得住的投教产品。推进“投资者之家”建设，健全实体投教基地功能，探索将投资者教育纳入国民教育体系。以投资者需求为导向，健全六位一体服务平台，推出“互动易”微信版，建设智能客服系统，探索投票权征集电子化平台。</p>
-<h3 id="4．全力以赴打好三大攻坚战"><a href="#4．全力以赴打好三大攻坚战" class="headerlink" title="4．全力以赴打好三大攻坚战"></a>4．全力以赴打好三大攻坚战</h3><p>建成统一的风险监测预警平台，打好防范化解重大风险攻坚战。优化现有风险管理系统，建立常态化风险管理工作机制，强化风险动态跟踪研判，坚持“每周一评估，每月一报告”。修订完善应急预案，强化应急演练，完善事前、事中、事后全过程的管理机制，提高风险应急处置能力。建立上市公司、债券、股票质押、融资融券、基金等重点业务风险监测系统，研究跨机构、跨产品、跨市场和跨境风险传递机理，利用大数据、人工智能等新技术，建立市场运行风险监测指标体系和预警模型，建成全所统一的风险监测预警平台，实现信息共享，做到风险早识别、早预警，提升系统性风险预研预判能力。</p>
-<p>推动绿色发展，助力打赢污染防治攻坚战。充分发挥深交所资源配置功能，鼓励绿色企业上市融资或再融资，支持绿色环保相关的并购重组，助力传统产业转型升级，推动节能、环保绿色企业做优做强。优化对绿色企业、绿色产品的服务，鼓励绿色企业发行可交换债、可转换债等股债结合的创新融资工具，加大绿色股票指数、绿色债券指数、绿色上市基金等绿色产品的开发。强化绿色信息披露监管，有针对性地出台绿色行业披露指引。积极践行并支持对企业进行ESG评价，进一步推动企业树立责任投资、绿色发展意识。</p>
-<p>充分依托深交所资源优势，多渠道履行脱贫攻坚社会责任。深入贯彻落实证监会《关于发挥资本市场作用服务国家脱贫攻坚战略的意见》，不断加强政策引导，持续加大贫困地区企业发行公司债券和资产支持证券的支持力度。不断完善深市上市公司信息披露规则，继续引导上市公司践行扶贫社会责任。因地制宜继续深入探索多渠道、多样化的精准脱贫新路径，做好定点帮扶县民生领域重点扶贫工作，坚持扶贫与扶智、扶志相结合，抓好产业扶贫重点项目。加强对深度贫困地区企业、地方干部培训，继续动员证券机构、上市公司等的力量进行对口帮扶，组织贫困县实地调研，深入开展产业对接。深入推广“深银通”“深农惠”两个信贷拳头产品，优化项目申报及评选机制，撬动更多信贷资金支持深度贫困地区企业及农户。</p>
-<h2 id="（二）显著提高深交所的国际影响力、竞争力和吸引力"><a href="#（二）显著提高深交所的国际影响力、竞争力和吸引力" class="headerlink" title="（二）显著提高深交所的国际影响力、竞争力和吸引力"></a>（二）显著提高深交所的国际影响力、竞争力和吸引力</h2><p>实现对外合作新突破。在发达市场，着重产品互挂，对接创新资本服务，推进交易互联互通，落实创新企业社区项目。在发展中市场，因地制宜，推动产品服务合作。在“一带一路”沿线尤其是南线市场，实施多样化合作，实现交易所技术和能力输出，通过战略合作带动深度融合。积极探索指数产品国际开发和推广，建设自主海外指数体系。推动跨境基金挂牌，推广海外追踪深市基金。</p>
-<p>深化深港市场合作。做好人民币跨境资本流动、互联互通新机制、粤港澳大湾区资本市场合作等探索创新。在“深港通”和内地香港“基金互认”机制的基础上，有序扩大深港互联互通标的和额度，形成“基础设施互联互通，市场规则兼容互认，跨境服务便捷高效，监管信息充分共享”的紧密合作关系。完善深港交易所上市公司联合监管机制，促进两地上市公司信息披露制度的有效协同。</p>
-<p>建设跨境资本服务平台。围绕企业跨境投融资需求，结合深市特点，以“一带一路”跨境资本服务机制为抓手，加强与境内外金融机构的可持续性合作，完善并延伸特色服务链条，为企业“走出去”提供更多资本市场服务。探索沿线企业和金融机构在境内发行固定收益产品。利用前海政策优势，推进跨境投融资工具开发。开展境外投资者关系管理，优化运作机制，拓展地域覆盖。</p>
-<p>提升国际话语权。深化与亚太地区乃至全球创新资本市场的联系，增强在世界交易所联合会、亚洲暨大洋洲交易所联合会等国际组织中的参与度，努力提升国际话语权，确立深交所的国际地位。紧跟业界动态，加强行业交流，择机主动发力，提升深交所国际影响力。</p>
-<h2 id="（三）全面提升监管、服务、技术和管理四大能力"><a href="#（三）全面提升监管、服务、技术和管理四大能力" class="headerlink" title="（三）全面提升监管、服务、技术和管理四大能力"></a>（三）全面提升监管、服务、技术和管理四大能力</h2><h3 id="1．着力强化一线监管能力"><a href="#1．着力强化一线监管能力" class="headerlink" title="1．着力强化一线监管能力"></a>1．着力强化一线监管能力</h3><p>强化一线监管职能。实现交易一线监管的三个转变，从主要直接监管投资者交易行为转变为监管投资者和监管会员并重，从主要发现、上报违法违规线索转变为违法违规线索发现与异常交易行为监控并重，从主要监控单个证券转变为单个证券监控与市场整体风险监控并重，有效维护市场稳定有序运行。全面加强上市公司一线监管，以上市协议为基础，推进原则监管，主动介入，发挥交易所灵活性；持续改进信息披露直通车，推进分类、分行业监管，探索差异化监管制度安排，构筑针对高风险的密集监管网络；强化合理怀疑机制，提高线索发现能力，遏制市场乱象，净化市场环境。全面加强债券监管，建立事前、事中、事后全方位的债券监管体系，做好重点行业和企业的风险摸底排查，强化债券违约风险的源头把控、持续监测和管理处置。全面完善基金监管，落实分级基金投资者适当性管理规定，强化分级基金终止上市监管，完善基金上市审核程序。<br>配齐配强专门现场检查队伍，积极主动开展现场检查，增强一线监管的有效性和威慑力，切实防控市场风险。</p>
-<p>夯实一线监管制度基础。持续优化以证券上市、交易、会员等为核心的一线监管业务规则，坚持简明高效、公开透明、动态清理的原则，推进科学立规、民主立规和依法立规，基本形成内容鲜明、层次清晰、体系完善的业务规则体系。<br>不断完善纪律处分工作机制，加强内部救济制度建设，提高依法监管水平。<br>强化一线监管法律风险防范工作，打造一支业务精、专业强的法律人才队伍。</p>
-<p>提升一线监管透明度。全面推进交易所信息公开，切实维护市场和投资者知情权、参与权及监督权。构建阳光监管机制，确保公开透明贯穿于日常监管服务的始终。推进监管裁量权基准制度公开，提高异常交易、会员违规、固收产品审核和违规处理标准等监管规则的透明度，稳定并明确市场预期。推进监管政策公开，编发上市公司监管、债券监管等系列监管、业务办理问答，加强政策解读回应，及时回应市场关切。推进决策过程和结果公开，加强监管措施及监管结果的舆论宣传，提高一线监管公信力。</p>
-<p>全面建成“以监管会员为中心”的交易行为监管模式。持续完善会员管理相关规则，丰富会员监管手段，适时公开监管标准，强化监管协同，建立常态化、规范化、制度化的工作机制。加大会员监督检查力度，推动会员切实承担起管理客户交易行为的各项责任，建立完善有效的客户交易行为监控系统，按照“事前认识客户、事中监控交易、事后报告异常”的要求，成为识别、发现、劝阻、制止异常交易行为的重要关口。</p>
-<p>实现主要监管活动的科技化、智能化。充分依托大数据与现代信息技术，推进新一代信息平台建设，开展“企业画像”“投资者画像”“证券画像”等应用工程。推进新一代监察系统建设，完善市场监控指标体系。强化交易监控与信息披露、舆情监测等的监管联动，提升线索发现能力和快速反应能力。深化与证监会中央监控系统合作，进一步扩大数据共享范围，提高数据质量。</p>
-<p>改进舆情预期管理。加强组织领导，建立健全舆情工作机制，不断提升舆情监测手段，全方位做好舆情监测，坚持“早发现、早回应、早澄清”，及时解答市场疑惑。提升预期管理能力，做好新闻宣传和舆论引导，有效稳定市场预期，营造良好外部环境，维护交易所公信力。</p>
-<h3 id="2．着力提高市场服务能力"><a href="#2．着力提高市场服务能力" class="headerlink" title="2．着力提高市场服务能力"></a>2．着力提高市场服务能力</h3><p>吸引标杆型创新企业上市。充分发挥市场培育、培训、研究、产品、信息服务等资源优势，完善覆盖企业上市前、上市中、上市后的全程服务体系，积极做好战略、服务对接工作，企业集团提供全链条服务解决方案。聚焦标杆重点，强化对“独角兽”等新兴行业企业服务，着力吸引一批优质企业进入深交所。</p>
-<p>建成全国在地化服务网络。继续深化与各地证监局、金融办（上市办）、高新园区在上市资源培育工作方面的合作，在重点区域与当地政府部门共建异地服务平台，形成覆盖全国的服务网络，融入地方创业创新支持体系，实现对服务需求的快速响应。以燧石星火（V-next）平台及创投联盟、中小企业之家、金融办之家、会员之家等为载体，与中介服务机构和社会各界深入合作，建立线上线下相结合、培训与互动交流相结合的社区化服务平台，不断丰富服务内容，提升服务的实时性和精准性，打造围绕深交所生态圈的综合服务平台。</p>
-<p>打造资本市场一流智库。围绕资本市场现实问题和深交所核心业务，强化研究选题会商，推出一批基础性、前瞻性、战略性的一流研究成果。做好所内外研究支持与合作，建立健全研究成果宣传、上报、转化和迭代递进机制，培养一批研究能力突出、社会影响力强的一流研究人员。做强做实《证券市场导报》编辑部，创新导报办刊方式和手段，充分发挥导报的作用。</p>
-<h3 id="3．着力加强技术支持能力"><a href="#3．着力加强技术支持能力" class="headerlink" title="3．着力加强技术支持能力"></a>3．着力加强技术支持能力</h3><p>构建世界一流的基础设施。推进南方中心二期建设项目、滨海数据中心升级改造等基础设施建设，拓展金融数据交换平台的能力与连接范围，建立行业领先的金融云技术平台。<br>通过打造世界一流的基础设施，构建行业信息服务生态链，打造具有聚集效应和世界影响力的交易所技术生态圈。</p>
-<p>强化安全运行能力建设。实现深交所两地三中心生产布局，进一步提高深交所核心业务持续性保障能力和数据的安全性。持续推进IT服务和运维管理平台的建设，提高IT运营的自动化水平。组织全所各业务、技术部门参与业务应急流程梳理及技术系统完善，防范和应对极端情形下办公场所或技术系统重大故障、主要业务无法连续运转等风险，牢牢守住“交易不断、数据不乱”的基本底线。</p>
-<p>优化完善新一代交易系统。进一步优化系统技术性能指标，提升运营支持能力，完善系统支持衍生品、固定收益及其他创新类产品的交易服务功能和综合金融服务功能，加大系统对跨市场互联互通业务的支持力度。</p>
-<p>建成深交所大数据中心。推进新一代互联网应用平台和新一代信息平台的规划建设，加强深交所集团互联网应用的统筹布局，增强深交所对大数据的采集、存储、加工、应用及推送能力，实现对结构化与非结构化全领域数据的处理能力。大力提高深交所互联网与大数据的综合应用水平，实现集中自动化管理，提高系统运营管理能力，重点围绕智能监管应用、运行风险监测、产品创新研究和互联网信息服务等领域实现突破，形成适应不同市场参与方需求的信息产品和全所统一的信息服务应用体系。</p>
-<p>加快推进交易技术的标准化、产品化。在全面开展技术保障体系升级和国际认证的基础上，结合深交所实践经验，从交易系统、市场监察、金融数据交换等角度，总结出一套有中国特色、操作性强、普适性广的标准技术体系，推进交易技术的产品化、国际化，促进深交所与其他国家、地区资本市场的多元合作，更好实现交易所技术和能力输出。</p>
-<p>推进金融科技的创新研究与应用。依托证券期货行业金融科技研究发展中心（深圳）平台，加强与行业机构、科技企业、科研机构的技术合作，就资本市场领域金融科技的前沿技术、关键技术，积极联合预研、开发、应用与推广，提升深交所的金融科技自主掌控能力，增强深交所的科技监管实力。</p>
-<h3 id="4．着力提升内部管理能力"><a href="#4．着力提升内部管理能力" class="headerlink" title="4．着力提升内部管理能力"></a>4．着力提升内部管理能力</h3><p>强化党的领导，健全深交所治理架构。加强党的建设，发挥党委政治领导核心作用，将党的领导嵌入深交所治理各个环节。<br>压紧压实党委主体责任和纪委监督责任，做好廉政风险防控，防范利益冲突。<br>坚持党管干部原则，坚持好干部标准，配齐配强干部队伍。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">坚持党的领导</span><br></pre></td></tr></table></figure></p>
-<p>实现会员大会常态化，优化理事会专门委员会设置，探索经理层分类分层，推进实施模块化管理，提升深交所运作的科学性、规范性。<br>落实人才强所规划，建设具有竞争力的人才队伍。<br>深化招聘改革，探索多渠道的人才引进机制，为深交所和证监会系统储备人才。<br>加大人才选拔培养力度，完善专业职务和行政职务聘任制度，建立健全优秀人才快速成长机制。<br>扩大境外岗位培训规模，拓宽干部挂职锻炼渠道，注重培养复合型人才。<br>全面优化人才发展环境，建设代表国内资本市场顶尖水平、具有较强国际竞争力的优秀专业人才队伍。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在资本市场监管方面,我国人才梯队建设比较薄弱, 作为监管者, 本身必须对市场很熟悉, 资本市场常常是道高一尺魔高一丈的</span><br></pre></td></tr></table></figure></p>
-<p>统筹全所资源，初步实现深交所集团化运作。强化内部审计监督，进一步明确下属机构职能定位，加强对下属公司的管控，发挥下属机构对深交所全局的支持保障作用。<br>深入实施品牌战略, 完善和落实企业形象识别系统，拓宽传播渠道。<br>建成博览中心，建设深交所公共展示基地和投资者教育基地。进一步营造具有深交所特色的企业文化，强化内部规范运作。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/12/深圳证券交易所发展战略规划纲要(2018-2020)/" data-id="cjdx5vhqt001066wpldosplzi" class="article-share-link">Teilen</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-2018-2月全球股市暴跌分析" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/02/09/2018-2月全球股市暴跌分析/" class="article-date">
-  <time datetime="2018-02-09T08:53:25.000Z" itemprop="datePublished">2018-02-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/economics/">economics</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/09/2018-2月全球股市暴跌分析/">2018-2月全球股市暴跌分析</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>美国1月底开始对中国发动大规模的贸易制裁<br>中国开始也开始反制  但是中国对付美国的最重要的武器是美债<br>如果中国大面积抛售美债的话  会引起债市大幅走低<br>如果债市大幅走低 美股就会再涨  这样对美元回流是有好处的</p>
-<p>但是现在美债突然高涨<br>有消息来源是认为中国持有美债的数量突然在加大<br>而且在把长期债券替换为短期债券</p>
-<p>中国持有多少美国的美债现在是个谜<br>因为美债是可以交易的<br>所以中国在全世界各国都用各种账户在买美债<br>现在美债的走高  就是有人在和中国抢</p>
-<p>美债走高就会让美股大跌  这个是跷跷板<br>一般双杀的情况比较少<br>也许和我们在抢债券的就是美国自己</p>
-<p>为什么中国股市要跌呢 为什么还不能救呢<br>还是我们之前说的  美国3月要加息<br>再加上美股大跌  会形成吸引资本的洼地效果</p>
-<p>这个时候我们A股再涨 就会资本流出, 锁死才是正确的操作</p>
-<p>人民币开始要进入大贬通道了, 之前的多头基本全部已经死了</p>
-<p>这些都是有前车之鉴的, 上一次2015年中国股灾的时候, 也是美国债利率大涨, 熔断那次好像也是</p>
-<p>现在的大跌 还是防御性质的大跌  不会起不来, 美国可能会表面上加息, 但是实际上很多政策会偏向QE放水</p>
-<p>美股肯定不能崩, 因为特朗普的实业兴国 美国优先等各种政策, 是不会让股市崩盘, 所以 美股有较大概率是深蹲</p>
-<p>美国这次依然会通过制造国际动荡 来保证美元地位  保证美国投资环境的最优  通过这些来压低美债收益  保证美股稳定<br>所以中国的股市 也会是深蹲</p>
-<p>但是根据以往的传统经验  十几个交易日是有的  但是这次不一样的情况又特殊<br>因为以往大跌的时候 美元指数都在100以上高位, 本次是90点一下开始跳水, 所以我个人感觉下蹲时间不会很长</p>
-<p>紫金中长线上涨的逻辑一直存在  这几天这么跌 我也万万没想到</p>
-<p>现在美国信用已经跌的比较厉害了</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/09/2018-2月全球股市暴跌分析/" data-id="cjdx5vhq1000066wp0lq8g6x5" class="article-share-link">Teilen</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-缠中说禅-2008-9-18-对经济调整的严酷性决不能掉以轻心" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/02/09/缠中说禅-2008-9-18-对经济调整的严酷性决不能掉以轻心/" class="article-date">
-  <time datetime="2018-02-09T03:37:58.000Z" itemprop="datePublished">2018-02-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/economics/">economics</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/09/缠中说禅-2008-9-18-对经济调整的严酷性决不能掉以轻心/">缠中说禅-2008-9-18-对经济调整的严酷性决不能掉以轻心</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>发布时间：2008-9-18</p>
-<p>　　现在，无论世界还是国内经济，都进入一个较大级别的调整，这点已经是无须讨论的现实。<br>经济有涨有跌，潮起潮落，本是正常的事情，问题的关键在于，如何用最好的策略对应对这不可避免的调整，使得最终的调整痛苦程度减到最低，甚至就此借力达到调整总体经济结构，培育新的经济增长点，为新一轮的经济上升做好充足的准备。<br>而要做到这一点，首要的，必须对经济调整的严酷性有充分清醒的认识，任何的掉以轻心都可能导致灾难性的结果。</p>
-<font color="#FF4500"><br>　　现在有一种极为有害的观点，认为现在资产价格已经大幅度调整，其他经济指标也没有进一步恶化，因此本轮调整将很快过去。<br>而事实上，任何的有一定级别的经济调整，最终的资产价格都不是刚好回到所谓合理的水平，而是大幅度地折让，这正如任何一次资产价格的上升热浪，总要把价格抛向远离合理水平的疯狂状态，而下跌时的道理是一样的，市场总是以不理性的行为为其基础，而这种非理性的状态才是最有杀伤力的。<br>任何以资产价格已经充分调整为理由，都不足以说明经济调整的结束，甚至往往意味着一轮更残酷的非理性下跌的开始。<br></font>
-
-<p>　　而这轮的经济调整，从走势形态上看，并没有出现加速恶化的状态，而是在不断的犹疑中徘徊，而这种状态，往往意味着更大的风险还在后面，一旦这种状态被打破，经济不可避免地进入加速调整中，在这加速调整还没有出现前，任何对经济调整结束的断言都是可疑的。</p>
-<font color="#FF4500"><br>　　更重要的是，一次较大规模的经济调整过后，总是有一段漫长的恢复期，而这恢复期的杀伤力，往往比调整期还要严重，那是一种磨和耗的状态，一种没有边际的、失望与希望交替的煎熬，那才是最为惨烈的，能否耗过这段时期，决定了经济下一轮增长能否顺利起步并占有最有利位置，因此，即使调整结束了，也决不能掉以轻心。<br></font>
-
-<p>　　而这轮调整，在世界范围内，越来越显示出其级别之大，甚至有可能是1929年以来最为严重的一次经济调整。</p>
-<p>而这次调整，同时纠缠了各种政治势力与经济利益的博弈，最终将决定今后数十年世界政治、经济利益的再分配，所以，站在国家战略的层面，是绝对不可以掉以轻心的。<br>经济，从来都是政治的，特别在这全球化的背景下，老的经济格局越来越束缚经济的发展，如何破局、如何在此中谋取最大的国家利益，这才是关键所在。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">老的经济格局 :</span><br><span class="line">美国在高端, 科技,文化,金融等偏虚拟的经济 剥削全世界</span><br><span class="line">日韩欧在中高端</span><br><span class="line">中国等金砖国家在中端</span><br></pre></td></tr></table></figure></p>
-<p>　　中国当然有足够的资源与国运在新的世界经济格局中占有更为重要的地位，但这并不是可以不劳而获，这并不是一个已经在天上挂好一定要掉到中国头上的馅饼，要达到此目的，任何的松懈都是不允许的。</p>
-<p>　　而中国整体的经济结构，还远远达不到基本完善的状态，里面还藏有诸多严重影响经济调整顺利过度的结构性弊端，就此，大力调整经济结构，把不合理的结构性弊端清除，理顺整体经济关系，这里有大量的工作需要去完成。</p>
-<p>　　站在资本全球化的大格局中，本次中国经济面临的调整的复杂程度是前所未有的，诸多国际性因素将在其中起着前所未有的作用。</p>
-<p>而很多因素，并不是中国一国所能控制的，而中国由于完善的整体经济结构并没有完全确立，所以其中存在的诸多漏洞可谓防不胜防，在这种状况下，非系统性风险随时存在，这是最难把控的。</p>
-<p>　　要应付如此复杂的局面，观望、犹豫、甚至随波逐流、坐以待毙都是没有出路的，必须首先确立明确的调整思路，使得调整以尽可能少的代价完成，然后动用一切资源确保调整按照可控的范围内进行，而中国目前的经济状态，完全有能力做到这一点，只是时机不能错失，否则代价极为昂贵。</p>
-<p>　　有足够的理由相信，风雨之后的中国将更有力量，但现在的问题是，必须首先安全平稳地度过风雨，否则光叨唠风雨之后见彩虹，是毫无意义的。而风雨，真正的风雨可能还没真正到来，而我们已经有足够的准备了吗？</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/09/缠中说禅-2008-9-18-对经济调整的严酷性决不能掉以轻心/" data-id="cjdx5vhqx001866wphp048bu6" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/20/华生--怎样建设一个强大的资本市场/" data-id="cjhg8i8cq000qjbs6ugb1pyhp" class="article-share-link">Share</a>
       
       
     </footer>
@@ -533,8 +569,8 @@
   
     <article id="post-华生--02--谨防疯牛失蹄和踩踏悲剧" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/02/08/华生--02--谨防疯牛失蹄和踩踏悲剧/" class="article-date">
-  <time datetime="2018-02-08T09:15:07.000Z" itemprop="datePublished">2018-02-08</time>
+    <a href="/2018/02/20/华生--02--谨防疯牛失蹄和踩踏悲剧/" class="article-date">
+  <time datetime="2018-02-20T12:34:25.000Z" itemprop="datePublished">2018-02-20</time>
 </a>
     
   <div class="article-category">
@@ -549,7 +585,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/08/华生--02--谨防疯牛失蹄和踩踏悲剧/">华生--02--谨防疯牛失蹄和踩踏悲剧</a>
+      <a class="article-title" href="/2018/02/20/华生--02--谨防疯牛失蹄和踩踏悲剧/">华生--02--谨防疯牛失蹄和踩踏悲剧</a>
     </h1>
   
 
@@ -629,7 +665,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/08/华生--02--谨防疯牛失蹄和踩踏悲剧/" data-id="cjdx5vhqm000k66wpfouj4v20" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/20/华生--02--谨防疯牛失蹄和踩踏悲剧/" data-id="cjhg8i8co000mjbs6qz32vc6r" class="article-share-link">Share</a>
       
       
     </footer>
@@ -641,8 +677,8 @@
   
     <article id="post-华生--03--A股市场的真问题与假问题" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/02/08/华生--03--A股市场的真问题与假问题/" class="article-date">
-  <time datetime="2018-02-08T09:15:06.000Z" itemprop="datePublished">2018-02-08</time>
+    <a href="/2018/02/20/华生--03--A股市场的真问题与假问题/" class="article-date">
+  <time datetime="2018-02-20T12:34:22.000Z" itemprop="datePublished">2018-02-20</time>
 </a>
     
   <div class="article-category">
@@ -657,7 +693,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/08/华生--03--A股市场的真问题与假问题/">华生--03--A股市场的真问题与假问题</a>
+      <a class="article-title" href="/2018/02/20/华生--03--A股市场的真问题与假问题/">华生--03--A股市场的真问题与假问题</a>
     </h1>
   
 
@@ -687,241 +723,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/08/华生--03--A股市场的真问题与假问题/" data-id="cjdx5vhqn000m66wpa6q7faqy" class="article-share-link">Teilen</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-华生--01--改革最忌欲速而不达，成功取决于路径和方法" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/02/08/华生--01--改革最忌欲速而不达，成功取决于路径和方法/" class="article-date">
-  <time datetime="2018-02-08T09:13:09.000Z" itemprop="datePublished">2018-02-08</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/economics/">economics</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/08/华生--01--改革最忌欲速而不达，成功取决于路径和方法/">华生--01--改革最忌欲速而不达，成功取决于路径和方法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>原文题目：《改革最忌欲速而不达，成功取决于路径和方法》 (2016-04-20 08:30:20)<br><a href="http://blog.sina.com.cn/s/blog_48e91e520102xfpf.html" target="_blank" rel="noopener">http://blog.sina.com.cn/s/blog_48e91e520102xfpf.html</a></p>
-<p>其实重要的在谈注册制和借壳重组问题，今天转载的三篇文章几乎都在讲，现在证监会有采纳他的建议意向，值得关注言论！</p>
-<p>注册制内涵不清</p>
-<h4 id="《财经》：今年的政府工作报告不再提注册制，市场理解为可能暂缓。对此，您怎么看？"><a href="#《财经》：今年的政府工作报告不再提注册制，市场理解为可能暂缓。对此，您怎么看？" class="headerlink" title="《财经》：今年的政府工作报告不再提注册制，市场理解为可能暂缓。对此，您怎么看？"></a>《财经》：今年的政府工作报告不再提注册制，市场理解为可能暂缓。对此，您怎么看？</h4><p>华生：暂缓是肯定了。我觉得主要是由于去年股市的异常波动所致。<br>说明中国股市对整个经济社会的影响还是非常广泛的，包括在经济下行的情况下，影响各方面包括国际上对中国经济的信心。<br>这场波动后，应当说高层在思想上有调整，希望减少市场震荡、增强人们对中国经济稳定发展的信心。<br>所以，宁可放慢注册制推进的步伐，也希望能有一个相对稳定的市场。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">延续了我国改革的一贯作风, 稳字当先.</span><br></pre></td></tr></table></figure></p>
-<h4 id="《财经》：有一段时间，一提注册制市场就下跌，注册制真有这么恐怖么？市场为什么这么惧怕注册制？"><a href="#《财经》：有一段时间，一提注册制市场就下跌，注册制真有这么恐怖么？市场为什么这么惧怕注册制？" class="headerlink" title="《财经》：有一段时间，一提注册制市场就下跌，注册制真有这么恐怖么？市场为什么这么惧怕注册制？"></a>《财经》：有一段时间，一提注册制市场就下跌，注册制真有这么恐怖么？市场为什么这么惧怕注册制？</h4><p>华生：我在注册制刚提时就指出，注册制的提法先天不足，本身有很多问题。<br>我当时提的是二次股改。<br>其内容很清楚，<font color="#FF4500">一次股改解决了产权界定问题，二次股改就是要解决发行制度的市场化。</font><br>我们所谓的注册制也是为了推进发行制度的市场化。</p>
-<p>但用注册制这名字问题在哪？<br>主要是注册制的含义并不清楚，包括今天大家还不是很清楚。<br>是美国的注册制么？因为香港也不是注册制。<br>那我们是否要抄美国的注册制？</p>
-<p>应当说注册制的内涵并不清楚，也没有经过充分的论证。</p>
-<p>这两年，注册制的概念也是在不断修改。<br>开始说注册制多好，好像能解决所有问题。<br>后来又说注册制也不是随便就可以上市。</p>
-<p>那注册制是什么？换了一个形式的审批制？还是把审批从证监会换一个地方到交易所？</p>
-<p>世界上市场化发行的制度多种多样。只有美国，被有人称之注册制。</p>
-<p>但美国是大进大出，每年新上几百家企业，退市的企业也有几百家。<br>我们现在几年退一家企业都很难，还敢讲注册制？<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">改革继续稳字当先,</span><br><span class="line">我国大概率不会发生大规模退市的情况, 那样容易引起社会不稳定, 投资失败者滋事.</span><br><span class="line">更可能的是大部分中小股票反复寻底, 出现几毛钱 几分钱的无人问津的仙股, 类似香港市场.</span><br></pre></td></tr></table></figure></p>
-<p>其实美国也不是随便到那儿注册都能上的。我们知道许多中国公司去美国上市也并不容易，费用很高，要求也不低。</p>
-<p>所以注册制是不是洪水猛兽，取决要做的是个什么样的注册制。<br>如果真如市场上很多人理解的那样，不管什么企业，盈利与否，只要如实披露就可以上。<br>以中国股市今天这么高的市盈率，人人都眼红的高估值，连已经在美国上市的中概股都花大钱退市回来上市，中国自己可以和想上市的企业更是以万家计。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">全球化的时代, 资产价格也需要全球化,</span><br><span class="line"></span><br><span class="line">A股因为审批制使得股票供给不足, 造成价格堰塞湖,</span><br><span class="line">长远角度来看, 绝大部分中小股票会向欧美市场靠拢, 反复寻底. 创业板市盈率至少要<span class="number">30</span>以下, 甚至<span class="number">20</span>, <span class="number">15</span>都有可能.</span><br><span class="line"></span><br><span class="line">如果想保持指数不过于难看, 有<span class="number">2</span>种办法</span><br><span class="line"><span class="number">1.</span> 经济方面要高速发展; 人为拉高上市门槛, 确保供给不要过快增加.</span><br><span class="line"><span class="number">2.</span> 国家托市, 拉抬大蓝筹. 稳住指数.</span><br><span class="line">目前来看, 似乎<span class="number">2</span>种办法都采用了, 尤其是办法<span class="number">2</span>的比例较多.</span><br></pre></td></tr></table></figure></p>
-<p>这么多人把A股市场当作提款机，那么沪指2000点肯定是守不住的，大家做好准备承受了吗？（评：也许证监会参考了华生言论，才讨论中概回归问题）<br>改革要对症下药</p>
-<h4 id="《财经》：注册制的本质是要搞发行制度的市场化。但这跟股权分置改革一样，是个高难度的事情，需要大智慧以及高度的技巧去设计路径。您对路径的设计有何建议？"><a href="#《财经》：注册制的本质是要搞发行制度的市场化。但这跟股权分置改革一样，是个高难度的事情，需要大智慧以及高度的技巧去设计路径。您对路径的设计有何建议？" class="headerlink" title="《财经》：注册制的本质是要搞发行制度的市场化。但这跟股权分置改革一样，是个高难度的事情，需要大智慧以及高度的技巧去设计路径。您对路径的设计有何建议？"></a>《财经》：注册制的本质是要搞发行制度的市场化。但这跟股权分置改革一样，是个高难度的事情，需要大智慧以及高度的技巧去设计路径。您对路径的设计有何建议？</h4><p>华生：对，如果把注册制理解为比较彻底的市场化发行，那么注册制就是发行市场化改革的目标和终点而不是起点。<br>就像上世纪80年代我们搞价格改革，目标是从完全僵死的计划经济价格过渡到市场价格，但一步过渡就会天下大乱、经济崩溃，这样就要有方法和路径，让大家有个学习和适应的过程。</p>
-<p>股市发行市场化改革也是这样，首先要看清中国证券市场过渡期面临的障碍和困难是什么。</p>
-<font size="4" color="#FF4500"><br>A股市场在股权分置改革后的最基本国情，就是大盘股低估、中小盘股高估的扭曲股价结构。<br>国际市场都是大盘股估值高，小盘股比较低。<br></font><br>一切改革措施不从这个基本国情入手都会事与愿违、碰得头破血流。<br><br>为什么唯独A股市场形成了中小盘股、垃圾股高溢价的股价结构？<br>将此归结于中国人的投机文化显然有失偏颇。香港市场台湾市场也是中华文化，市场估值结构就与国际成熟市场趋同。<br>A股的问题<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">一是供给端的管制；</span><br><span class="line">二是中国特色的资产重组制度，即所谓的壳资源重组。前者是病根，后者火上浇油。</span><br></pre></td></tr></table></figure><br><br>一个个垃圾股变黄金、乌鸦变凤凰的案例推动了市场如蝇逐臭的投机文化。<br><font size="8" color="#FF4500"><br>市场化改革确实会打击大多数中小盘股的估值。<br>市场化改革只要往前推，中小盘股的估值就得大幅度下降。<br>这是全世界的普遍规律。<br></font><br>由于中国是以散户为主体的市场，而且绝大多数都买的是中小盘股，这就有个市场的承受力问题。这是改革的难点所在。（评：看的清）<br><br>#### 《财经》：但是资产重组是证券市场的重要功能，收购兼并在国际成熟市场也极其普遍。去年证监会鼓励并购重组，也是基于整个经济转型的大背景下，促进上市公司深入推进行业整合和产业升级。<br><br>华生：这是混淆了国际成熟市场上以产业整合为基础的收购兼并与我国借壳重组（评：近期热门，不妨参考）的本质区别。<br>西方成熟市场上的收购重组一般是同行业兼并，都是有产业背景和以优化资源配置为基础的。<br>所以我们经常看到如美国市场上的收购兼并常常是强强合并，购并额动辄几百亿、几千亿美元。<br>他们的市场上绝不会有优质企业去借壳垃圾企业，因为好企业肯定自己直接上市，不会去给别人分利。<br><br>中国特色的资产重组则是由于上市排队时间太长，一些好企业不能不去借壳已经衰败的企业，这就像不断把年轻人的血输给老年人，不惜代价让垂死的人再返老还童。<br><br>由于这些并不是基于产业背景的购并重组，对于实体经济毫无意义，并没有任何真实的产业整合、规模扩大和资源使用的优化。<br>但对上市公司而言却像打了一针强心剂，乌鸦一下子变凤凰，或者至少是暂时打扮漂亮，可以迷惑人了，至于不行了以后还可以反复再重组。<br>这让辛辛苦苦做基本面研究和价值投资还不如赌重组来得容易。<br><br>这样就扭曲了市场估值。本来的烂变成了好，丑变成了美。好企业估值不高，烂企业估值不低，投资标准严重混乱，从而极大助长了市场的投机性。（评：这段话说的棒，乌鸦变凤凰，不行了反复可以重组，基本面研究不如赌重组，谁还搞企业研究，证监会要对壳股出手，貌似真的是听了华生的）<br><br>#### 《财经》：其实退市制度之所以推得那么难，一方面企业上市很不容易，一旦退市，无论是对地方政府还是投资者的打击都会很大，尤其是投资者，所以退的路上不停地有救。<br><br>华生：现在很多人说退市不容易，退市会来自地方政府的压力等。其实许多壳公司是民企，跟地方政府的关系真没那么大。我们有一段时间也下了不少，到老三板去的。关键是没有把规矩划严。<br><br>当然，美国是一个机构为主的市场，这和我国散户为主的市场不同。其实，退市只是净化市场的最后手段而不宜作为常规手段。严格地说，退市主要惩罚的是中小投资者，让他们用血的代价去认识小盘绩差股的风险。<br><br><font size="8" color="#FF4500"><br>退市制度的实质是什么？其实不是退，而是让价格反映它的价值。<br>可以像美国那样一年退几百家，也可以像香港那样不退也行。<br><br>改革的实质是让市场发挥作用，让值一分钱的东西就是一分钱，这时退不退本身就不重要了。<br></font>
-
-<h4 id="《财经》：那您觉得退市如此的难的深层次原因是什么？"><a href="#《财经》：那您觉得退市如此的难的深层次原因是什么？" class="headerlink" title="《财经》：那您觉得退市如此的难的深层次原因是什么？"></a>《财经》：那您觉得退市如此的难的深层次原因是什么？</h4><p>华生：就是因为壳可以重组，还很值钱，有大量散户投资者在里面，有几十亿市值在那儿，就像要对年轻人说死亡一样，当然就很残酷、就很难。<br>所以执行起来总是留了大量的政策空间。</p>
-<p>为什么留呢？另一个深层次的原因是政府急功近利的短期行为，为了维持眼下的繁荣，希望市场在我这先繁荣着再说，深层次问题以后再解决。<br>投资者也迎合这个，先能炒作赚钱再说，制度合理不合理与我无关。这是深刻的国情。</p>
-<p><font size="8" color="#FF4500"><br>退市的核心问题取决两个，<br>一是取决于监管层的决心有多大；<br>另外，资产重组政策是个风向标。<br></font><br>根本还是决策人的决心和取向问题。允许重组的话，再烂的企业也总有办法救活。<br>好几年才搞一两个当样子，以证明有退市。那啥问题也不解决。（评：这段话深刻，形象，看证监会决心了，继续关注借壳问题）</p>
-<p>路径和方法</p>
-<h4 id="《财经》：发行市场化改革的突破点应该从哪里开始？"><a href="#《财经》：发行市场化改革的突破点应该从哪里开始？" class="headerlink" title="《财经》：发行市场化改革的突破点应该从哪里开始？"></a>《财经》：发行市场化改革的突破点应该从哪里开始？</h4><p>华生：先从刚才说的几个问题的纠正开始。<br>比如壳资源重组。应该禁止没有产业整合背景的壳资源重组。<br>可以给半年、一年的过渡期，跟历史衔接。<br>照顾市场的既得利益，使投资者有调整和退出的时间和机会。（评：这要真执行，大家要注意手里的票）此后一个都不准借壳重组或变相重组。<br>现在的创业板说是不允许借壳了，但变相借壳依然很多。<br>其实，相当于还是允许。<br>如果真的严格执行了，会让此后所有的壳资源、中小盘下跌。<br>其实，下跌就对了。这样股价结构的扭曲才能改善，资本市场的功能才能发挥。<br>而我们现在的资本市场是鼓励做坏的企业。企业经营再坏了没关系，卖壳还值大价钱。这种市场能搞好才怪。</p>
-<p>中小盘股的估值跟大盘股的价格扭曲，是当下中国资本市场最大的国情。一切措施不从这入手都会碰得头破血流。（评：中小盘股的估值跟大盘股的价格扭曲，是当下中国资本市场最大的国情。这句话直击高层内心，国家队手里大把大盘股，哈哈）</p>
-<h4 id="《财经》：既然注册制是方向，那什么情况下算是准备好了？"><a href="#《财经》：既然注册制是方向，那什么情况下算是准备好了？" class="headerlink" title="《财经》：既然注册制是方向，那什么情况下算是准备好了？"></a>《财经》：既然注册制是方向，那什么情况下算是准备好了？</h4><p>华生：市场化改革本来没有是否准备好的问题，只要方法路径正确，时不我待。现在首先是要在资本市场上拨乱反正。（评：拨乱反正来了，注意了各位，看好方法，证监会可能真采取哦！）</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">第一步：先把中国特色的资产重组给废了。让市场上好企业有好的价格，坏企业有坏的价格。</span><br><span class="line">不能借壳重组，壳资源没价值，价格自然回归。</span><br><span class="line">价格信号要正确，这是市场经济的起点。</span><br><span class="line"></span><br><span class="line">第二步：如果想市场化，先从难度较小的再融资市场化开始。</span><br><span class="line">先学走，再学跑，风险小的还没开始，不能上来就搞个大的。</span><br><span class="line">世界上虽然没有新股可以自由上市的备案制，但已上市公司的股权和债权私募再融资的备案制却是真正的国际惯例。</span><br><span class="line">再融资的市场化是发行市场化的逻辑起点。</span><br><span class="line">已经上市公司的再融资都不能市场化，就大讲未上市、想上市企业进场的市场化，这是自相矛盾的大话空话。</span><br><span class="line"></span><br><span class="line">第三步：发行价格和发行节奏的市场化要周密规划，分步实施，各个击破。</span><br><span class="line"></span><br><span class="line">总之，发行市场化的内容很多，要分解分散风险，逐一突破，才能最终达到目标。</span><br><span class="line">不能笼而统之就喊一个谁也解释不清的注册制，霸王硬上弓，那样反而会事倍功半，反复折腾。</span><br></pre></td></tr></table></figure>
-<h3 id="《财经》：其实要说困难，之前的股权分置改革不比这个容易。十多年前，您较早提出了股权分置改革，并积极参与和推动了整个股改过程。您觉得有什么可以吸取的经验？"><a href="#《财经》：其实要说困难，之前的股权分置改革不比这个容易。十多年前，您较早提出了股权分置改革，并积极参与和推动了整个股改过程。您觉得有什么可以吸取的经验？" class="headerlink" title="《财经》：其实要说困难，之前的股权分置改革不比这个容易。十多年前，您较早提出了股权分置改革，并积极参与和推动了整个股改过程。您觉得有什么可以吸取的经验？"></a>《财经》：其实要说困难，之前的股权分置改革不比这个容易。十多年前，您较早提出了股权分置改革，并积极参与和推动了整个股改过程。您觉得有什么可以吸取的经验？</h3><p>华生：三年前注册制刚提出时，我就拿国有股减持的案例提醒过。为什么当初的国有股减持会失败，就是开始对于困难估计不足，后来市场反应非常剧烈，发现没那么简单，又退回来。最后损失的还是市场参与者，政府的威信也受损。结果这次注册制还是重复了这种弯路。所以，以后决策一定要慎重，万一有问题，就像去年的熔断一样，发现不对要赶紧改，不能要面子。（评：听了华生的话？）</p>
-<p>股权分置改革的成功则是经过了充分的酝酿。<br>从民间开始讨论了很多年。经过广泛的争论最后才进入国务院的文件。<br>充分地集中了民间的智慧。<br>它的过渡路径设计的也比较好，不是一下子放开。<br>其实，国家一开始也想通过国有股减持硬闯。<br>结果失败了，才开始重新讨论设计。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">尚福林 李青原 王波明 等人做出了巨大贡献</span><br></pre></td></tr></table></figure></p>
-<p>注册制改革现在的关键反而是千万不要因为去年的挫折动摇了市场化改革的决心和方向。<br>希望这次能广泛吸收各方面的智慧，拿出确实可行的过渡办法，切实解决发行制度市场化中的各种挑战和问题。<br>发行市场化改革老停在这儿也不行，目前这种炒作严格地说只是饮鸩止渴，而资本市场不健康不能发挥其功能会制约和影响中国经济前进的步伐，这样会误了大事。</p>
-<h4 id="《财经》：对于注册制的路径设计，您有什么建议？"><a href="#《财经》：对于注册制的路径设计，您有什么建议？" class="headerlink" title="《财经》：对于注册制的路径设计，您有什么建议？"></a>《财经》：对于注册制的路径设计，您有什么建议？</h4><p>华生：现在新主席也到位了，的确要好好设计一个方向明确、符合国情的而不是顾头不顾尾的方案。</p>
-<p><font color="#FF4500"><br>当前中国经济面临下行的很大压力，本来资本市场是撬动经济发展的重要推动力。<br>但现在资本市场起不了这个作用，甚至还帮倒忙，这是很可惜的。关键是路径方法要正确。<br></font><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">第一，注册制的提法既然用了也不必轻易改，但需要给一个明确的定义。</span><br><span class="line">我们想搞的注册制到底是什么，不是什么，让大家明确目标。</span><br><span class="line"></span><br><span class="line">第二，把当前的情况分析清楚。</span><br><span class="line">我们离那个制度相差多远，其中有哪几个主要障碍，怎样一一攻克，这样才能为注册制以后有可能的实行扫清障碍。</span><br><span class="line"></span><br><span class="line">第三，每走一步都要看到政府、市场、投资者的承受力和我们行动能力的边界。</span><br><span class="line">一步一个脚印，避免进一步、退两步，那样损失代价反而更大。</span><br></pre></td></tr></table></figure></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/08/华生--01--改革最忌欲速而不达，成功取决于路径和方法/" data-id="cjdx5vhql000h66wphxfuh31p" class="article-share-link">Teilen</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-马克思对全球治理的几点看法" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/02/08/马克思对全球治理的几点看法/" class="article-date">
-  <time datetime="2018-02-08T07:47:40.000Z" itemprop="datePublished">2018-02-08</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/economics/">economics</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/08/马克思对全球治理的几点看法/">马克思对全球治理的几点看法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="一-引言"><a href="#一-引言" class="headerlink" title="一　引言"></a>一　引言</h2><p>世界历史理论并非马克思的独创，在古希腊时期，世界历史观念就已经在众多欧洲学者的研究成果中萌芽。<br>素有“历史之父”之称的希罗多德(Herodotus)在《历史》一书中就展示了一种朴素的世界历史观念。</p>
-<ul>
-<li>到中世纪，奥古斯丁(St. Augustine)等著名神学家将人们引向了另一种世界历史观念之中，他们借上帝之身超越了民族历史观念的狭隘性而达到了抽象的普遍性，并确立了历史进步观念、上帝目的论和历史时空观念。[1]</li>
-</ul>
-<p>后来，但丁(Dante Alighieri)则将世界历史视为人类自身智力与潜能的发展过程，把中世纪颠倒的神与人之间的关系重新摆正过来，把神意的世界历史观念还原为人类本身的创造活动，创立了人本主义的世界历史观念。<br>此后，世界历史观念又历经了维柯(Giambattista Vico)的“哲学提升”、伏尔泰(Francois Marie Arouet Voltaire)的“文明化的进化”、康德(Immanuel Kant)的“世界公民社会的构建”、赫尔德(Johann Gottfried Herder)的人道主义世界历史范式的确立以及黑格尔(George Wilhelm Hegel)把世界历史归结为“世界精神”</p>
-<ul>
-<li>[2]的漫长过程。<br>这些都在一定程度上对马克思变革世界历史理论产生了重要影响。<br>但是，马克思的世界历史理论第一次厘清了“世界历史”这一概念，认为“世界史不是过去一直存在的”。</li>
-<li>[3]马克思的“世界历史”是特指“16世纪以来建立在大工业和各民族普遍交往基础上日益形成一个整体的世界历史，它强调的是各民族之间相互作用、相互依存的整体性联系以及人的发展和最终解放”，“其空间内涵不包括16世纪前各民族、国家、地区相对隔绝、彼此孤立而尚未形成有机整体的历史”。</li>
-<li>[4] 马克思抛弃了中世纪把神置于人之上的世界历史观念，批判了理性主义把世界历史视为自由意识的进展过程的唯心主义历史观，但吸收了包括但丁在内的人本主义世界历史观念，在此基础上对世界历史理论进行了科学的重构。</li>
-</ul>
-<p>全球治理</p>
-<p>早在19世纪40年代，马克思、恩格斯就在《德意志意识形态》和《共产党宣言》等多部著作中提出并阐述了“世界历史”理论。<br>马克思用这一理论揭示了世界历史与人的发展之间的内在一致性，并认为人的发展是历史发展的实质与核心。<br>马克思指出：“全部历史是为了使‘人’成为感性意识的对象和使‘人作为人’的需要成为需要而作准备的历史(发展的历史)。”[5]但是，在马克思看来，并非生产使用价值的特殊劳动开拓世界历史，而是生产交换价值的抽象劳动才能真正开拓世界历史。<br>而劳动从特殊劳动向抽象劳动的转变过程正是劳动的异化过程，也是资本形成的过程。</p>
-<font color="#FF4500"><br>资本在直接生产的过程中无止境地、盲目地追求剩余价值的本性，使它必然突破狭隘的民族地域历史界限而开辟广阔的市场。<br></font><br>这就是马克思、恩格斯在《共产党宣言》中所说的：“资产阶级，由于开拓了世界市场，使一切国家的生产和消费都成世界性的了”，“过去那种地方的和民族的自给自足和闭关自守状态，被各民族的各方面的相互往来和各方面的相互依赖所代替了。物质的生产是如此，精神的生产也是如此”。[6]马克思还指出：“创造世界市场的趋势已经直接包含在资本的概念本身中。”[7]<br><font color="#FF4500"><br>马克思认为，资本不仅把人与人之间的关系变成了冷酷无情的“现金交易”，而且也使物化的社会关系成为束缚个人的枷锁。<br>马克思指出：“在世界市场上，单个人与一切人发生联系，但同时这种联系又不以单个人为转移。”“交换价值作为整个生产制度的客观基础这一前提，从一开始就已经包含着对个人的强制，个人的直接产品不是为了个人的产品，只有在社会过程中它才成为这样的产品，因而必须采取这种一般的并且诚然是表面的形式；<br>个人只有作为交换价值的生产者才能存在，而这种情况就已经包含着对个人的自然存在的完全否定，因而个人完全是由社会所决定的。”[8]由此可见，马克思不仅揭示了资本怎样开拓世界历史，<br>而且也揭示了资本是怎样在世界历史进程中进行世界性控制的。<br></font><br>这就是马克思世界历史理论视野下的全球治理。<br>然而遗憾的是，由于时代的限制，马克思全球治理的思想跟“世界历史”理论一样并没有引起世人的重视。<br>但是，当今在探讨全球治理的思想源头的过程中，马克思的全球治理思想是不得不提起的。<br><br><br>## 二　世界历史进程的开创与全球治理的源起<br><br>在迄今为止的研究中，人们一般认为全球治理是在冷战结束以后全球化日益深化、全球化带来的全球性问题日益凸显这一背景下而兴起并受到国际社会的广泛关注。<br>最初学术界对“全球治理”这一概念并没有明确界定。<br>以国家为中心的世界体系形成以后，为了解决国家间面临的安全困境，或者为了拓展疆土、扩充影响力而形成相应规则(包括合理的和不合理的)，跨国家的治理开始出现。<br>最早提出“全球治理”这个概念并将这一概念推向学术领域的是詹姆斯·罗西瑙(James N. Rosenau)。<br>他虽然很少直接使用这一概念，但他从全球的视角来考察全球生活，并在这个层面上使用“全球治理”这一术语。<br>他认为治理“既包括政府机制，同时也包括非正式、非政府的机制，随着治理范围的扩大，各色人等和各类组织得以借助这些机制满足各自的需要并实现各自的愿望”。<br><em> [9]戴维·赫尔德(David Held)在其颇有影响的《全球大变革》一书中也谈到：“全球治理不仅意味着正式的制度和组织——国家机构、政府间合作等——制定(或不制定)和维持管理世界秩序的规则和规范，而且意味着所有的其他组织和压力团体——从多国公司、跨国社会运动到众多的非政府组织——都追求对跨国规则和权威体系产生影响的目标和对象。”<br><br><font color="#FF4500">
-</font></em> [10]中国学术界引入“全球治理”的术语比较晚，但也都是基于全球化的负面影响并试图建立全球性秩序而探讨全球治理的内涵。<br>俞可平可以说是最早把“全球治理”的概念引入中国学术界的。他认为，“所谓全球治理，指的是通过具有约束力的国际规制(regimes)解决全球性的冲突、生态、人权、移民、毒品、走私、传染病等问题，以维持正常的国际政治经济秩序”。<br>
-
-<ul>
-<li>[11]迄今为止，中国学术界关于全球治理的理解基本上沿袭了这一内涵。</li>
-</ul>
-<p>假若全球治理确实主要是指对国际秩序的追求而忽略其价值取向问题的话，那么全球治理在资本主义大工业生产和普遍交往的出现、各民族之间的相互依赖形成一个有机整体的发展状况，即地域性的民族历史被全球性的世界历史所取代的状况下就已经出现了。<br>或者说，世界历史进程的开创是全球治理的前提。<br>只不过当时的全球治理更多的是对全球资本主义的管理。<br>既然全球治理是规则、秩序的跨国界影响，那么首先必须要有跨国界的关系的出现。没有这种关系就不可能有调节这种关系的规则和秩序。<br>开启这种跨国界关系的原因究竟是什么呢？毫无疑问，这要归功于地理大发现。</p>
-<p>地理大发现使人类社会开始真正进入了世界联系和交往的时期。<br>正是哥伦布发现美洲新大陆后的两百多年间，人类才把被海洋隔开的各大陆，被沙漠、高山隔开的各文明国家紧密地联系起来，从根本上打破了世界联系和交往的闭塞性，使分散发展的区域民族史逐步转变为整体发展的世界历史。</p>
-<p>正如恩格斯所说：“世界一下子大了差不多十倍；现在展现在西欧人眼前的，已不是一个半球的四分之一，而是整个地球了。<br>他们赶紧去占据其余的七个四分之一。</p>
-<p>传统的中世纪思想方式的千年藩篱，同旧日的狭隘的故乡藩篱一起崩溃了。<br>在人的外在的眼睛和内心的眼睛前面，都展开了无限广大的视野。”</p>
-<ul>
-<li>[12]美国历史学家斯塔夫里阿诺斯(Leften Stavros Stavrianos)也指出：“实际上，严格的全球意义上的世界历史直到哥伦布、达·伽马和麦哲伦进行远航探险时才开始。<br>在这以前，只有各民族的相对平行的历史，而没有一部统一的人类历史。”</li>
-</ul>
-<p><font color="#FF4500"></font></p>
-<ul>
-<li><p>[13]不过，仅仅是地理大发现还不足以开启跨国家的关系，真正开启这种跨国界关系的是资本的力量。<br>资产阶级的本质就是对剩余价值的无限占有，资本的本性就是唯利是图。<br>资本的本性驱使着资产阶级对剩余价值的占有从一国、一个民族内部拓展到整个世界。<br>特别是由于资产阶级生产方式的发展，特别是大工业大大地提高了资本主义生产的效率，因此，资产阶级“不断扩大产品销路”，“到处落户、到处开发，到处建立联系”。<br></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">你个狗日的, 要不要说的这么经典透彻啊.</span><br><span class="line"></span><br><span class="line">反对剥削，往往是在掩盖更深刻的剥削，因为剥削早已经无形化、升级版，任何的反对，从利用社会资源上看，都是在促进剥削本身。</span><br><span class="line">资本主义早进化成这样一只魔兽，任何社会资源的交换与利用，都成了促使其更有力量的行为。</span><br><span class="line">所有人都在资本的魔性用迷失，所有在资本魔性中沉浮的，都为这资本魔兽提供动力。</span><br><span class="line">而那虚实的游戏，同样要席卷一切。反对资本主义的，最终被资本主义所吞没，就算是死了，其葬礼、也构成其交易，构成其GDP，为资本主义添砖加瓦；</span><br><span class="line">反对资本市场的，最终被资本市场吞没，资本市场高效地配置社会的资源，资本市场的采阳大法，只采集其精华，而所有的交易、所有的人，都被其筛选着、吞噬着</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>[14]起初这种联系是非常简单的、松散的，但后来随着资本运动的加速以及社会分工从国内扩展到整个世界，资产阶级建立的这种联系逐渐形成了以资本为纽带的联系。这种以资本为纽带而建立起来的全球性的资本主义“联系”就是以资本为工具和手段的全球治理机制。</p>
-</li>
-</ul>
-<p>以资本为纽带的全球资本主义“联系”为什么需要治理？<br>马克思虽然没有使用治理这一概念，但他在揭示资产阶级开创世界历史进程的过程中看到了资产阶级内部的尖锐矛盾，这种矛盾客观上要求进行全球资本主义的治理。<br>当然，资产阶级不可能对此形成自觉，但资本作为全球资本主义联系纽带的同时也充当着对资本主义进行全球治理的一种“自觉”的工具。</p>
-<p>众所周知，不同国家、不同民族的资产阶级在世界历史进程中所处的地位是不一样的，这是由它们的生产力水平不一样所决定的。</p>
-<p>这同时也就决定了卷入“文明史”中各民族的相互关系具有相当大的复杂性。<br>“各民族之间的相互关系取决于每一个民族的生产力、分工和内部交往的发展程度。”</p>
-<ul>
-<li>[15]生产力发达的资产阶级往往在世界历史进程中占据主导地位，而生产力水平相对落后的则只能从属于前者。<br>那些“被卷入”世界历史进程的民族则只好听命于前两者的使唤和奴役。</li>
-</ul>
-<p>结果，在世界历史进程中就形成了一种特殊的层级关系，或者说是多层次的全球治理关系。<br>资产阶级只知道无限占有剩余价值，并不知道存在着这样的全球治理结构。</p>
-<p>但是，资本作为最重要的纽带是非常清楚这种全球治理结构的，并且在维系这种全球治理结构中发挥着关键性的作用。</p>
-<p>由于生产力水平在资产阶级内部是严重不平衡的，这就必然导致资本主义生产力与生产关系的矛盾难以克服，</p>
-<p>这个矛盾首先在一国内部发生，但随着资产阶级生产方式向落后国家的扩展和资产阶级对外的殖民掠夺，<br>这个矛盾也迅速蔓延到所有“被卷入”世界历史进程的其他国家和民族。</p>
-<p>于是，“资产阶级的生产关系和交换关系，资产阶级的所有制关系，这个曾经仿佛用法术制造了如此庞大的生产资料和交换手段的现代资产阶级社会，现在像一个魔术师一样不能再支配自己用法术呼唤出来的魔鬼了。</p>
-<p>几十年工业和商业的历史，只不过是现代生产力反抗现代生产关系的历史”。</p>
-<ul>
-<li>[16]因此，以资本为工具和手段的全球治理实际上就是资本对资本主义生产力与生产关系这一基本矛盾的治理。<br>然而，资本唯利是图的本性决定了资本对全球资本主义进行的治理是无效的。<br>这种无效治理的表现就是资本主义周期性的经济危机以及为转嫁危机而举行的大规模对外战争。<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">这点不能认同, 没有比资本对全球化治理更有效的了.</span><br><span class="line"></span><br><span class="line">周期性经济危机的本质是 :</span><br><span class="line"><span class="string">'资本要生存下去，就不但要冲破人在自然的关系中能力的限制，又要冲破它自身对生产过程的限制。'</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="三以资本为手段的全球治理及其实现方式"><a href="#三以资本为手段的全球治理及其实现方式" class="headerlink" title="三以资本为手段的全球治理及其实现方式"></a>三以资本为手段的全球治理及其实现方式</h2><p>资产阶级开创的世界历史进程为以资本为手段的全球治理提供了可能。但是，资本要真正充当治理全球资本主义的工具必须具备这样的条件：</p>
-<ul>
-<li>其一，世界历史进程是资本控制之下的一个进程。</li>
-<li>其二，资本主义生产方式遍及全球并且形成了一个相对统一的整体。</li>
-<li>其三，世界历史进程和世界市场客观上对全球治理产生了需求，同时资产阶级自身也对全球治理产生需求。</li>
-</ul>
-<p>首先，世界历史进程是否是资本控制下的一个进程？<br>马克思认为，世界市场的形成是资本主义生存与发展的基础，又是世界历史进程得以开创的重要标志。<br>黑格尔认为，世界历史不过是“世界精神”的外化与实现，世界精神决定世界历史，世界历史是由上帝创造的，<br>“上帝统治着世界，而世界历史便是上帝的实际行政，便是上帝计划的付诸实施”。</p>
-<ul>
-<li><p>[17]但是，马克思却把人的发展作为世界历史发展的实质与核心，认为“整个所谓世界历史不外是人通过人的劳动而诞生的过程，是自然界对人来说的生成过程，所以关于他通过自身而诞生、关于他的形成过程，他有直观的、无可辩驳的证明”。</p>
-</li>
-<li><p>[18]更为重要的是，马克思揭示了资本和发达的私有财产对于战胜封建主义和开创世界历史的重要意义。<br>马克思指出，资本和私有财产的发展打破了封建土地关系的地方性、民族性的限制，并“作为存在于人之外的本质的私有财产的那些地域性的、民族性的等等的规定，从而发挥一种世界主义的、普遍的、摧毁一切界限和束缚的能量，以便自己作为唯一的政策、普遍性、界限和束缚取代这些规定”而发展起来。</p>
-</li>
-<li><p>[19]结果，“一切财富都成了工业的财富，成了劳动的财富，而工业是完成了的劳动，正像工厂制度是工业的即劳动的发达的本质，而工业资本是私有财产的完成了的客观形式一样。——我们看到，只有这时私有财产才能完成它对人的统治，并以最普遍的形式成为世界历史性的力量”。</p>
-</li>
-<li><p>[20]由此可见，资产阶级开拓世界市场，同时也把资产阶级内部的竞争从一国扩展到资本主义生产方式所覆盖的全球，进而使资本成为那个时代的世界历史进程的实际控制者。</p>
-</li>
-</ul>
-<p>其次，资本主义生产方式是怎样遍及全球并形成一个整体的？马克思在分析资本的本性时就指出：“作为财富，作为财富的一般形式，作为起价值作用的价值而被固定下来的货币，只是一种不断超出自己量的界限的欲望：是无止境的过程。”</p>
-<ul>
-<li>[21]资本就是在满足这种欲望的过程中不断增值、不断推动生产力向前发展。为了这个目的，“资本的趋势是</li>
-</ul>
-<ul>
-<li>(1)不断扩大流通范围；</li>
-<li>(2)在一切地点把生产变成由资本推动的生产”。</li>
-</ul>
-<ul>
-<li><p>[22]资产阶级对剩余价值的占有，一方面客观上充当了为世界历史进程创造物质基础的动力；另一方面也决定了资产阶级必须“对生产工具，从而对生产关系、对全部社会关系不断地进行革命，否则就不能生存下去”。</p>
-</li>
-<li><p>[23]资产阶级通过资本开拓了世界市场，资产阶级所到之处，用资本的利刃无情地斩断了把人们束缚于天然尊长的形形色色的封建羁绊，并迅速地不断消除生产资料、财产和人口的分散状态，使世界在经济、政治上形成一个统一的整体，“各自独立的、几乎只有同盟关系的、各有不同利益、不同法律、不同政府、不同关税的各个地区，现在已经结合为一个拥有统一的政府、统一的法律、统一的民族阶级利益和统一的关税的统一民族”。</p>
-</li>
-<li><p>[24]但是，这个“整体”实际上是存在着尖锐矛盾的。这是因为资产阶级在全球范围内追逐剩余价值的欲望是无限的。这种欲望必然促使资产阶级在全球范围内不断扩大再生产。于是，世界市场的有限性与资产阶级欲望无限性之间的矛盾必然会导致资产阶级之间的竞争在全球范围内愈演愈烈，矛盾也越来越尖锐。而解决这种矛盾的最终出路是资产阶级相互之间掠夺世界市场的战争。从这一角度来看，资产阶级只是充当了开创世界历史不自觉的主体。但是，世界历史进程和世界市场的发展客观上要求进行全球治理，特别是要遏制资产阶级无限追求剩余价值的欲望。另外，资本主义企业生产的有组织性和社会生产的无政府状态之间也存在着不可调和的矛盾。由于机器大工业的产生，资产阶级的生产能力越来越强，社会生产力在不断地提升，但社会生产的无序化、无政府状态反过来对社会生产力的进一步提升产生了阻碍作用。其必然结果是资本主义经济危机的爆发。更为严重的问题不是一次性的经济危机，而是周期性的经济危机。在这样的情形下，为了使资本生产得以继续下去，资产阶级主观上也对全球治理产生了需求。</p>
-</li>
-</ul>
-<p>有了对全球治理的需求之后，以资本为手段的全球治理又是如何实现的呢？首先，资本进行全球治理的第一步是资产阶级把一切都资本化。虽然资本开创了世界历史进程，但它是这一历史进程不自觉的工具。然而，资本在追求剩余价值的过程中却充当了全球治理自觉的工具。资产阶级用资本开拓了世界市场并由此首次开创了世界历史，但资产阶级开创世界历史进程绝非是要把自己淹没在世界历史进程中，而是通过这个进程来实现利益的最大化。马克思指出，资本的本性就是唯利是图。为了达到这一目的，资产阶级把一切都资本化包括“把人的尊严都变成了交换价值”，从而使人与人之间的关系简单化为“赤裸裸的利害关系，除了冷酷无情的‘现金交易’，就再也没有任何别的联系了”，“资产阶级抹去了一切向来受人尊崇和令人敬畏的职业的神圣光环。它把医生、律师、教士、诗人和学者变成了它出钱招雇的雇佣劳动者”。</p>
-<ul>
-<li>[25]这样，资本就可以在它所开创的这个世界历史进程中成为支配一切的力量。</li>
-</ul>
-<p>其次，资产阶级把一切民族都通过资本卷入到资本的“文明”之中。资产阶级首先在一国范围内把落后民族、落后的阶级纳入到资本化的进程之中，“使农村屈服于城市的统治”，“使很大一部分居民脱离了农村生活的愚昧状态”。</p>
-<ul>
-<li>[26]然后，资产阶级把一切资本化并非仅仅限于在一国范围之内，而是把它的资本化过程推向全世界。资产阶级将资本化推向全球的过程首先是借助于生产工具的迅速改进，借助于便利的交通和新航路的开辟；其次借助于资产阶级价格低廉的商品。前者使资本走出了欧洲、走向了世界，后者则使资本在美洲、亚洲、非洲等地区落地生根，并且用有悖人性的方式征服了“野蛮人”。这样，资产阶级就“迫使一切民族——如果它们不想灭亡的话——采用资产阶级的生产方式；它迫使它们在自己那里推行所谓的文明，即变成资产者。一句话，它按照自己的面貌为自己创造一个世界”。</li>
-<li>[27]在这个世界中，“未开化和半开化的国家从属于文明国家，使农民的民族从属于资产阶级的民族，使东方从属于西方”。[28]简言之，在世界历史进程和世界市场中，一切都从属于资本。</li>
-</ul>
-<p>再次，资产阶级“迫使一切民族采用资产阶级的生产方式”的手段不是别的，而是资本。资本的力量使“以前那种封建的或行会的工业经营方式已经不能满足随着新市场的出现而增加的需求了。工场手工业代替了这种经营方式。行会师傅被工业中的中间等级排挤掉了；各行各业组织之间的分工随着各个作坊内部的分工的出现而消失了”。</p>
-<ul>
-<li><p>[29]一句话，资本摧毁了封建社会的一切藩篱并借助于新航路和新的航海技术而走向了世界。而与新航路的开辟相伴随的是资本通过血与火的殖民掠夺进行的疯狂的原始积累。新航路开辟以后，以欧洲为中心的资产阶级便开始以武力掠夺和商业贸易双重手段，将美洲、亚洲、非洲等变成了资本的殖民地。马克思以英国为例揭示了资产阶级在迫使其他民族采用资产阶级生产方式的过程中采用殖民掠夺手段更甚于贸易手段。他指出：“在整个18世纪期间，由印度流入英国的财富，主要不是通过比较次要的贸易弄到手的，而是通过对印度的直接搜刮，通过掠夺巨额财富然后转运英国的办法弄到手的。”</p>
-</li>
-<li><p>[30]但是，这并不意味着殖民掠夺的手段使资本的作用降低了，相反更表明资本的“迫使”作用更加增强了。因为一般的贸易仅仅反映的是资本主义的自然发展速度和资本对其他民族的自然征服，但资本主义的自然发展速度是无法满足资产阶级的贪得无厌的，资本的本性和资产阶级的无限欲望强烈要求资本的发展要有一个巨大的加速度。资本发展的这个加速度来自于哪里？只能来自于武力掠夺。也就是说，殖民掠夺是为资本的加速增值服务的，是为资本能够更快地“迫使”一切民族接受资本的支配服务的。不仅殖民掠夺是这样，包括灭绝人性的奴隶贸易也是为了使资本增值获得这样的加速度。“没有奴隶制就没有棉花，没有棉花现代工业就不可设想。奴隶制使殖民地具有价值，殖民地产生了世界贸易，世界贸易是大工业的条件。”</p>
-</li>
-<li><p>[31]由此可见，世界市场使资本主义生产方式国际化，而殖民掠夺和奴隶贸易则使资本在加速度中实现了对世界市场和一切民族的控制。</p>
-</li>
-</ul>
-<p>最后，资本实行全球治理的目的是要在资本的控制之下实现资本收益的最大化，而不是建立一个稳定的秩序，但为了剩余价值而寻求一种畸形的秩序，资本正是借用这种畸形的秩序来进行全球治理的。毫无疑问，人类要追求一种理想的秩序，但究竟什么是理想的秩序呢？最早探讨这一问题的是古希腊哲学家柏拉图(Plato)，他在其《理想国》一书中指出：“我们建立这个国家的目标并不是为了某一个阶级的单独突出的幸福，而是为了全体公民的最大幸福；因为我们认为在一个这样的城邦里最有可能找到正义，而在一个建立得最糟糕的城邦里最有可能找不到正义。”</p>
-<ul>
-<li><p>[32]后来，亚里士多德(Aristotle)在此基础上提出了评判“理想秩序”的标准，即“依绝对公正的原则来评判”。[33]马克思主义的秩序观也认为，秩序必须确保是“为了所有人的平等权利和平等义务”。[34]在资本把野蛮民族卷入之前，原来的社会原本是有一个秩序的。正如恩格斯在评述氏族内部的组织特点时所说：“没有军队、宪兵和警察，没有贵族、国王、总督、地方官和法官，没有监狱、没有诉讼，而一切都是有条理的。”</p>
-</li>
-<li><p>[35]随着社会生产的发展，社会“产生了这样一种需求：把每天重复着的生产、分配和交换产品的行为作为用一个共同的规划概括起来，设法使个人服从生产和交换的一般条件”。</p>
-</li>
-<li><p>[36]这里的“一般条件”所指的就是秩序。然而，当资本迫使一切民族进入资本化进程之后，无论是一国内部的秩序还是全球范围内的秩序都是资本建立起来并为资本的增值服务的。在这样的秩序之下，不仅整个社会分裂为两大相互直接对立的阶级——资产阶级和无产阶级，而且被雇佣和被奴役的无产阶级最后只剩下把自己出卖给哪一个资本家的权利和自由，除此之外，别无他有。因此，这样一个畸形的全球治理秩序注定是不稳定、不安定的。正如马克思所说：“生产的不断变革，一切社会状况不停的动荡，永远的不安定和变动，这就是资产阶级时代不同于过去一切时代的地方。”[37]</p>
-</li>
-</ul>
-<h2 id="四-以资本为工具的全球治理的价值取向"><a href="#四-以资本为工具的全球治理的价值取向" class="headerlink" title="四　以资本为工具的全球治理的价值取向"></a>四　以资本为工具的全球治理的价值取向</h2><p>国内治理机制是有价值目标的。俞可平从国内治理的角度提出了“善治”的价值取向，并从合法性、法治、透明性、责任性、回应、有效性、参与、稳定、廉洁和公正十个方面揭示了“善治”的价值构成。[38]同样，全球治理机制也是有价值取向的。在这一方面，艾伦·布坎南(Allen Buchanan)和罗伯特·基欧汉(Robert O. Keohane)进行了非常有益的研究。他们不仅认为全球治理机制是有价值的，而且还从规范的角度阐述了全球治理机制合法性的公共标准。他们认为，“全球治理机制之所以有价值，是因为它们创造了使成员国及其他行为体以互利的方式协调彼此行为的准则和信息。它们能减少交易成本，创造成员国及其他行为体展示可信度的机会，克服背叛承诺问题，同时提供包括原则性的、和平解决冲突方法在内的公共产品”。[39]而关于全球治理机制合法性的公共标准，他们提出了关于合法性的三种独立的标准，包括国家同意、民主国家的一致同意以及全球性民主。他们还认为，在价值目标的保证之下，全球治理机制能提供并维护国家无法供给的收益，这会进一步增强全球治理机制的合法性。[40]托尼·麦克格鲁(Tony McGrew)认为，限制了人们更高水平的全球社会正义和人类安全，就是“扭曲的全球治理”。[41]因此，人权和民主就是作为支撑全球治理的价值大厦的核心价值。中国学者对全球治理的价值取向问题也进行了相关的研究。例如蔡拓认为，“全球治理体系规则与一定价值取向的社会公共观念、文化、价值观具有一致性”。[42]换言之，全球治理体系的规则本身就是民主、正义、平等等被普遍认同的价值观的一种再现。尽管即便是在当今的全球治理体系中这也不是一种事实存在，但全球治理体系的规则客观上要求全球治理的过程要体现民主、正义与平等。它为全球治理提供了一种价值目标，这也正是人类社会所追求的理想秩序。任剑涛认为，“全球治理的价值基础具有制约全球治理观念导向的作用”，不过，“从全球治理的价值基础所显现的实际状态来看，全球治理价值还远远没有建立起与之相适应的价值共识。如何在各民族-国家自有渊源的文化价值基础上达成全球治理的价值共识，也就相应地成为支持或瓦解全球治理的关键问题”。[43]</p>
-<p>以资本为工具和手段的全球治理也有价值取向，但它体现的是一种非道德的价值取向。正如马克思所说：“资本来到世间，从头到脚，每个毛孔都滴着血和肮脏的东西。”[44]由此我们可以理解以资本为工具的全球治理的非道德取向。资本要实行全球治理，首先是把自己作为资本主义生产方式的核心纽带。在资本主义生产方式中，不是单个的资本家和单个的工人，而是两大直接对立的阶级：资本家阶级和工人阶级。表面上看，工人是自由的，即出卖给哪个资本家由工人自己决定，但资本家一旦雇佣了工人即把自己的一部分资本转化为劳动力，资本家就增殖了自己的总资本。从此，“工人阶级的个人消费，在绝对必要的限度内，只是把资本用来交换的劳动资料转化为可供资本重新剥削的劳动力。这种消费是资本家最不可少的生产资料即工人本身的生产和再生产。可见，工人的个人消费，不论在工厂以内或以外，在劳动过程以内或以外进行，总是资本生产和再生产的一个要素，正像擦洗机器，不论在劳动过程中或劳动过程的一定间隙进行，总是资本生产和再生产的一个要素一样”。[45]因此，资本主义再生产过程是这样一个过程，“不仅生产商品，不仅生产剩余价值，而且还生产和再生产资本关系本身：一方面是资本家，另一方面是雇佣工人”。[46]资本把资本家阶级和工人阶级紧紧地捆绑在一起，目的是使资本获得最大的增值。</p>
-<p>其次，资本实现全球治理的非道德取向还在于资本的殖民掠夺。通过圈地运动，西欧资产阶级把农民的土地全部掌控在自己的手中，使原来的自由农转变为雇佣工人，于是自由农被资本化了。但是，资产阶级的资本积累并不到此结束，而是为了资本迅速增大而对外进行殖民扩张。“殖民制度宣布，赚钱是人类最终的和唯一的目的。”[47]为了这一目的，西欧资产阶级开辟了一条殖民增殖的血腥之路：残杀土著居民、在非洲与美洲之间贩卖黑人、在爪哇推行盗人制度等。所以说，西欧殖民主义的历史“展示出一幅背信弃义、贿赂、残杀和卑鄙行为的绝妙图景”。[48]</p>
-<p>再次，资产阶级所谓的“公共信用制度”实际上是资本全球治理非道德价值取向的有力证据。资本不仅是资本家与工人之间的核心纽带，而且也是不同资本家(不同地域的资本)之间的核心纽带。那么不同地域的资本之间的关系靠什么来调节呢？首先靠的是工业资本，工业资本借助于新技术和新航路而进行殖民掠夺并最终建立起工业资本霸权。工业资本因“美洲金矿的发现，土著居民的被剿灭、被奴役和被埋葬于矿井，对东印度开始进行的征服和掠夺，非洲变成商业性地猎获黑人的场所”而开辟了“资本主义生产时代的曙光”。[49]殖民制度又大大促进了贸易的发展，工业上的霸权带来了商业上的霸权。因此调节不同地域的资本关系的工具很快被商业资本所取代。但是，商业资本最初并不能离开工业资本而独立存在，为此它还必须创造出新的条件来支撑其独立的存在。这种工具就是公共信用制度。在这一制度体系中，首先是国债，国债实际上调节着资产阶级统治者与人民之间的关系。国债发行人凭着等同于相同金额的公债券掠夺人民手中仅有的一点财富，从而使自己大发横财；同时，以国家的名义装饰起来的银行，“一只手拿出去，另一只手拿更多的进来，这还不够；当它拿进来时，它仍然是国民的永远债权人，直到最后一个铜板付清为止”。[50]简言之，就是要把国民彻底榨干为止。随着国债制度产生的是国际信用制度。这种制度不仅可以隐藏资产阶级资本原始积累源泉，而且还是强化资本的国际殖民掠夺的一种手段。由于资本在国际间的相互借贷，实力弱小的资本因获得这种借贷而增加了自己的实力，从而也就可以实施更残忍的殖民掠夺。也因为这种借贷，正如马克思所描述的那样，“由于没落的威尼斯以巨额货币贷给荷兰，威尼斯劫掠制度的卑鄙行径就成为荷兰资本财富的这种隐蔽的基础。荷兰和英国的关系也是这样。在18世纪初，荷兰的工场手工业已经远远落后了，荷兰已不再是一个占统治地位的工商业国家。因此，荷兰在1701-1776年时期的主要营业之一就是贷贩巨额资本，特别是贷给它的强大竞争者英国。现在，英国和美国之间也有类似的情形。今天出现在美国的许多身世不明的资本，仅仅在昨天还是英国的资本化了的儿童血液”。[51]从国际资本借贷的过程中，我们不仅仍然可以看到资本全球治理的非道德价值取向，而且也看到了西方大国兴衰的一般历史过程。</p>
-<p>不过，资本的野蛮性并不否定资本的文明化趋势。马克思在《1857-1858年经济学手稿》中明确指出：“在资本的简单概念中必然自在地包含着资本的文明化趋势等等，这种趋势并非像迄今为止的经济学著作中所说的那样，只表现为外部结果。同样必须指出，在资本的简单概念中已经潜在地包含着以后才暴露出来的那些矛盾。”[52]资本简单的概念之所以自在地包含着资本的文明化趋势，是因为资本内在地要求自然(nature)变成文化(culture)的一部分。这里的“自然”既包括外部自然，即我们通常所说的自然界，也包括人的自然(human nature)，也就是我们通常所说的人性。[53]资本的文明化趋势就是指在资本的驱动下，人化的自然越来越替代纯粹的自然，而人的“历史地形成的需要”越来越代替“自然的需要”。[54]具体而言，资本的文明化趋势至少表现为：其一，资本扫清了封建主义生产关系的残余，促使社会生产关系局部调整和改变。其二，资本促进了社会生产力以前所未有的速度发展。资本的最主要目的和直接动机就是生产剩余价值，这种内在目的的外化必然使“资本主义生产方式包含着绝对发展生产力的趋势”。[55]甚至可以这样说：“发展社会劳动生产力，是资本的历史任务和存在理由。”[56]因此，资产阶级在其不到一百年的阶级统治中所创造的生产力，比过去一切时代创造的全部生产力还要多、还要大。其三，资本客观上为个人的全面而自由发展创造了条件。资本的发展为资产阶级改变资本原始积累时那种血淋淋的野蛮做法创造条件，从而有能力给资本的统治披上正义性的外衣。例如，随着技术的发展，资本不断地缩减必要劳动时间、极大地增加剩余时间，这同时意味着有了更多的社会的自由时间，自由时间的增加意味着扩展了人类的自由发展的空间。正如马克思所说：“节约劳动时间等于增加自由时间，即增加使个人得到充分发展的时间，而个人的充分发展又作为最大的生产力反作用于劳动生产力。”[57]</p>
-<p>但是，资本的文明化趋势并不意味着资本的全球治理是一种道德的价值取向。这是因为，资本的本性是驱使雇佣劳动在必要劳动时间以外用剩余劳动时间创造剩余价值，这种本性也决定了资本在全球范围内只追求“经济效益”而不讲“社会道德”。因此，马克思指出：“资本不可遏制地追求的普遍性，在资本本身的性质上遇到了限制。这些限制在资本发展到一定阶段时，会使人们认识到资本本身就是这种趋势的最大限度，因而驱使人们利用资本本身来消灭资本。”[58]换言之，资本全球治理的非道德价值取向注定了这种形式的全球治理是脆弱的，也是不可持续的。</p>
-<h2 id="五-马克思对全球善治的追求"><a href="#五-马克思对全球善治的追求" class="headerlink" title="五　马克思对全球善治的追求"></a>五　马克思对全球善治的追求</h2><p>国内政治中客观上存在着所谓的善治，也就是约翰·罗尔斯(John Rawls)所说的善治要体现正义，而正义应该奉行两个基本原则：第一，每个人对与其他人所拥有的最广泛的基本自由体系相容的类似自由体系都应有一种平等的权利。第二，社会的和经济的不平等应有这样的安排，使它们被合理地期望适合于每一个人的利益，并且依系于地位和职务向所有人开放。[59]那么是否存在着所谓的全球善治？如果存在，它究竟是什么内容呢？在马克思看来，全球善治是客观存在的，但不是现实。马克思认为，理想中的全球善治就是这样一种状态：在自由人联合体中确保人的自由全面发展。</p>
-<p>前文述及，资本开创的世界历史进程是全球治理兴起的前提。没有世界历史进程，没有世界历史进程中的跨国界关系，也就没有所谓的全球治理。马克思的世界历史理论不仅否定了黑格尔将世界历史归结为某种精神力量创造物的观点，而且也揭示了世界历史的发展与人的全面发展之间的内在一致性。马克思指出：“每一个单个人的解放的程度是与历史转变为世界历史的程度一致的。”[60]也就是说，马克思从一开始就是把“人的全面发展”放在全球的视野中来思考的。单个人的发展、单个国家中的任何个人的发展，必须跟世界上一切人的全面发展联系在一起，因为“每个人的自由发展是一切人的自由发展的条件”。[61]由此可见，人的全面发展不是某一个人的问题，不是某一民族的问题，也不是某个国家的问题，而是全人类的问题，是全人类在世界历史进程中的共同目标。也正因为如此，马克思把人的全面发展置于世界历史进程中特别是置于全球治理的视野中来考量，并把人的全面发展作为全球善治的具体体现。</p>
-<p>但在资本主义时代，首先是资本使劳动异化，也就是马克思所说的，“劳动所生产的对象，即劳动产品，作为异己的东西，作为不依赖于生产者的独立力量，是同劳动对立的”。[62]在马克思看来，劳动本是充满了浪漫主义的一首田园诗，然而，在资本主义的生产条件下，劳动者自由自主的生命活动却变成了维持肉体生存的手段，“异化劳动把这种关系颠倒过来，正是由于人是有意识的存在物，人才把自己的生命活动、自己的本质仅仅变成维持自己生存的手段”。[63]结果，劳动非但不能彰显人之为人的本质，反而成了禁锢人性的枷锁和异化人类的罪魁，因此，“只要对劳动的肉体强制或其他强制一消失，人们就会像逃避鼠疫一样地逃避劳动”。[64]资本不仅使劳动异化，而且也通过使劳动异化而导致人的异化。马克思指出：“异化劳动，由于(1)自然界同人相异化，(2)使人本身，使他自己的活动机能，使他的生命活动相异化，因此，异化劳动也就使类同人相异化，对人来说，异化劳动把类生活变成维持个人生活的手段，第一，它使类生活和个人生活相异化；第二，它把抽象形式的个人生活变成同样是抽象形式和异化形式的类生活的目的。”[65]在这种异化劳动状态下，“劳动者在自己的劳动中并不肯定自己，而是否定自己，并不感到幸福，而是感到不幸，并不自由地发挥自己的肉体力量和精神力量，而是使自己的肉体受到损伤、精神遭到摧残”。[66]因此，在资本主义时代——确切地说——在资本实行全球治理的时代，人的全面发展在现实只能是一种奢望，但这并不能否定人类可以把它作为一种理想来追求。事实上，马克思正是把人的全面发展作为未来全球善治的理想来追求的。</p>
-<p>首先，马克思对消除异化从而实现人的解放给予了充分的肯定。其方法没有别的，只能是通过无产阶级的暴力革命消灭资本主义私有制并进一步解放和发展生产力。这样就能够为实现人的全面发展提供基本的前提保障。马克思指出：“要使被压迫阶级能够解放自己，就必须使既得的生产力和现存的社会关系不再能够继续并存。”[67]这是因为，在资本主义私有制下，“这个理性的王国不过是资产阶级的理想化了的王国；永恒的正义在资产阶级的司法中得到实现；平等归结为法律面前的资产阶级的平等；被宣布为最主要的人权之一的是资产阶级的所有权；而理性的国家、卢梭的社会契约在实践中表现为，而且也只能表现为资产阶级的民主共和国。”[68]因此，要实现人的全面发展，无产阶级必须要用暴力推翻资产阶级并建立自己的统治。但是，推翻资产阶级并夺取政权后的无产阶级“不能简单地掌握现成的国家机器，并运用它来达到自己的目的。奴役他们的政治工具不能当成解放他们的工具来使用”。[69]只有彻底砸碎旧的国家机器和摧毁资本主义私有制，才能彻底铲除导致劳动异化的土壤，从而为人的全面发展开辟道路。</p>
-<p>其次，马克思认为，要实现人的全面发展的全球善治，全世界无产阶级必须采取联合的行动。在马克思看来，“联合的行动，至少是各文明国家的联合的行动，是无产阶级获得解放的首要条件之一”。[70]因为与资产阶级相比，无产阶级的力量是弱小的，脱离了一定的社会关系，个人的力量就更显得微不足道。而在强大的资本面前，“单个人随着自己的活动扩大为世界历史性的活动，越来越受到对他们来说是异己的力量的支配，受到日益扩大的、归根结底表现为世界市场的力量的支配”。[71]简而言之，单个人的力量无论如何摆脱不了资本的支配。这也充分表明，“个人只有在群体中才能获得全面发展其才能的手段”的论断。也正因为如此，马克思指出：“被剥削被压迫的阶级(无产阶级)，如果不同时使整个社会永远摆脱剥削、压迫和阶级斗争，就不再能使自己从剥削它压迫它的那个阶级(资产阶级)下解放出来。”[72]在马克思看来，从世界历史视野来看，人的全面发展实际上就是世界历史性个人的生存过程。而马克思所说的世界历史性个人指的是摆脱了民族地域局限性的、与整个世界生产包括精神生产发生实际联系的、具有利用全球的全面生产能力的现实个人。也就是说，马克思的世界历史个人思想表明，人的自由全面发展是实现个人与人类的关系解放的过程。为了“人的自由全面发展”这一目的，马克思指出，全世界无产者必须联合起来，共产党人必须到处支持一切反对现存的社会制度和政治制度的革命运动。</p>
-<p>最后，马克思认为，人的自由全面发展作为全球善治的目标，只有在共产主义社会才能实现。马克思将人的发展过程概括为三个阶段：第一阶段是人的依赖关系。在这一阶段，个人没有独立性，直接依附于一定的社会共同体。第二阶段是以物的依赖关系为基础的人独立性阶段。在这一阶段，社会性成了普遍的物质交换、全面的关系、多方面的要求以及全面的能力的体系。第三阶段是建立在个人全面发展和他们共同的社会生产能力成为他们的社会财富这一基础上的自由个性。在这一阶段，人们将在丰富、全面的社会关系中获得自由、全面的发展，成为具有自由个性的人，成为世界历史性的个人。不过，从第一阶段经第二阶段到第三阶段的过程，并非是一个自然发展的过程，而是都要经历血与火的斗争。特别是在第二阶段，“只有用人头做酒杯才能喝下甜美的酒浆”。[73]在这一阶段，人类不可能实现人的全面发展的目标。在马克思看来，要真正实现个人的解放、实现人的全面发展，条件就是“现存社会制度被共产主义所推翻以及与这一革命具有同等意义的私有制的消灭”。因为只有这样，“单个人才能摆脱种种民族局限和地域局限而同整个世界的生产(也同精神生产)发生实际联系，才能获得利用全球的这种全面的生产(人们创造)的能力”。[74]到那时，社会成员才能彻底摆脱生产资料私有制的束缚，社会生产力高度发展，社会能够为每个社会成员提供充分的物质生活和精神生活，劳动成为人们生活的第一需要，每个社会成员能够“全面发展和表现自己全部的即体力和脑力的能力”，这时，“人终于成为自己的社会结合的主人，从而也就成为自然界的主人，成为自身的主人——自由的人”。[75]</p>
-<h2 id="六-结论"><a href="#六-结论" class="headerlink" title="六　结论"></a>六　结论</h2><p>把全球治理视为20世纪后期兴起的一种现象，实际上是把全球治理当做基于民主、平等、正义等普遍认同的普遍价值基础上的一个秩序建构过程，是“政府、社会组织和企业等共同合作，通过订立各类国际制度，在国际社会对主权国家管辖权以外的全球性问题形成有效管理，最终使国际社会接近秩序的过程”。[76]但是，这种层面上的全球治理是狭义的全球治理。狭义的全球治理，主要是指对全球秩序的追求，并通过这一秩序避免全球性问题的泛滥。从这一角度来看，狭义的全球治理实际上就是“全球共同治理”。因为全球性问题需要全球的协同行动。广义的全球治理是伴随着资本开创世界历史进程以及由此产生了跨国界、跨民族的关系而出现的。资本所开创的广义全球治理虽然也追求全球秩序，但这种秩序并不是全球协同行动的结果，而是资本作为一种特定力量强加的，其目的是追求资本这种“特定力量”的利益最大化。当今所说的全球治理即全球共同治理存在着事实与价值的疏离，也就是全球共同治理既处于一种事实上的资源贫困状态，也存在着价值上的严重亏空。[77]即便如此，这种全球共同治理是建立在民主、平等、人权等现代价值基石上的，而资本开创世界历史进程后而兴起的全球治理则是为谋取最大的剩余价值服务的，因此，以资本为工具和手段的全球治理是一种基于非道德价值取向的畸形秩序。这种畸形秩序注定不具有可持续性，因为“资产阶级用来推翻封建制度的武器，现在却对准资产阶级自己了”；而且，在资本实行全球治理的过程中，“资产阶级不仅锻造了置自身于死地的武器；它还产生了运用这种武器的人——现代工人，即无产者”。[78]当今的全球治理的机制是脆弱的，功效是十分有限的，但相比之下，资本主导下的全球治理更为脆弱，因为资本把世界带入文明之中，但资本的全球治理却是反文明的。</p>
-<p>但是，这并不意味着全球善治是不存在的。相反，全球善治在理论上是存在的，但不是在资本主义时代中，而是在未来共产主义社会中。由于资本的全球治理体系存在着工具、手段和目标上的严重缺陷，马克思没有把全球善治的价值目标放在资本主义的全球治理框架之中，而是寄希望于未来共产主义社会，取代资本全球治理模式的将是共产主义社会的全球治理模式，在这种全球治理模式中，人的全面发展将得以真正实现，人类社会将真正实现全球善治。马克思深知，资本作为全球治理的手段和工具，不可能实行真正意义的全球治理，相反它会带来全球性的危机，不仅有周期性的资本主义经济危机，而且由于资本的掠夺还会产生危及人类生存和阻碍人的全面发展的环境危机、生态危机、资源性危机等。从这些情况来看，当今所说的全球治理被认为是伴随着全球问题而兴起的，实际上是延续着马克思世界历史理论视野下全球治理的理论逻辑。全球治理归根结底要为人的全面发展服务，任何有碍于人的全面发展的因素都是全球治理革命的对象。因此，马克思一直在努力用无产阶级革命的方式来寻找实行全球治理的新的工具、手段乃至新的全球治理模式。当然，无产阶级取得革命胜利之后，全球治理的工具仍然是临时性的，因为无产阶级社会主义同资产阶级和整个资本主义的斗争是长期性的。只有当革命在全球范围内获得胜利，“自由人联合体”取代国家成为全球治理的主体之后，全球善治才得以实现。因此，在“自由人联合体”作为全球治理的模式建立之前，任何全球治理的模式都不可能是持续有效的，即便它在某些领域内取得一定的效果，那也只是既有全球治理主体之间的暂时性妥协。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/08/马克思对全球治理的几点看法/" data-id="cjdx5vhrb002466wpgbims3h3" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/20/华生--03--A股市场的真问题与假问题/" data-id="cjhg8i8cp000ojbs6vg23v575" class="article-share-link">Share</a>
       
       
     </footer>
@@ -935,7 +737,7 @@
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">weiter &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -944,7 +746,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/economics/">economics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/technique/">technique</a></li></ul>
     </div>
@@ -959,9 +761,9 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
     </div>
   </div>
 
@@ -969,9 +771,21 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2018/05/21/阿里云SLB显示用户真实IP/">阿里云SLB显示用户真实IP</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/21/Nginx获取真实IP方案/">Nginx获取真实IP方案</a>
+          </li>
+        
+          <li>
+            <a href="/2018/02/21/一些牛人/">一些牛人</a>
+          </li>
         
           <li>
             <a href="/2018/02/21/不畏浮云遮望眼：黄江南关于十九大的四个解读和十个判断/">不畏浮云遮望眼：黄江南关于十九大的四个解读和十个判断</a>
@@ -979,18 +793,6 @@
         
           <li>
             <a href="/2018/02/21/高粱：两种根本不同的经济改革观/">高粱：两种根本不同的经济改革观</a>
-          </li>
-        
-          <li>
-            <a href="/2018/02/20/华生--怎样建设一个强大的资本市场/">华生--怎样建设一个强大的资本市场</a>
-          </li>
-        
-          <li>
-            <a href="/2018/02/12/深圳证券交易所发展战略规划纲要(2018-2020)/">深圳证券交易所发展战略规划纲要(2018-2020)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/02/09/2018-2月全球股市暴跌分析/">2018-2月全球股市暴跌分析</a>
           </li>
         
       </ul>
