@@ -7,16 +7,16 @@
   
   <title>阿里云SLB显示用户真实IP | 谢谢这个世界</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="其实解决方法挺简单的，配合Nginx的Realip模块就行，主要是配置问题，我之前折腾CDN的时候就搞过，不过来源IP各家都有所不同，所以这边记录下吧，辣鸡阿里云自己的文档里都不写，简直智障。 ①首先确保你的Nginx安装了realip模块，nginx -V然后看看有没有http_realip_module就行，没有的话需要重新编译安装，在./configure后面添加–with-http_rea">
+  <meta name="description" content="其实解决方法挺简单的，配合Nginx的Realip模块就行，主要是配置问题，我之前折腾CDN的时候就搞过，不过来源IP各家都有所不同，所以这边记录下吧，辣鸡阿里云自己的文档里都不写，简直智障。 首先确保你的Nginx安装了realip模块，nginx -V然后看看有没有http_realip_module就行，没有的话需要重新编译安装，在./configure后面添加–with-http_real">
 <meta property="og:type" content="article">
 <meta property="og:title" content="阿里云SLB显示用户真实IP">
 <meta property="og:url" content="http://yoursite.com/2018/05/21/阿里云SLB显示用户真实IP/index.html">
 <meta property="og:site_name" content="谢谢这个世界">
-<meta property="og:description" content="其实解决方法挺简单的，配合Nginx的Realip模块就行，主要是配置问题，我之前折腾CDN的时候就搞过，不过来源IP各家都有所不同，所以这边记录下吧，辣鸡阿里云自己的文档里都不写，简直智障。 ①首先确保你的Nginx安装了realip模块，nginx -V然后看看有没有http_realip_module就行，没有的话需要重新编译安装，在./configure后面添加–with-http_rea">
-<meta property="og:updated_time" content="2018-05-21T12:29:57.000Z">
+<meta property="og:description" content="其实解决方法挺简单的，配合Nginx的Realip模块就行，主要是配置问题，我之前折腾CDN的时候就搞过，不过来源IP各家都有所不同，所以这边记录下吧，辣鸡阿里云自己的文档里都不写，简直智障。 首先确保你的Nginx安装了realip模块，nginx -V然后看看有没有http_realip_module就行，没有的话需要重新编译安装，在./configure后面添加–with-http_real">
+<meta property="og:updated_time" content="2018-05-21T12:45:47.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="阿里云SLB显示用户真实IP">
-<meta name="twitter:description" content="其实解决方法挺简单的，配合Nginx的Realip模块就行，主要是配置问题，我之前折腾CDN的时候就搞过，不过来源IP各家都有所不同，所以这边记录下吧，辣鸡阿里云自己的文档里都不写，简直智障。 ①首先确保你的Nginx安装了realip模块，nginx -V然后看看有没有http_realip_module就行，没有的话需要重新编译安装，在./configure后面添加–with-http_rea">
+<meta name="twitter:description" content="其实解决方法挺简单的，配合Nginx的Realip模块就行，主要是配置问题，我之前折腾CDN的时候就搞过，不过来源IP各家都有所不同，所以这边记录下吧，辣鸡阿里云自己的文档里都不写，简直智障。 首先确保你的Nginx安装了realip模块，nginx -V然后看看有没有http_realip_module就行，没有的话需要重新编译安装，在./configure后面添加–with-http_real">
   
     <link rel="alternate" href="/atom.xml" title="谢谢这个世界" type="application/atom+xml">
   
@@ -90,17 +90,13 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>其实解决方法挺简单的，配合Nginx的Realip模块就行，主要是配置问题，我之前折腾CDN的时候就搞过，不过来源IP各家都有所不同，所以这边记录下吧，辣鸡阿里云自己的文档里都不写，简直智障。</p>
-<p>①首先确保你的Nginx安装了realip模块，nginx -V然后看看有没有http_realip_module就行，没有的话需要重新编译安装，在./configure后面添加–with-http_realip_module 然后一顿操作就行</p>
-<p>②修改nginx.conf配置文件，在http区块部分添加如下内容（如果你还是不知道是哪部分，那就找一堆fastcgi那边，在最后一行fastcgi下面添加）</p>
-<p>set_real_ip_from 127.0.0.1;<br>set_real_ip_from 10.49.0.0/16;<br>set_real_ip_from 10.158.0.0/16;<br>set_real_ip_from 10.159.0.0/16;<br>set_real_ip_from 100.64.0.0/10;<br>real_ip_header X-Forwarded-For;<br>real_ip_recursive on;</p>
-<p>然后重启下nginx就行，这个对lnmpa也行，在nginx里面会显示真实ip，在apache那儿会显示127.0.0.1+真实ip</p>
-<p>直接使用apache处理的情况下需要安装mod_rpaf这个模块，我就不多提了，网上搜下就有然后重启下nginx就行，这个对lnmpa也行，在nginx里面会显示真实ip，在apache那儿会显示127.0.0.1+真实ip</p>
-<p>直接使用apache处理的情况下需要安装mod_rpaf这个模块，我就不多提了，网上搜下就有</p>
+<h1 id="首先确保你的Nginx安装了realip模块，nginx-V然后看看有没有http-realip-module就行，没有的话需要重新编译安装，在-configure后面添加–with-http-realip-module-然后一顿操作就行"><a href="#首先确保你的Nginx安装了realip模块，nginx-V然后看看有没有http-realip-module就行，没有的话需要重新编译安装，在-configure后面添加–with-http-realip-module-然后一顿操作就行" class="headerlink" title="首先确保你的Nginx安装了realip模块，nginx -V然后看看有没有http_realip_module就行，没有的话需要重新编译安装，在./configure后面添加–with-http_realip_module 然后一顿操作就行"></a>首先确保你的Nginx安装了realip模块，nginx -V然后看看有没有http_realip_module就行，没有的话需要重新编译安装，在./configure后面添加–with-http_realip_module 然后一顿操作就行</h1><h1 id="修改nginx-conf配置文件，在http区块部分添加如下内容（如果你还是不知道是哪部分，那就找一堆fastcgi那边，在最后一行fastcgi下面添加）"><a href="#修改nginx-conf配置文件，在http区块部分添加如下内容（如果你还是不知道是哪部分，那就找一堆fastcgi那边，在最后一行fastcgi下面添加）" class="headerlink" title="修改nginx.conf配置文件，在http区块部分添加如下内容（如果你还是不知道是哪部分，那就找一堆fastcgi那边，在最后一行fastcgi下面添加）"></a>修改nginx.conf配置文件，在http区块部分添加如下内容（如果你还是不知道是哪部分，那就找一堆fastcgi那边，在最后一行fastcgi下面添加）</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">set_real_ip_from <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>;</span><br><span class="line">set_real_ip_from <span class="number">10.49</span><span class="number">.0</span><span class="number">.0</span>/<span class="number">16</span>;</span><br><span class="line">set_real_ip_from <span class="number">10.158</span><span class="number">.0</span><span class="number">.0</span>/<span class="number">16</span>;</span><br><span class="line">set_real_ip_from <span class="number">10.159</span><span class="number">.0</span><span class="number">.0</span>/<span class="number">16</span>;</span><br><span class="line">set_real_ip_from <span class="number">100.64</span><span class="number">.0</span><span class="number">.0</span>/<span class="number">10</span>;</span><br><span class="line">real_ip_header X-Forwarded-For;</span><br><span class="line">real_ip_recursive on;</span><br></pre></td></tr></table></figure>
+<p>然后重启下nginx就行，这个对lnmpa也行，在nginx里面会显示真实ip，在apache那儿会显示127.0.0.1+真实ip<br>直接使用apache处理的情况下需要安装mod_rpaf这个模块，我就不多提了，网上搜下就有然后重启下nginx就行，这个对lnmpa也行，在nginx里面会显示真实ip，在apache那儿会显示127.0.0.1+真实ip<br>直接使用apache处理的情况下需要安装mod_rpaf这个模块，我就不多提了，网上搜下就有</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/21/阿里云SLB显示用户真实IP/" data-id="cjhg8sgju0022qns6y8smvx00" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/05/21/阿里云SLB显示用户真实IP/" data-id="cjhg8uvlm0022r8s68peh7btr" class="article-share-link">Teilen</a>
       
       
     </footer>
