@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>How to manage concurrency in Django models | 谢谢这个世界</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="https://medium.com/@hakibenita/how-to-manage-concurrency-in-django-models-b240fed4ee2 The days of desktop systems serving single users are long gone — web applications nowadays are serving millions of">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to manage concurrency in Django models">
+<meta property="og:url" content="http://yoursite.com/2018/06/28/How_to_manage_concurrency_in_Django_models/index.html">
+<meta property="og:site_name" content="谢谢这个世界">
+<meta property="og:description" content="https://medium.com/@hakibenita/how-to-manage-concurrency-in-django-models-b240fed4ee2 The days of desktop systems serving single users are long gone — web applications nowadays are serving millions of">
+<meta property="og:updated_time" content="2018-06-28T12:14:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="How to manage concurrency in Django models">
+<meta name="twitter:description" content="https://medium.com/@hakibenita/how-to-manage-concurrency-in-django-models-b240fed4ee2 The days of desktop systems serving single users are long gone — web applications nowadays are serving millions of">
+  
+    <link rel="alternate" href="/atom.xml" title="谢谢这个世界" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">谢谢这个世界</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-How_to_manage_concurrency_in_Django_models" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/28/How_to_manage_concurrency_in_Django_models/" class="article-date">
+  <time datetime="2018-06-28T12:09:46.000Z" itemprop="datePublished">2018-06-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/technique/">technique</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      How to manage concurrency in Django models
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://medium.com/@hakibenita/how-to-manage-concurrency-in-django-models-b240fed4ee2" target="_blank" rel="noopener">https://medium.com/@hakibenita/how-to-manage-concurrency-in-django-models-b240fed4ee2</a></p>
+<p>The days of desktop systems serving single users are long gone — web applications nowadays are serving millions of users at the same time. With many users comes a wide range of new problems — concurrency problems.</p>
+<p>In this article I’m going to present two approaches for managing concurrency in Django models.<br>Photo by Denys Nevozhai<br>The Problem</p>
+<p>To demonstrate common concurrency issues we are going to work on a bank account model:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Account</span><span class="params">(models.Model)</span>:</span></span><br><span class="line"></span><br><span class="line">    id = models.AutoField(</span><br><span class="line">        primary_key=<span class="keyword">True</span>,</span><br><span class="line">    )</span><br><span class="line">    user = models.ForeignKey(</span><br><span class="line">        User,</span><br><span class="line">    )</span><br><span class="line">    balance = models.IntegerField(</span><br><span class="line">        default=<span class="number">0</span>,</span><br><span class="line">    )</span><br></pre></td></tr></table></figure></p>
+<p>To get started we are going to implement a naive deposit and withdraw methods for an account instance:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">deposit</span><span class="params">(self, amount)</span>:</span></span><br><span class="line">    self.balance += amount</span><br><span class="line">    self.save()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">withdraw</span><span class="params">(self, amount)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> amount &gt; self.balance:</span><br><span class="line">        <span class="keyword">raise</span> errors.InsufficientFunds()</span><br><span class="line"></span><br><span class="line">    self.balance -= amount</span><br><span class="line">    self.save()</span><br></pre></td></tr></table></figure></p>
+<p>This seems innocent enough and it might even pass unit tests and integration tests on localhost. But, what happens when two users perform actions on the same account at the same time?</p>
+<pre><code>User A fetches the account — balance is 100$.
+User B fetches the account — balance is 100$.
+User B withdraws 30$ — balance is updated to 100$ — 30$ = 70$.
+User A deposits 50$ — balance is updated to 100$ + 50$ = 150$.
+</code></pre><p>What happened here?</p>
+<p>User B asked to withdraw 30$ and user A deposited 50$ — we expect the balance to be 120$, but we ended up with 150$.<br>Why did it happen?</p>
+<p>At step 4, when user A updated the balance, the amount he had stored in memory was stale (user B had already withdrawn 30$).</p>
+<p>To prevent this situation from happening we need to make sure the resource we are working on is not altered while we are working on it.<br>Pessimistic approach</p>
+<p>The pessimistic approach dictates that you should lock the resource exclusively until you are finished with it. If nobody else can acquire a lock on the object while you are working on it, you can be sure the object was not changed.</p>
+<p>To acquire a lock on a resource we use a database lock for several reasons:</p>
+<pre><code>(relational) databases are very good at managing locks and maintaining consistency.
+The database is the lowest level in which data is accessed — acquiring the lock at the lowest level will protect the data from other processes modifying the data as well. For example, direct updates in the DB, cron jobs, cleanup tasks, etc.
+A Django app can run on multiple processes (e.g workers). Maintaining locks at the app level will require a lot of (unnecessary) work.
+</code></pre><p>To lock an object in Django we use select_for_update.</p>
+<p>Let’s use the pessimistic approach to implement a safe deposit and withdraw:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@classmethod</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">deposit</span><span class="params">(cls, id, amount)</span>:</span></span><br><span class="line">   <span class="keyword">with</span> transaction.atomic():</span><br><span class="line">       account = (</span><br><span class="line">           cls.objects</span><br><span class="line">           .select_for_update()</span><br><span class="line">           .get(id=id)</span><br><span class="line">       )</span><br><span class="line"></span><br><span class="line">       account.balance += amount</span><br><span class="line">       account.save()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> account</span><br><span class="line"></span><br><span class="line"><span class="meta">@classmethod</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">withdraw</span><span class="params">(cls, id, amount)</span>:</span></span><br><span class="line">   <span class="keyword">with</span> transaction.atomic():</span><br><span class="line">       account = (</span><br><span class="line">           cls.objects</span><br><span class="line">           .select_for_update()</span><br><span class="line">           .get(id=id)</span><br><span class="line">       )</span><br><span class="line"></span><br><span class="line">       <span class="keyword">if</span> account.balance &lt; amount:</span><br><span class="line">           <span class="keyword">raise</span> errors.InsufficentFunds()</span><br><span class="line"></span><br><span class="line">       account.balance -= amount</span><br><span class="line">       account.save()</span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> account</span><br></pre></td></tr></table></figure></p>
+<p>What do we have here:</p>
+<pre><code>We use select_for_update on our queryset to tell the database to lock the object until the transaction is done.
+Locking a row in the database requires a database transaction — we use Django’s decorator transaction.atomic() to scope the transaction.
+We use a classmethod instead of an instance method — to acquire the lock we need to tell the database to lock it. To achieve that we need to be the ones fetching the object from the database. When operating on self the object is already fetched and we don’t have any guaranty that it was locked.
+All the operations on the account are executed within the database transaction.
+</code></pre><p>Let’s see how the scenario from earlier is prevented with our new implementation:</p>
+<pre><code>User A asks to withdraw 30$:
+- User A acquires a lock on the account.
+- Balance is 100$.
+User B asks to deposit 50$:
+- Attempt to acquire lock on account fails (locked by user A).
+- User B waits for the lock to release.
+User A withdraw 30$ :
+- Balance is 70$.
+- Lock of user A on account is released.
+User B acquires a lock on the account.
+- Balance is 70$.
+- New balance is 70$ + 50$ = 120$.
+Lock of user B on account is released, balance is 120$.
+</code></pre><p>Bug prevented!</p>
+<p>What you need to know about select_for_update:</p>
+<pre><code>In our scenario user B waited for user A to release the lock. Instead of waiting we can tell Django not to wait for the lock to release and raise a DatabaseError instead. To do that we can set the nowait argument of select_for_update to True, …select_for_update(nowait=True).
+Select related objects are also locked — When using select_for_update with select_related, the related objects are also locked.
+For example, If we were to select_related the user along with the account, both the user and the account will be locked. If during deposit, for example, someone is trying to update the first name, that update will fail because the user object is locked.
+If you are using PostgreSQL or Oracle this might not be a problem soon thanks to a new feature in the upcoming Django 2.0. In this version, select_for_update has an “of” option to explicitly state which of the tables in the query to lock.
+</code></pre><p>I used the bank account example in the past to demonstrate common patterns we use in Django models. You are welcome to follow up in this article:<br>Bullet Proofing Django Models</p>
+<p>We recently added a bank account like functionality into one of our products. During the development we encountered…<br>medium.com<br>Optimistic Approach</p>
+<p>Unlike the pessimistic approach, the optimistic approach does not require a lock on the object. The optimistic approach assumes collisions are not very common, and dictates that one should only make sure there were no changes made to the object at the time it is updated.<br>How can we implement such a thing with Django?</p>
+<p>First, we add a column to keep track of changes made to the object:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">version = models.IntegerField(</span><br><span class="line">    default=<span class="number">0</span>,</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<p>Then, when we update an object we make sure the version did not change:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">deposit</span><span class="params">(self, id, amount)</span>:</span></span><br><span class="line">   updated = Account.objects.filter(</span><br><span class="line">       id=self.id,</span><br><span class="line">       version=self.version,</span><br><span class="line">   ).update(</span><br><span class="line">       balance=balance + amount,</span><br><span class="line">       version=self.version + <span class="number">1</span>,</span><br><span class="line">   )</span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> updated &gt; <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">withdraw</span><span class="params">(self, id, amount)</span>:</span>       </span><br><span class="line">   <span class="keyword">if</span> self.balance &lt; amount:</span><br><span class="line">       <span class="keyword">raise</span> errors.InsufficentFunds()</span><br><span class="line"></span><br><span class="line">   updated = Account.objects.filter(</span><br><span class="line">       id=self.id,</span><br><span class="line">       version=self.version,</span><br><span class="line">   ).update(</span><br><span class="line">       balance=balance - amount,</span><br><span class="line">       version=self.version + <span class="number">1</span>,</span><br><span class="line">   )</span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> updated &gt; <span class="number">0</span></span><br></pre></td></tr></table></figure></p>
+<p>Let’s break it down:</p>
+<pre><code>We operate directly on the instance (no classmethod).
+We rely on the fact that the version is incremented every time the object is updated.
+We update only if the version did not change:
+- If the object was not modified since we fetched it than the object is updated.
+- If it was modified than the query will return zero records and the object will not be updated.
+Django returns the number of updated rows. If `updated` is zero it means someone else changed the object from the time we fetched it.
+</code></pre><p>How is optimistic locking work in our scenario:</p>
+<pre><code>User A fetch the account — balance is 100$, version is 0.
+User B fetch the account — balance is 100$, version is 0.
+User B asks to withdraw 30$:
+- Balance is updated to 100$ — 30$ = 70$.
+- Version is incremented to 1.
+User A asks to deposit 50$:
+- The calculated balance is 100$ + 50$ = 150$.
+- The account does not exist with version 0 -&gt; nothing is updated.
+</code></pre><p>What you need to know about the optimistic approach:</p>
+<pre><code>Unlike the pessimistic approach, this approach requires an additional field and a lot of discipline.
+One way to overcome the discipline issue is to abstract this behavior. django-fsm implements optimistic locking using a version field as described above. django-optimistic-lock seem to do the same. We haven’t used any of these packages but we’ve taken some inspiration from them.
+In an environment with a lot of concurrent updates this approach might be wasteful.
+This approach does not protect from modifications made to the object outside the app. If you have other tasks that modify the data directly (e.g no through the model) you need to make sure they use the version as well.
+Using the optimistic approach the function can fail and return false. In this case we will most likely want to retry the operation. Using the pessimistic approach with nowait=False the operation cannot fail — it will wait for the lock to release.
+</code></pre><p>Which one should I use?</p>
+<p>Like any great question, the answer is “it depends”:</p>
+<pre><code>If your object has a lot of concurrent updates you are probably better off with the pessimistic approach.
+If you have updates happening outside the ORM (for example, directly in the database) the pessimistic approach is safer.
+If your method has side effects such as remote API calls or OS calls make sure they are safe. Some things to consider — can the remote call take a long time? Is the remote call idempotent (safe to retry)?
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/06/28/How_to_manage_concurrency_in_Django_models/" data-id="cjiyij1cn000454s6o7mkgvji" class="article-share-link">Teilen</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/06/28/Bullet_Proofing_Django_Models/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">Bullet Proofing Django Models</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Kategorien</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/economics/">economics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/technique/">technique</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/06/28/How_to_manage_concurrency_in_Django_models/">How to manage concurrency in Django models</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/28/Bullet_Proofing_Django_Models/">Bullet Proofing Django Models</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/21/阿里云SLB显示用户真实IP/">阿里云SLB显示用户真实IP</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/21/Nginx获取真实IP方案/">Nginx获取真实IP方案</a>
+          </li>
+        
+          <li>
+            <a href="/2018/02/21/一些牛人/">一些牛人</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
