@@ -13,7 +13,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/06/28/How_to_manage_concurrency_in_Django_models/index.html">
 <meta property="og:site_name" content="谢谢这个世界">
 <meta property="og:description" content="https://medium.com/@hakibenita/how-to-manage-concurrency-in-django-models-b240fed4ee2 The days of desktop systems serving single users are long gone — web applications nowadays are serving millions of">
-<meta property="og:updated_time" content="2018-06-28T12:31:00.000Z">
+<meta property="og:updated_time" content="2018-06-28T12:36:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="How to manage concurrency in Django models">
 <meta name="twitter:description" content="https://medium.com/@hakibenita/how-to-manage-concurrency-in-django-models-b240fed4ee2 The days of desktop systems serving single users are long gone — web applications nowadays are serving millions of">
@@ -166,30 +166,40 @@ We update only if the version did not change:
 - If it was modified than the query will return zero records and the object will not be updated.
 Django returns the number of updated rows. If `updated` is zero it means someone else changed the object from the time we fetched it.
 </code></pre><p>How is optimistic locking work in our scenario:</p>
-<pre><code>User A fetch the account — balance is 100$, version is 0.
-User B fetch the account — balance is 100$, version is 0.
-User B asks to withdraw 30$:
-- Balance is updated to 100$ — 30$ = 70$.
-- Version is incremented to 1.
-User A asks to deposit 50$:
-- The calculated balance is 100$ + 50$ = 150$.
-- The account does not exist with version 0 -&gt; nothing is updated.
-</code></pre><p>What you need to know about the optimistic approach:</p>
-<pre><code>Unlike the pessimistic approach, this approach requires an additional field and a lot of discipline.
-One way to overcome the discipline issue is to abstract this behavior. django-fsm implements optimistic locking using a version field as described above. django-optimistic-lock seem to do the same. We haven’t used any of these packages but we’ve taken some inspiration from them.
-In an environment with a lot of concurrent updates this approach might be wasteful.
-This approach does not protect from modifications made to the object outside the app. If you have other tasks that modify the data directly (e.g no through the model) you need to make sure they use the version as well.
-Using the optimistic approach the function can fail and return false. In this case we will most likely want to retry the operation. Using the pessimistic approach with nowait=False the operation cannot fail — it will wait for the lock to release.
-</code></pre><p>Which one should I use?</p>
+<ol>
+<li>User A fetch the account — balance is 100$, version is 0.</li>
+<li>User B fetch the account — balance is 100$, version is 0.</li>
+<li>User B asks to withdraw 30$:<ul>
+<li>Balance is updated to 100$ — 30$ = 70$.</li>
+<li>Version is incremented to 1.</li>
+</ul>
+</li>
+<li>User A asks to deposit 50$:<ul>
+<li>The calculated balance is 100$ + 50$ = 150$.</li>
+<li>The account does not exist with version 0 -&gt; nothing is updated.</li>
+</ul>
+</li>
+</ol>
+<p>What you need to know about the optimistic approach:</p>
+<ul>
+<li>Unlike the pessimistic approach, this approach requires an additional field and a lot of discipline.</li>
+<li>One way to overcome the discipline issue is to abstract this behavior. django-fsm implements optimistic locking using a version field as described above. django-optimistic-lock seem to do the same. We haven’t used any of these packages but we’ve taken some inspiration from them.</li>
+<li>In an environment with a lot of concurrent updates this approach might be wasteful.</li>
+<li>This approach does not protect from modifications made to the object outside the app. If you have other tasks that modify the data directly (e.g no through the model) you need to make sure they use the version as well.</li>
+<li>Using the optimistic approach the function can fail and return false. In this case we will most likely want to retry the operation. Using the pessimistic approach with nowait=False the operation cannot fail — it will wait for the lock to release.</li>
+</ul>
+<p>Which one should I use?</p>
 <p>Like any great question, the answer is “it depends”:</p>
-<pre><code>If your object has a lot of concurrent updates you are probably better off with the pessimistic approach.
-If you have updates happening outside the ORM (for example, directly in the database) the pessimistic approach is safer.
-If your method has side effects such as remote API calls or OS calls make sure they are safe. Some things to consider — can the remote call take a long time? Is the remote call idempotent (safe to retry)?
-</code></pre>
+<ul>
+<li>If your object has a lot of concurrent updates you are probably better off with the pessimistic approach.</li>
+<li>If you have updates happening outside the ORM (for example, directly in the database) the pessimistic approach is safer.</li>
+<li>If your method has side effects such as remote API calls or OS calls make sure they are safe. Some things to consider — can the remote call take a long time? Is the remote call idempotent (safe to retry)?</li>
+</ul>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/28/How_to_manage_concurrency_in_Django_models/" data-id="cjiyj278u00036vs6z6l2jqdf" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/06/28/How_to_manage_concurrency_in_Django_models/" data-id="cjiyjaiir000480s6drovdyi4" class="article-share-link">Teilen</a>
       
       
     </footer>
