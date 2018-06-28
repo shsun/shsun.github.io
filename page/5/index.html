@@ -61,48 +61,6 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-openresty_log_by_lua_file" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/02/01/openresty_log_by_lua_file/" class="article-date">
-  <time datetime="2018-02-01T02:06:43.000Z" itemprop="datePublished">2018-02-01</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/technique/">technique</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/01/openresty_log_by_lua_file/">openresty_log_by_lua_file</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="set-the-log-in-nginx-conf"><a href="#set-the-log-in-nginx-conf" class="headerlink" title="set the log in nginx.conf"></a>set the log in nginx.conf</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#location /docs/images/tomcat.png</span></span><br><span class="line">location /docs &#123;</span><br><span class="line">	keepalive_timeout 0;</span><br><span class="line">	default_type <span class="string">'text/html'</span>;</span><br><span class="line">	<span class="built_in">set</span> <span class="variable">$res</span> <span class="string">""</span>;</span><br><span class="line">	set_by_lua_file <span class="variable">$res</span> /opt/openresty/set_by.lua;</span><br><span class="line">	rewrite_by_lua_file /opt/openresty/rewrite.lua;</span><br><span class="line">	access_by_lua_file /opt/openresty/access.lua;</span><br><span class="line">	content_by_lua_file /opt/openresty/content.lua;</span><br><span class="line">	header_filter_by_lua_file /opt/openresty/header_filter.lua;</span><br><span class="line">	body_filter_by_lua_file /opt/openresty/body_filter.lua;</span><br><span class="line">	log_by_lua_file /opt/openresty/base/log.lua;</span><br><span class="line">	proxy_pass http://default_doc_upstream;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="log-by-lua-file"><a href="#log-by-lua-file" class="headerlink" title="log_by_lua_file"></a>log_by_lua_file</h3><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> cjson = <span class="built_in">require</span>(<span class="string">"cjson"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> upstream_addr = <span class="literal">nil</span>;</span><br><span class="line"><span class="keyword">if</span> <span class="literal">nil</span> ~= ngx.var.upstream_addr <span class="keyword">then</span></span><br><span class="line">    upstream_addr = ngx.var.upstream_addr;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    upstream_addr = <span class="literal">nil</span>;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">ngx.<span class="built_in">log</span>(ngx.INFO, <span class="string">"upstream_addr="</span>..upstream_addr);</span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="keyword">if</span> <span class="literal">nil</span> ~= ngx.var.upstream_response_time <span class="keyword">and</span> <span class="string">'number'</span> == <span class="built_in">type</span>(ngx.var.upstream_response_time) <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">local</span> resp_time_so_far = ngx.now() - <span class="built_in">tonumber</span>(ngx.var.upstream_response_time);</span><br><span class="line">    <span class="comment">-- 1s</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">tonumber</span>(ngx.var.upstream_response_time) &gt;= <span class="number">1</span> <span class="keyword">then</span></span><br><span class="line">        ngx.<span class="built_in">log</span>(ngx.WARN, <span class="string">"[SLOW] request_time="</span>..ngx.var.request_time..<span class="string">" upstream_response_time="</span>..ngx.var.upstream_response_time..<span class="string">", upstream_addr="</span>..upstream_addr);</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/openresty_log_by_lua_file/" data-id="cjiyij1ct000f54s6bwr9r9kj" class="article-share-link">Teilen</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="post-Got &#34;ERROR sending &#39;cluster slots&#39; command to redis server: {&#39;host&#39;: &#39;127.0.0.1&#39;, &#39;port&#39;: 6379}&#34; when i use StrictRedisCluster connection" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/02/01/Got "ERROR sending 'cluster slots' command to redis server: {'host': '127.0.0.1', 'port': 6379}" when i use StrictRedisCluster connection/" class="article-date">
@@ -135,7 +93,49 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/Got "ERROR sending 'cluster slots' command to redis server: {'host': '127.0.0.1', 'port': 6379}" when i use StrictRedisCluster connection/" data-id="cjiyij1cj000154s689mklrze" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/01/Got "ERROR sending 'cluster slots' command to redis server: {'host': '127.0.0.1', 'port': 6379}" when i use StrictRedisCluster connection/" data-id="cjiyitf06000168s6ckgzjg2a" class="article-share-link">Teilen</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-openresty_log_by_lua_file" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/02/01/openresty_log_by_lua_file/" class="article-date">
+  <time datetime="2018-02-01T02:06:43.000Z" itemprop="datePublished">2018-02-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/technique/">technique</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/01/openresty_log_by_lua_file/">openresty_log_by_lua_file</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="set-the-log-in-nginx-conf"><a href="#set-the-log-in-nginx-conf" class="headerlink" title="set the log in nginx.conf"></a>set the log in nginx.conf</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#location /docs/images/tomcat.png</span></span><br><span class="line">location /docs &#123;</span><br><span class="line">	keepalive_timeout 0;</span><br><span class="line">	default_type <span class="string">'text/html'</span>;</span><br><span class="line">	<span class="built_in">set</span> <span class="variable">$res</span> <span class="string">""</span>;</span><br><span class="line">	set_by_lua_file <span class="variable">$res</span> /opt/openresty/set_by.lua;</span><br><span class="line">	rewrite_by_lua_file /opt/openresty/rewrite.lua;</span><br><span class="line">	access_by_lua_file /opt/openresty/access.lua;</span><br><span class="line">	content_by_lua_file /opt/openresty/content.lua;</span><br><span class="line">	header_filter_by_lua_file /opt/openresty/header_filter.lua;</span><br><span class="line">	body_filter_by_lua_file /opt/openresty/body_filter.lua;</span><br><span class="line">	log_by_lua_file /opt/openresty/base/log.lua;</span><br><span class="line">	proxy_pass http://default_doc_upstream;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="log-by-lua-file"><a href="#log-by-lua-file" class="headerlink" title="log_by_lua_file"></a>log_by_lua_file</h3><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> cjson = <span class="built_in">require</span>(<span class="string">"cjson"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> upstream_addr = <span class="literal">nil</span>;</span><br><span class="line"><span class="keyword">if</span> <span class="literal">nil</span> ~= ngx.var.upstream_addr <span class="keyword">then</span></span><br><span class="line">    upstream_addr = ngx.var.upstream_addr;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    upstream_addr = <span class="literal">nil</span>;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">ngx.<span class="built_in">log</span>(ngx.INFO, <span class="string">"upstream_addr="</span>..upstream_addr);</span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="keyword">if</span> <span class="literal">nil</span> ~= ngx.var.upstream_response_time <span class="keyword">and</span> <span class="string">'number'</span> == <span class="built_in">type</span>(ngx.var.upstream_response_time) <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">local</span> resp_time_so_far = ngx.now() - <span class="built_in">tonumber</span>(ngx.var.upstream_response_time);</span><br><span class="line">    <span class="comment">-- 1s</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">tonumber</span>(ngx.var.upstream_response_time) &gt;= <span class="number">1</span> <span class="keyword">then</span></span><br><span class="line">        ngx.<span class="built_in">log</span>(ngx.WARN, <span class="string">"[SLOW] request_time="</span>..ngx.var.request_time..<span class="string">" upstream_response_time="</span>..ngx.var.upstream_response_time..<span class="string">", upstream_addr="</span>..upstream_addr);</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/02/01/openresty_log_by_lua_file/" data-id="cjiyitf0f000c68s6vacu2zf7" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -177,7 +177,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/openresty_balancer_by_lua_file/" data-id="cjiyij1cq000854s6wpy3ojid" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/01/openresty_balancer_by_lua_file/" data-id="cjiyitf0e000b68s695zht0ww" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -224,7 +224,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/29/一些指标/" data-id="cjiyij1cs000c54s6gu73rcx8" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/01/29/一些指标/" data-id="cjiyitf0g000f68s6svoky6qi" class="article-share-link">Teilen</a>
       
       
     </footer>
