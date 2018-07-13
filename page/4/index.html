@@ -50,7 +50,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -60,6 +60,175 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-beautiful_idiomatic_python" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/02/06/beautiful_idiomatic_python/" class="article-date">
+  <time datetime="2018-02-06T00:28:50.000Z" itemprop="datePublished">2018-02-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/technique/">technique</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/06/beautiful_idiomatic_python/">beautiful_idiomatic_python</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://github.com/JeffPaine/beautiful_idiomatic_python" target="_blank" rel="noopener">https://github.com/JeffPaine/beautiful_idiomatic_python</a></p>
+<h1 id="Transforming-Code-into-Beautiful-Idiomatic-Python"><a href="#Transforming-Code-into-Beautiful-Idiomatic-Python" class="headerlink" title="Transforming Code into Beautiful, Idiomatic Python"></a>Transforming Code into Beautiful, Idiomatic Python</h1><p>Notes from Raymond Hettinger’s talk at pycon US 2013 <a href="http://www.youtube.com/watch?feature=player_embedded&amp;v=OSGv2VnC0go" target="_blank" rel="noopener">video</a>, <a href="https://speakerdeck.com/pyconslides/transforming-code-into-beautiful-idiomatic-python-by-raymond-hettinger-1" target="_blank" rel="noopener">slides</a>.</p>
+<p>The code examples and direct quotes are all from Raymond’s talk. I’ve reproduced them here for my own edification and the hopes that others will find them as handy as I have!</p>
+<h2 id="Looping-over-a-range-of-numbers"><a href="#Looping-over-a-range-of-numbers" class="headerlink" title="Looping over a range of numbers"></a>Looping over a range of numbers</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]:</span><br><span class="line">    <span class="keyword">print</span> i**<span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">6</span>):</span><br><span class="line">    <span class="keyword">print</span> i**<span class="number">2</span></span><br></pre></td></tr></table></figure>
+<h3 id="Better"><a href="#Better" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> xrange(<span class="number">6</span>):</span><br><span class="line">    <span class="keyword">print</span> i**<span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p><code>xrange</code> creates an iterator over the range producing the values one at a time. This approach is much more memory efficient than <code>range</code>. <code>xrange</code> was renamed to <code>range</code> in python 3.</p>
+<h2 id="Looping-over-a-collection"><a href="#Looping-over-a-collection" class="headerlink" title="Looping over a collection"></a>Looping over a collection</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">colors = [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>, <span class="string">'yellow'</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(colors)):</span><br><span class="line">    <span class="keyword">print</span> colors[i]</span><br></pre></td></tr></table></figure>
+<h3 id="Better-1"><a href="#Better-1" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> color <span class="keyword">in</span> colors:</span><br><span class="line">    <span class="keyword">print</span> color</span><br></pre></td></tr></table></figure>
+<h2 id="Looping-backwards"><a href="#Looping-backwards" class="headerlink" title="Looping backwards"></a>Looping backwards</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">colors = [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>, <span class="string">'yellow'</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(colors)<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>):</span><br><span class="line">    <span class="keyword">print</span> colors[i]</span><br></pre></td></tr></table></figure>
+<h3 id="Better-2"><a href="#Better-2" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> color <span class="keyword">in</span> reversed(colors):</span><br><span class="line">    <span class="keyword">print</span> color</span><br></pre></td></tr></table></figure>
+<h2 id="Looping-over-a-collection-and-indices"><a href="#Looping-over-a-collection-and-indices" class="headerlink" title="Looping over a collection and indices"></a>Looping over a collection and indices</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">colors = [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>, <span class="string">'yellow'</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(colors)):</span><br><span class="line">    <span class="keyword">print</span> i, <span class="string">'---&gt;'</span>, colors[i]</span><br></pre></td></tr></table></figure>
+<h3 id="Better-3"><a href="#Better-3" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i, color <span class="keyword">in</span> enumerate(colors):</span><br><span class="line">    <span class="keyword">print</span> i, <span class="string">'---&gt;'</span>, color</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>It’s fast and beautiful and saves you from tracking the individual indices and incrementing them.</p>
+<p>Whenever you find yourself manipulating indices [in a collection], you’re probably doing it wrong.</p>
+</blockquote>
+<h2 id="Looping-over-two-collections"><a href="#Looping-over-two-collections" class="headerlink" title="Looping over two collections"></a>Looping over two collections</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">names = [<span class="string">'raymond'</span>, <span class="string">'rachel'</span>, <span class="string">'matthew'</span>]</span><br><span class="line">colors = [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>, <span class="string">'yellow'</span>]</span><br><span class="line"></span><br><span class="line">n = min(len(names), len(colors))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(n):</span><br><span class="line">    <span class="keyword">print</span> names[i], <span class="string">'---&gt;'</span>, colors[i]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> name, color <span class="keyword">in</span> zip(names, colors):</span><br><span class="line">    <span class="keyword">print</span> name, <span class="string">'---&gt;'</span>, color</span><br></pre></td></tr></table></figure>
+<h3 id="Better-4"><a href="#Better-4" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> name, color <span class="keyword">in</span> izip(names, colors):</span><br><span class="line">    <span class="keyword">print</span> name, <span class="string">'---&gt;'</span>, color</span><br></pre></td></tr></table></figure>
+<p><code>zip</code> creates a new list in memory and takes more memory. <code>izip</code> is more efficient than <code>zip</code>.<br>Note: in python 3 <code>izip</code> was renamed to <code>zip</code> and promoted to a builtin replacing the old <code>zip</code>.</p>
+<h2 id="Looping-in-sorted-order"><a href="#Looping-in-sorted-order" class="headerlink" title="Looping in sorted order"></a>Looping in sorted order</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">colors = [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>, <span class="string">'yellow'</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># Forward sorted order</span></span><br><span class="line"><span class="keyword">for</span> color <span class="keyword">in</span> sorted(colors):</span><br><span class="line">    <span class="keyword">print</span> colors</span><br><span class="line"></span><br><span class="line"><span class="comment"># Backwards sorted order</span></span><br><span class="line"><span class="keyword">for</span> color <span class="keyword">in</span> sorted(colors, reverse=<span class="keyword">True</span>):</span><br><span class="line">    <span class="keyword">print</span> colors</span><br></pre></td></tr></table></figure>
+<h2 id="Custom-Sort-Order"><a href="#Custom-Sort-Order" class="headerlink" title="Custom Sort Order"></a>Custom Sort Order</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">colors = [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>, <span class="string">'yellow'</span>]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">compare_length</span><span class="params">(c1, c2)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> len(c1) &lt; len(c2): <span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">    <span class="keyword">if</span> len(c1) &gt; len(c2): <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> sorted(colors, cmp=compare_length)</span><br></pre></td></tr></table></figure>
+<h3 id="Better-5"><a href="#Better-5" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">print</span> sorted(colors, key=len)</span><br></pre></td></tr></table></figure>
+<p>The original is slow and unpleasant to write. Also, comparison functions are no longer available in python 3.</p>
+<h2 id="Call-a-function-until-a-sentinel-value"><a href="#Call-a-function-until-a-sentinel-value" class="headerlink" title="Call a function until a sentinel value"></a>Call a function until a sentinel value</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">blocks = []</span><br><span class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">    block = f.read(<span class="number">32</span>)</span><br><span class="line">    <span class="keyword">if</span> block == <span class="string">''</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    blocks.append(block)</span><br></pre></td></tr></table></figure>
+<h3 id="Better-6"><a href="#Better-6" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">blocks = []</span><br><span class="line"><span class="keyword">for</span> block <span class="keyword">in</span> iter(partial(f.read, <span class="number">32</span>), <span class="string">''</span>):</span><br><span class="line">    blocks.append(block)</span><br></pre></td></tr></table></figure>
+<p><code>iter</code> takes two arguments. The first you call over and over again and the second is a sentinel value.</p>
+<h2 id="Distinguishing-multiple-exit-points-in-loops"><a href="#Distinguishing-multiple-exit-points-in-loops" class="headerlink" title="Distinguishing multiple exit points in loops"></a>Distinguishing multiple exit points in loops</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">find</span><span class="params">(seq, target)</span>:</span></span><br><span class="line">    found = <span class="keyword">False</span></span><br><span class="line">    <span class="keyword">for</span> i, value <span class="keyword">in</span> enumerate(seq):</span><br><span class="line">        <span class="keyword">if</span> value == target:</span><br><span class="line">            found = <span class="keyword">True</span></span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> found:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">    <span class="keyword">return</span> i</span><br></pre></td></tr></table></figure>
+<h3 id="Better-7"><a href="#Better-7" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">find</span><span class="params">(seq, target)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i, value <span class="keyword">in</span> enumerate(seq):</span><br><span class="line">        <span class="keyword">if</span> value == target:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">    <span class="keyword">return</span> i</span><br></pre></td></tr></table></figure>
+<p>Inside of every <code>for</code> loop is an <code>else</code>.</p>
+<h2 id="Looping-over-dictionary-keys"><a href="#Looping-over-dictionary-keys" class="headerlink" title="Looping over dictionary keys"></a>Looping over dictionary keys</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">d = &#123;<span class="string">'matthew'</span>: <span class="string">'blue'</span>, <span class="string">'rachel'</span>: <span class="string">'green'</span>, <span class="string">'raymond'</span>: <span class="string">'red'</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> k <span class="keyword">in</span> d:</span><br><span class="line">    <span class="keyword">print</span> k</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> k <span class="keyword">in</span> d.keys():</span><br><span class="line">    <span class="keyword">if</span> k.startswith(<span class="string">'r'</span>):</span><br><span class="line">        <span class="keyword">del</span> d[k]</span><br></pre></td></tr></table></figure>
+<p>When should you use the second and not the first? When you’re mutating the dictionary.</p>
+<blockquote>
+<p>If you mutate something while you’re iterating over it, you’re living in a state of sin and deserve what ever happens to you.</p>
+</blockquote>
+<p><code>d.keys()</code> makes a copy of all the keys and stores them in a list. Then you can modify the dictionary.<br>Note: in python 3 to iterate through a dictionary you have to explicitly write: <code>list(d.keys())</code> because <code>d.keys()</code> returns a “dictionary view” (an iterable that provide a dynamic view on the dictionary’s keys). See <a href="https://docs.python.org/3/library/stdtypes.html#dict-views" target="_blank" rel="noopener">documentation</a>.</p>
+<h2 id="Looping-over-dictionary-keys-and-values"><a href="#Looping-over-dictionary-keys-and-values" class="headerlink" title="Looping over dictionary keys and values"></a>Looping over dictionary keys and values</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Not very fast, has to re-hash every key and do a lookup</span></span><br><span class="line"><span class="keyword">for</span> k <span class="keyword">in</span> d:</span><br><span class="line">    <span class="keyword">print</span> k, <span class="string">'---&gt;'</span>, d[k]</span><br><span class="line"></span><br><span class="line"><span class="comment"># Makes a big huge list</span></span><br><span class="line"><span class="keyword">for</span> k, v <span class="keyword">in</span> d.items():</span><br><span class="line">    <span class="keyword">print</span> k, <span class="string">'---&gt;'</span>, v</span><br></pre></td></tr></table></figure>
+<h3 id="Better-8"><a href="#Better-8" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> k, v <span class="keyword">in</span> d.iteritems():</span><br><span class="line">    <span class="keyword">print</span> k, <span class="string">'---&gt;'</span>, v</span><br></pre></td></tr></table></figure>
+<p><code>iteritems()</code> is better as it returns an iterator.<br>Note: in python 3 there is no <code>iteritems()</code> and <code>items()</code> behaviour is close to what <code>iteritems()</code> had. See <a href="https://docs.python.org/3/library/stdtypes.html#dict-views" target="_blank" rel="noopener">documentation</a>.</p>
+<h2 id="Construct-a-dictionary-from-pairs"><a href="#Construct-a-dictionary-from-pairs" class="headerlink" title="Construct a dictionary from pairs"></a>Construct a dictionary from pairs</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">names = [<span class="string">'raymond'</span>, <span class="string">'rachel'</span>, <span class="string">'matthew'</span>]</span><br><span class="line">colors = [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>]</span><br><span class="line"></span><br><span class="line">d = dict(izip(names, colors))</span><br><span class="line"><span class="comment"># &#123;'matthew': 'blue', 'rachel': 'green', 'raymond': 'red'&#125;</span></span><br></pre></td></tr></table></figure>
+<p>For python 3: <code>d = dict(zip(names, colors))</code></p>
+<h2 id="Counting-with-dictionaries"><a href="#Counting-with-dictionaries" class="headerlink" title="Counting with dictionaries"></a>Counting with dictionaries</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">colors = [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'red'</span>, <span class="string">'blue'</span>, <span class="string">'green'</span>, <span class="string">'red'</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># Simple, basic way to count. A good start for beginners.</span></span><br><span class="line">d = &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> color <span class="keyword">in</span> colors:</span><br><span class="line">    <span class="keyword">if</span> color <span class="keyword">not</span> <span class="keyword">in</span> d:</span><br><span class="line">        d[color] = <span class="number">0</span></span><br><span class="line">    d[color] += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># &#123;'blue': 1, 'green': 2, 'red': 3&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Better-9"><a href="#Better-9" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">d = &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> color <span class="keyword">in</span> colors:</span><br><span class="line">    d[color] = d.get(color, <span class="number">0</span>) + <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Slightly more modern but has several caveats, better for advanced users</span></span><br><span class="line"><span class="comment"># who understand the intricacies</span></span><br><span class="line">d = collections.defaultdict(int)</span><br><span class="line"><span class="keyword">for</span> color <span class="keyword">in</span> colors:</span><br><span class="line">    d[color] += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<h2 id="Grouping-with-dictionaries-–-Part-I-and-II"><a href="#Grouping-with-dictionaries-–-Part-I-and-II" class="headerlink" title="Grouping with dictionaries – Part I and II"></a>Grouping with dictionaries – Part I and II</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">names = [<span class="string">'raymond'</span>, <span class="string">'rachel'</span>, <span class="string">'matthew'</span>, <span class="string">'roger'</span>,</span><br><span class="line">         <span class="string">'betty'</span>, <span class="string">'melissa'</span>, <span class="string">'judith'</span>, <span class="string">'charlie'</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># In this example, we're grouping by name length</span></span><br><span class="line">d = &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> name <span class="keyword">in</span> names:</span><br><span class="line">    key = len(name)</span><br><span class="line">    <span class="keyword">if</span> key <span class="keyword">not</span> <span class="keyword">in</span> d:</span><br><span class="line">        d[key] = []</span><br><span class="line">    d[key].append(name)</span><br><span class="line"></span><br><span class="line"><span class="comment"># &#123;5: ['roger', 'betty'], 6: ['rachel', 'judith'], 7: ['raymond', 'matthew', 'melissa', 'charlie']&#125;</span></span><br><span class="line"></span><br><span class="line">d = &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> name <span class="keyword">in</span> names:</span><br><span class="line">    key = len(name)</span><br><span class="line">    d.setdefault(key, []).append(name)</span><br></pre></td></tr></table></figure>
+<h3 id="Better-10"><a href="#Better-10" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">d = collections.defaultdict(list)</span><br><span class="line"><span class="keyword">for</span> name <span class="keyword">in</span> names:</span><br><span class="line">    key = len(name)</span><br><span class="line">    d[key].append(name)</span><br></pre></td></tr></table></figure>
+<h2 id="Is-a-dictionary-popitem-atomic"><a href="#Is-a-dictionary-popitem-atomic" class="headerlink" title="Is a dictionary popitem() atomic?"></a>Is a dictionary popitem() atomic?</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">d = &#123;<span class="string">'matthew'</span>: <span class="string">'blue'</span>, <span class="string">'rachel'</span>: <span class="string">'green'</span>, <span class="string">'raymond'</span>: <span class="string">'red'</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> d:</span><br><span class="line">    key, value = d.popitem()</span><br><span class="line">    <span class="keyword">print</span> key, <span class="string">'--&gt;'</span>, value</span><br></pre></td></tr></table></figure>
+<p><code>popitem</code> is atomic so you don’t have to put locks around it to use it in threads.</p>
+<h2 id="Linking-dictionaries"><a href="#Linking-dictionaries" class="headerlink" title="Linking dictionaries"></a>Linking dictionaries</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">defaults = &#123;<span class="string">'color'</span>: <span class="string">'red'</span>, <span class="string">'user'</span>: <span class="string">'guest'</span>&#125;</span><br><span class="line">parser = argparse.ArgumentParser()</span><br><span class="line">parser.add_argument(<span class="string">'-u'</span>, <span class="string">'--user'</span>)</span><br><span class="line">parser.add_argument(<span class="string">'-c'</span>, <span class="string">'--color'</span>)</span><br><span class="line">namespace = parser.parse_args([])</span><br><span class="line">command_line_args = &#123;k:v <span class="keyword">for</span> k, v <span class="keyword">in</span> vars(namespace).items() <span class="keyword">if</span> v&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># The common approach below allows you to use defaults at first, then override them</span></span><br><span class="line"><span class="comment"># with environment variables and then finally override them with command line arguments.</span></span><br><span class="line"><span class="comment"># It copies data like crazy, unfortunately.</span></span><br><span class="line">d = defaults.copy()</span><br><span class="line">d.update(os.environ)</span><br><span class="line">d.update(command_line_args)</span><br></pre></td></tr></table></figure>
+<h3 id="Better-11"><a href="#Better-11" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">d = ChainMap(command_line_args, os.environ, defaults)</span><br></pre></td></tr></table></figure>
+<p><code>ChainMap</code> has been introduced into python 3. Fast and beautiful.</p>
+<h2 id="Improving-Clarity"><a href="#Improving-Clarity" class="headerlink" title="Improving Clarity"></a>Improving Clarity</h2><ul>
+<li>Positional arguments and indicies are nice</li>
+<li>Keywords and names are better</li>
+<li>The first way is convenient for the computer</li>
+<li>The second corresponds to how human’s think</li>
+</ul>
+<h2 id="Clarify-function-calls-with-keyword-arguments"><a href="#Clarify-function-calls-with-keyword-arguments" class="headerlink" title="Clarify function calls with keyword arguments"></a>Clarify function calls with keyword arguments</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">twitter_search(<span class="string">'@obama'</span>, <span class="keyword">False</span>, <span class="number">20</span>, <span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="Better-12"><a href="#Better-12" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">twitter_search(<span class="string">'@obama'</span>, retweets=<span class="keyword">False</span>, numtweets=<span class="number">20</span>, popular=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
+<p>Is slightly (microseconds) slower but is worth it for the code clarity and developer time savings.</p>
+<h2 id="Clarify-multiple-return-values-with-named-tuples"><a href="#Clarify-multiple-return-values-with-named-tuples" class="headerlink" title="Clarify multiple return values with named tuples"></a>Clarify multiple return values with named tuples</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Old testmod return value</span></span><br><span class="line">doctest.testmod()</span><br><span class="line"><span class="comment"># (0, 4)</span></span><br><span class="line"><span class="comment"># Is this good or bad? You don't know because it's not clear.</span></span><br></pre></td></tr></table></figure>
+<h3 id="Better-13"><a href="#Better-13" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># New testmod return value, a namedTuple</span></span><br><span class="line">doctest.testmod()</span><br><span class="line"><span class="comment"># TestResults(failed=0, attempted=4)</span></span><br></pre></td></tr></table></figure>
+<p>A namedTuple is a subclass of tuple so they still work like a regular tuple, but are more friendly.</p>
+<p>To make a namedTuple:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TestResults = namedTuple(<span class="string">'TestResults'</span>, [<span class="string">'failed'</span>, <span class="string">'attempted'</span>])</span><br></pre></td></tr></table></figure>
+<h2 id="Unpacking-sequences"><a href="#Unpacking-sequences" class="headerlink" title="Unpacking sequences"></a>Unpacking sequences</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">p = <span class="string">'Raymond'</span>, <span class="string">'Hettinger'</span>, <span class="number">0x30</span>, <span class="string">'python@example.com'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># A common approach / habit from other languages</span></span><br><span class="line">fname = p[<span class="number">0</span>]</span><br><span class="line">lname = p[<span class="number">1</span>]</span><br><span class="line">age = p[<span class="number">2</span>]</span><br><span class="line">email = p[<span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+<h3 id="Better-14"><a href="#Better-14" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fname, lname, age, email = p</span><br></pre></td></tr></table></figure>
+<p>The second approach uses tuple unpacking and is faster and more readable.</p>
+<h2 id="Updating-multiple-state-variables"><a href="#Updating-multiple-state-variables" class="headerlink" title="Updating multiple state variables"></a>Updating multiple state variables</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fibonacci</span><span class="params">(n)</span>:</span></span><br><span class="line">    x = <span class="number">0</span></span><br><span class="line">    y = <span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(n):</span><br><span class="line">        <span class="keyword">print</span> x</span><br><span class="line">        t = y</span><br><span class="line">        y = x + y</span><br><span class="line">        x = t</span><br></pre></td></tr></table></figure>
+<h3 id="Better-15"><a href="#Better-15" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fibonacci</span><span class="params">(n)</span>:</span></span><br><span class="line">    x, y = <span class="number">0</span>, <span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(n):</span><br><span class="line">        <span class="keyword">print</span> x</span><br><span class="line">        x, y = y, x + y</span><br></pre></td></tr></table></figure>
+<p>Problems with first approach</p>
+<ul>
+<li>x and y are state, and state should be updated all at once or in between lines that state is mis-matched and a common source of issues</li>
+<li>ordering matters</li>
+<li>it’s too low level</li>
+</ul>
+<p>The second approach is more high-level, doesn’t risk getting the order wrong and is fast.</p>
+<h2 id="Simultaneous-state-updates"><a href="#Simultaneous-state-updates" class="headerlink" title="Simultaneous state updates"></a>Simultaneous state updates</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">tmp_x = x + dx * t</span><br><span class="line">tmp_y = y + dy * t</span><br><span class="line"><span class="comment"># <span class="doctag">NOTE:</span> The "influence" function here is just an example function, what it does</span></span><br><span class="line"><span class="comment"># is not important. The important part is how to manage updating multiple</span></span><br><span class="line"><span class="comment"># variables at once.</span></span><br><span class="line">tmp_dx = influence(m, x, y, dx, dy, partial=<span class="string">'x'</span>)</span><br><span class="line">tmp_dy = influence(m, x, y, dx, dy, partial=<span class="string">'y'</span>)</span><br><span class="line">x = tmp_x</span><br><span class="line">y = tmp_y</span><br><span class="line">dx = tmp_dx</span><br><span class="line">dy = tmp_dy</span><br></pre></td></tr></table></figure>
+<h3 id="Better-16"><a href="#Better-16" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># <span class="doctag">NOTE:</span> The "influence" function here is just an example function, what it does</span></span><br><span class="line"><span class="comment"># is not important. The important part is how to manage updating multiple</span></span><br><span class="line"><span class="comment"># variables at once.</span></span><br><span class="line">x, y, dx, dy = (x + dx * t,</span><br><span class="line">                y + dy * t,</span><br><span class="line">                influence(m, x, y, dx, dy, partial=<span class="string">'x'</span>),</span><br><span class="line">                influence(m, x, y, dx, dy, partial=<span class="string">'y'</span>))</span><br></pre></td></tr></table></figure>
+<h2 id="Efficiency"><a href="#Efficiency" class="headerlink" title="Efficiency"></a>Efficiency</h2><ul>
+<li>An optimization fundamental rule</li>
+<li>Don’t cause data to move around unnecessarily</li>
+<li>It takes only a little care to avoid O(n**2) behavior instead of linear behavior</li>
+</ul>
+<blockquote>
+<p>Basically, just don’t move data around unecessarily.</p>
+</blockquote>
+<h2 id="Concatenating-strings"><a href="#Concatenating-strings" class="headerlink" title="Concatenating strings"></a>Concatenating strings</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">names = [<span class="string">'raymond'</span>, <span class="string">'rachel'</span>, <span class="string">'matthew'</span>, <span class="string">'roger'</span>,</span><br><span class="line">         <span class="string">'betty'</span>, <span class="string">'melissa'</span>, <span class="string">'judith'</span>, <span class="string">'charlie'</span>]</span><br><span class="line"></span><br><span class="line">s = names[<span class="number">0</span>]</span><br><span class="line"><span class="keyword">for</span> name <span class="keyword">in</span> names[<span class="number">1</span>:]:</span><br><span class="line">    s += <span class="string">', '</span> + name</span><br><span class="line"><span class="keyword">print</span> s</span><br></pre></td></tr></table></figure>
+<h3 id="Better-17"><a href="#Better-17" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">print</span> <span class="string">', '</span>.join(names)</span><br></pre></td></tr></table></figure>
+<h2 id="Updating-sequences"><a href="#Updating-sequences" class="headerlink" title="Updating sequences"></a>Updating sequences</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">names = [<span class="string">'raymond'</span>, <span class="string">'rachel'</span>, <span class="string">'matthew'</span>, <span class="string">'roger'</span>,</span><br><span class="line">         <span class="string">'betty'</span>, <span class="string">'melissa'</span>, <span class="string">'judith'</span>, <span class="string">'charlie'</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">del</span> names[<span class="number">0</span>]</span><br><span class="line"><span class="comment"># The below are signs you're using the wrong data structure</span></span><br><span class="line">names.pop(<span class="number">0</span>)</span><br><span class="line">names.insert(<span class="number">0</span>, <span class="string">'mark'</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="Better-18"><a href="#Better-18" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">names = collections.deque([<span class="string">'raymond'</span>, <span class="string">'rachel'</span>, <span class="string">'matthew'</span>, <span class="string">'roger'</span>,</span><br><span class="line">               <span class="string">'betty'</span>, <span class="string">'melissa'</span>, <span class="string">'judith'</span>, <span class="string">'charlie'</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># More efficient with collections.deque</span></span><br><span class="line"><span class="keyword">del</span> names[<span class="number">0</span>]</span><br><span class="line">names.popleft()</span><br><span class="line">names.appendleft(<span class="string">'mark'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="Decorators-and-Context-Managers"><a href="#Decorators-and-Context-Managers" class="headerlink" title="Decorators and Context Managers"></a>Decorators and Context Managers</h2><ul>
+<li>Helps separate business logic from administrative logic</li>
+<li>Clean, beautiful tools for factoring code and improving code reuse</li>
+<li>Good naming is essential.</li>
+<li>Remember the Spiderman rule: With great power, comes great responsibility!</li>
+</ul>
+<h2 id="Using-decorators-to-factor-out-administrative-logic"><a href="#Using-decorators-to-factor-out-administrative-logic" class="headerlink" title="Using decorators to factor-out administrative logic"></a>Using decorators to factor-out administrative logic</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Mixes business / administrative logic and is not reusable</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">web_lookup</span><span class="params">(url, saved=&#123;&#125;)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> url <span class="keyword">in</span> saved:</span><br><span class="line">        <span class="keyword">return</span> saved[url]</span><br><span class="line">    page = urllib.urlopen(url).read()</span><br><span class="line">    saved[url] = page</span><br><span class="line">    <span class="keyword">return</span> page</span><br></pre></td></tr></table></figure>
+<h3 id="Better-19"><a href="#Better-19" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@cache</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">web_lookup</span><span class="params">(url)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> urllib.urlopen(url).read()</span><br></pre></td></tr></table></figure>
+<p>Note: since python 3.2 there is a decorator for this in the <a href="https://docs.python.org/3/library/functools.html" target="_blank" rel="noopener">standard library</a>: <a href="https://pypi.python.org/pypi/backports.functools_lru_cache/1.2.1" target="_blank" rel="noopener"><code>functools.lru_cache</code></a>.</p>
+<h2 id="Factor-out-temporary-contexts"><a href="#Factor-out-temporary-contexts" class="headerlink" title="Factor-out temporary contexts"></a>Factor-out temporary contexts</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Saving the old, restoring the new</span></span><br><span class="line">old_context = getcontext().copy()</span><br><span class="line">getcontext().prec = <span class="number">50</span></span><br><span class="line"><span class="keyword">print</span> Decimal(<span class="number">355</span>) / Decimal(<span class="number">113</span>)</span><br><span class="line">setcontext(old_context)</span><br></pre></td></tr></table></figure>
+<h3 id="Better-20"><a href="#Better-20" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> localcontext(Context(prec=<span class="number">50</span>)):</span><br><span class="line">    <span class="keyword">print</span> Decimal(<span class="number">355</span>) / Decimal(<span class="number">113</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="How-to-open-and-close-files"><a href="#How-to-open-and-close-files" class="headerlink" title="How to open and close files"></a>How to open and close files</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">f = open(<span class="string">'data.txt'</span>)</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    data = f.read()</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    f.close()</span><br></pre></td></tr></table></figure>
+<h3 id="Better-21"><a href="#Better-21" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> open(<span class="string">'data.txt'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    data = f.read()</span><br></pre></td></tr></table></figure>
+<h2 id="How-to-use-locks"><a href="#How-to-use-locks" class="headerlink" title="How to use locks"></a>How to use locks</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Make a lock</span></span><br><span class="line">lock = threading.Lock()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Old-way to use a lock</span></span><br><span class="line">lock.acquire()</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">print</span> <span class="string">'Critical section 1'</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">'Critical section 2'</span></span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    lock.release()</span><br></pre></td></tr></table></figure>
+<h3 id="Better-22"><a href="#Better-22" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># New-way to use a lock</span></span><br><span class="line"><span class="keyword">with</span> lock:</span><br><span class="line">    <span class="keyword">print</span> <span class="string">'Critical section 1'</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">'Critical section 2'</span></span><br></pre></td></tr></table></figure>
+<h2 id="Factor-out-temporary-contexts-1"><a href="#Factor-out-temporary-contexts-1" class="headerlink" title="Factor-out temporary contexts"></a>Factor-out temporary contexts</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    os.remove(<span class="string">'somefile.tmp'</span>)</span><br><span class="line"><span class="keyword">except</span> OSError:</span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<h3 id="Better-23"><a href="#Better-23" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> ignored(OSError):</span><br><span class="line">    os.remove(<span class="string">'somefile.tmp'</span>)</span><br></pre></td></tr></table></figure>
+<p><code>ignored</code> is is new in python 3.4, <a href="http://docs.python.org/dev/library/contextlib.html#contextlib.ignored" target="_blank" rel="noopener">documentation</a>.<br>Note: <code>ignored</code> is actually called <code>suppress</code> in the standard library.</p>
+<p>To make your own <code>ignored</code> context manager in the meantime:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@contextmanager</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ignored</span><span class="params">(*exceptions)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">yield</span></span><br><span class="line">    <span class="keyword">except</span> exceptions:</span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Stick that in your utils directory and you too can ignore exceptions</p>
+</blockquote>
+<h2 id="Factor-out-temporary-contexts-2"><a href="#Factor-out-temporary-contexts-2" class="headerlink" title="Factor-out temporary contexts"></a>Factor-out temporary contexts</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Temporarily redirect standard out to a file and then return it to normal</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'help.txt'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    oldstdout = sys.stdout</span><br><span class="line">    sys.stdout = f</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        help(pow)</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        sys.stdout = oldstdout</span><br></pre></td></tr></table></figure>
+<h3 id="Better-24"><a href="#Better-24" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> open(<span class="string">'help.txt'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    <span class="keyword">with</span> redirect_stdout(f):</span><br><span class="line">        help(pow)</span><br></pre></td></tr></table></figure>
+<p><code>redirect_stdout</code> is proposed for python 3.4, <a href="http://bugs.python.org/issue15805" target="_blank" rel="noopener">bug report</a>.</p>
+<p>To roll your own <code>redirect_stdout</code> context manager</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@contextmanager</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">redirect_stdout</span><span class="params">(fileobj)</span>:</span></span><br><span class="line">    oldstdout = sys.stdout</span><br><span class="line">    sys.stdout = fileobj</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">yield</span> fileobj</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        sys.stdout = oldstdout</span><br></pre></td></tr></table></figure>
+<h2 id="Concise-Expressive-One-Liners"><a href="#Concise-Expressive-One-Liners" class="headerlink" title="Concise Expressive One-Liners"></a>Concise Expressive One-Liners</h2><p>Two conflicting rules:</p>
+<ul>
+<li>Don’t put too much on one line</li>
+<li>Don’t break atoms of thought into subatomic particles</li>
+</ul>
+<p>Raymond’s rule:</p>
+<ul>
+<li>One logical line of code equals one sentence in English</li>
+</ul>
+<h2 id="List-Comprehensions-and-Generator-Expressions"><a href="#List-Comprehensions-and-Generator-Expressions" class="headerlink" title="List Comprehensions and Generator Expressions"></a>List Comprehensions and Generator Expressions</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">result = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">    s = i ** <span class="number">2</span></span><br><span class="line">    result.append(s)</span><br><span class="line"><span class="keyword">print</span> sum(result)</span><br></pre></td></tr></table></figure>
+<h3 id="Better-25"><a href="#Better-25" class="headerlink" title="Better"></a>Better</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">print</span> sum(i**<span class="number">2</span> <span class="keyword">for</span> i <span class="keyword">in</span> xrange(<span class="number">10</span>))</span><br></pre></td></tr></table></figure>
+<p>First way tells you what to do, second way tells you what you want.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/02/06/beautiful_idiomatic_python/" data-id="cjjjlk8fv000425s61sn1hmin" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-缠中说禅-货币战争和人民币战略-续-4" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -106,7 +275,60 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/06/缠中说禅-货币战争和人民币战略-续-4/" data-id="cjjjhltt80021x4s6bq76xvqj" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/06/缠中说禅-货币战争和人民币战略-续-4/" data-id="cjjjlk8hh001w25s6sohxs2w5" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-缠中说禅-2007-08-18-总市值超GDP后的泡沫化生存" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/02/06/缠中说禅-2007-08-18-总市值超GDP后的泡沫化生存/" class="article-date">
+  <time datetime="2018-02-06T00:28:47.000Z" itemprop="datePublished">2018-02-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/economics/">economics</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/06/缠中说禅-2007-08-18-总市值超GDP后的泡沫化生存/">缠中说禅-2007-08-18-总市值超GDP后的泡沫化生存</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>发布时间：2007-8-18 15:23:13 查看：[ ] [双击滚屏] 栏目：名家视点</p>
+<p>在3月19日的杂志创刊号，本栏目的首篇文章“神州自有中天日，万国衣冠舞九韶”，给出了本轮大牛市的一个基本判断，</p>
+<font color="#FF4500"><br>就是至少再延续20年、上升3万点，这个观点依然有效，没有任何需要修改的地方。<br></font><br>在同一文章中，更给出了本轮行情第一阶段走势的基本特征，现引用如下：<br><br>### “第一阶段行情，伴随着中国股市本身的制度性、结构性完善，其后，中国股市才真正具备参与全球化盛宴的资格。全流通、整体上市、两大交易所的功能重组、人民币逐步可自由兑换等，都不过是这种制度性、结构性完善的必然步骤。<br>这一阶段，行情最主要体现在以权重股为代表的成分股上。在总市值超越GDP之前谈论股市的泡沫是可笑的，在中国股市总市值超越其GDP之前，第一阶段行情不会结束。”<br><br>显然，这个“在中国股市总市值超越其GDP之前，第一阶段行情不会结束。”的判断已经被今天的事实所证明，因为，目前中国股市总市值已经超越GDP，但第一轮的成分股行情依然在延续中。如果，对何谓第一阶段的成分股行情还有所疑问，那么这段时间，中国股票市场大象狂舞的情形，应该给这种成分股行情一个最好的注释。<br><br>在这样一个市值超越GDP的历史性事件如期到来之时，必须给行情今后的发展定一下性。在市值超越GDP后，中国资本市场将进入第一阶段成分股行情的泡沫化阶段，中国资本市场的参与者将进入总市值超GDP后的泡沫化生存状态。<br><br>正如上面引文所说“在总市值超越GDP之前谈论股市的泡沫是可笑的”，而在总市值超越GDP之后，谈论股市的泡沫，就是十分必要了。<br>如果把GDP当成总市值波动的中枢，那么在其下，可以说市场被结构性低估，而在其上，就是出现结构性泡沫了。<br><br>显然，GDP是变动的，随着中国经济的快速增长，总市值的波动中枢也将不断上移，今天的泡沫，可以就是明天的低估，这一切都必须动态去看。<br>出现结构性泡沫并不意味着市场就没有上涨的理由，而是说这种上涨，其基础上存在被这波动中枢回拉的压力，一旦市场上涨的中短期理由不足以抗拒这种回拉，<br>那么无论上涨使得总市值向上远离GDP30%还是300%，最终的回拉都将导致相应级别的调整。<br><br><font color="#FF4500"><br>如果说4500点附近对应目前GDP比较肯定的中枢，那么中国经济的高速发展，将使得20年后的GDP至少达到目前美国的水平，<br>也就是说，一个100万亿人民币的GDP值是十分正常的，相应资本市场的中枢位置至少上移到23000点附近，<br>而那时候，中短期波动让指数上冲到30000多点甚至50000点，都是可以想象的。<br>市场总要波动的，市场可以围绕中枢去波动，但绝对不排除市场的波动大幅度去远离中枢，只是这种远离后都必然导致回拉的修正而已。<br></font>
+
+<p>远期目标且不讨论，回到第一阶段这种泡沫化生存状态下，唯一能站在长期角度抗拒泡沫的，就是成长性带来的中枢上移，一旦成长性不足以支持这种中枢上移，那么大规模的泡沫破裂就是天经地义的。<br>而且，这种泡沫的破裂，往往导致中短期走势跌破中枢，形成一个新的低估，这又构成良好的中长期介入机会。</p>
+<p>中国资本市场目前的泡沫化生存之所以还不构成大规模的压力，就在于，即使是中国资本市场上最大型的成分股，站在世界资本市场的历史发展中，依然属于高速成长股。因此只要这种状态依然存在，那么一个适度的泡沫化生存反而是合理且理所当然的。</p>
+<p>不过，市场行情总是从非理性开始，又在非理性中结束，没有疯狂的低估，就没有疯狂的牛市行情；同样，没有疯狂的泡沫，就没有疯狂的熊市造就新的历史性低估介入点。</p>
+<p>第一段成分股行情，最终必然在疯狂的泡沫中结束，在这疯狂的泡沫被制造过程中，反而能获取高额利润。</p>
+<p>如果说低估回到中枢可让股票上涨10倍，那么疯狂的泡沫甚至有更强的能力。</p>
+<p>对于任何市场的参与者，耐心等待市场的疯狂，在市场的疯狂中等待最后的卖点，是一个最重要、最值得培养的能力。</p>
+<p>显然，目前市场最疯狂的状态依然没有出现，外围因素制造短期的波动反而有利于市场能量的积累。</p>
+<p>在泡沫制造能力被充分发挥之前，市场不会最终逆转，第一阶段的成分股行情不会结束。</p>
+<p>不再战略性买进、只战略性持有，等待市场疯狂、等待第一阶段长线卖点的出现，是泡沫化状态下最应采取的策略。<br>（本刊特约高级顾问   木子）</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/02/06/缠中说禅-2007-08-18-总市值超GDP后的泡沫化生存/" data-id="cjjjlk8hb001e25s6un4gpg3p" class="article-share-link">Share</a>
       
       
     </footer>
@@ -168,60 +390,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/06/缠中说禅-2007-10-16-中国股市的未来依然美好/" data-id="cjjjhltsw0017x4s6ig4uo83r" class="article-share-link">Teilen</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-缠中说禅-2007-08-18-总市值超GDP后的泡沫化生存" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/02/06/缠中说禅-2007-08-18-总市值超GDP后的泡沫化生存/" class="article-date">
-  <time datetime="2018-02-06T00:28:47.000Z" itemprop="datePublished">2018-02-06</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/economics/">economics</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/06/缠中说禅-2007-08-18-总市值超GDP后的泡沫化生存/">缠中说禅-2007-08-18-总市值超GDP后的泡沫化生存</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>发布时间：2007-8-18 15:23:13 查看：[ ] [双击滚屏] 栏目：名家视点</p>
-<p>在3月19日的杂志创刊号，本栏目的首篇文章“神州自有中天日，万国衣冠舞九韶”，给出了本轮大牛市的一个基本判断，</p>
-<font color="#FF4500"><br>就是至少再延续20年、上升3万点，这个观点依然有效，没有任何需要修改的地方。<br></font><br>在同一文章中，更给出了本轮行情第一阶段走势的基本特征，现引用如下：<br><br>### “第一阶段行情，伴随着中国股市本身的制度性、结构性完善，其后，中国股市才真正具备参与全球化盛宴的资格。全流通、整体上市、两大交易所的功能重组、人民币逐步可自由兑换等，都不过是这种制度性、结构性完善的必然步骤。<br>这一阶段，行情最主要体现在以权重股为代表的成分股上。在总市值超越GDP之前谈论股市的泡沫是可笑的，在中国股市总市值超越其GDP之前，第一阶段行情不会结束。”<br><br>显然，这个“在中国股市总市值超越其GDP之前，第一阶段行情不会结束。”的判断已经被今天的事实所证明，因为，目前中国股市总市值已经超越GDP，但第一轮的成分股行情依然在延续中。如果，对何谓第一阶段的成分股行情还有所疑问，那么这段时间，中国股票市场大象狂舞的情形，应该给这种成分股行情一个最好的注释。<br><br>在这样一个市值超越GDP的历史性事件如期到来之时，必须给行情今后的发展定一下性。在市值超越GDP后，中国资本市场将进入第一阶段成分股行情的泡沫化阶段，中国资本市场的参与者将进入总市值超GDP后的泡沫化生存状态。<br><br>正如上面引文所说“在总市值超越GDP之前谈论股市的泡沫是可笑的”，而在总市值超越GDP之后，谈论股市的泡沫，就是十分必要了。<br>如果把GDP当成总市值波动的中枢，那么在其下，可以说市场被结构性低估，而在其上，就是出现结构性泡沫了。<br><br>显然，GDP是变动的，随着中国经济的快速增长，总市值的波动中枢也将不断上移，今天的泡沫，可以就是明天的低估，这一切都必须动态去看。<br>出现结构性泡沫并不意味着市场就没有上涨的理由，而是说这种上涨，其基础上存在被这波动中枢回拉的压力，一旦市场上涨的中短期理由不足以抗拒这种回拉，<br>那么无论上涨使得总市值向上远离GDP30%还是300%，最终的回拉都将导致相应级别的调整。<br><br><font color="#FF4500"><br>如果说4500点附近对应目前GDP比较肯定的中枢，那么中国经济的高速发展，将使得20年后的GDP至少达到目前美国的水平，<br>也就是说，一个100万亿人民币的GDP值是十分正常的，相应资本市场的中枢位置至少上移到23000点附近，<br>而那时候，中短期波动让指数上冲到30000多点甚至50000点，都是可以想象的。<br>市场总要波动的，市场可以围绕中枢去波动，但绝对不排除市场的波动大幅度去远离中枢，只是这种远离后都必然导致回拉的修正而已。<br></font>
-
-<p>远期目标且不讨论，回到第一阶段这种泡沫化生存状态下，唯一能站在长期角度抗拒泡沫的，就是成长性带来的中枢上移，一旦成长性不足以支持这种中枢上移，那么大规模的泡沫破裂就是天经地义的。<br>而且，这种泡沫的破裂，往往导致中短期走势跌破中枢，形成一个新的低估，这又构成良好的中长期介入机会。</p>
-<p>中国资本市场目前的泡沫化生存之所以还不构成大规模的压力，就在于，即使是中国资本市场上最大型的成分股，站在世界资本市场的历史发展中，依然属于高速成长股。因此只要这种状态依然存在，那么一个适度的泡沫化生存反而是合理且理所当然的。</p>
-<p>不过，市场行情总是从非理性开始，又在非理性中结束，没有疯狂的低估，就没有疯狂的牛市行情；同样，没有疯狂的泡沫，就没有疯狂的熊市造就新的历史性低估介入点。</p>
-<p>第一段成分股行情，最终必然在疯狂的泡沫中结束，在这疯狂的泡沫被制造过程中，反而能获取高额利润。</p>
-<p>如果说低估回到中枢可让股票上涨10倍，那么疯狂的泡沫甚至有更强的能力。</p>
-<p>对于任何市场的参与者，耐心等待市场的疯狂，在市场的疯狂中等待最后的卖点，是一个最重要、最值得培养的能力。</p>
-<p>显然，目前市场最疯狂的状态依然没有出现，外围因素制造短期的波动反而有利于市场能量的积累。</p>
-<p>在泡沫制造能力被充分发挥之前，市场不会最终逆转，第一阶段的成分股行情不会结束。</p>
-<p>不再战略性买进、只战略性持有，等待市场疯狂、等待第一阶段长线卖点的出现，是泡沫化状态下最应采取的策略。<br>（本刊特约高级顾问   木子）</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/06/缠中说禅-2007-08-18-总市值超GDP后的泡沫化生存/" data-id="cjjjhltsw0019x4s6mtbeszxx" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/06/缠中说禅-2007-10-16-中国股市的未来依然美好/" data-id="cjjjlk8hb001g25s6u0q1umij" class="article-share-link">Share</a>
       
       
     </footer>
@@ -276,7 +445,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/06/缠中说禅-2008-04-本轮调整是中国资本市场结构性缺陷的总暴露/" data-id="cjjjhltsy001dx4s68kvr4zdj" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/06/缠中说禅-2008-04-本轮调整是中国资本市场结构性缺陷的总暴露/" data-id="cjjjlk8hc001i25s6nmcx4hsh" class="article-share-link">Share</a>
       
       
     </footer>
@@ -326,7 +495,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/06/缠中说禅-2007-07-07-看待当前资本市场必须具有的基本智慧/" data-id="cjjjhltsu0013x4s60abr1y55" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/06/缠中说禅-2007-07-07-看待当前资本市场必须具有的基本智慧/" data-id="cjjjlk8h8001625s6c87i8xpd" class="article-share-link">Share</a>
       
       
     </footer>
@@ -375,7 +544,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/hello-world/" data-id="cjjjhlts90003x4s6l5hss4vr" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/01/hello-world/" data-id="cjjjlk8fu000325s6dwuqg9ra" class="article-share-link">Share</a>
       
       
     </footer>
@@ -428,7 +597,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/缠中说禅-货币战争和人民币战略-续-2/" data-id="cjjjhltt3001px4s684zf38y6" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/01/缠中说禅-货币战争和人民币战略-续-2/" data-id="cjjjlk8ho002i25s6si8hezak" class="article-share-link">Share</a>
       
       
     </footer>
@@ -475,7 +644,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/缠中说禅-货币战争和人民币战略-续-3/" data-id="cjjjhltt5001tx4s6yrl4iyv8" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/01/缠中说禅-货币战争和人民币战略-续-3/" data-id="cjjjlk8hh001y25s6h09oxz14" class="article-share-link">Share</a>
       
       
     </footer>
@@ -526,62 +695,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/缠中说禅-货币战争和人民币战略-下/" data-id="cjjjhltt4001rx4s6evm7qlxd" class="article-share-link">Teilen</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-缠中说禅-民族复兴周期与世界经济周期历史性共振下的国家地缘与货币战略" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/02/01/缠中说禅-民族复兴周期与世界经济周期历史性共振下的国家地缘与货币战略/" class="article-date">
-  <time datetime="2018-02-01T08:23:58.000Z" itemprop="datePublished">2018-02-01</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/economics/">economics</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/01/缠中说禅-民族复兴周期与世界经济周期历史性共振下的国家地缘与货币战略/">民族复兴周期与世界经济周期历史性共振下的国家地缘与货币战略</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>由2003年所写旧帖整理而成</p>
-<h2 id="一、从中国历史朝代更迭的相似性看中华民族可能面临的重大机遇"><a href="#一、从中国历史朝代更迭的相似性看中华民族可能面临的重大机遇" class="headerlink" title="一、从中国历史朝代更迭的相似性看中华民族可能面临的重大机遇"></a>一、从中国历史朝代更迭的相似性看中华民族可能面临的重大机遇</h2><p>　　<br>　　历史总有一种神秘的惊人相似性，例如上世纪中国几乎所有最关键的大事都和9有关。<br>在中国历史朝代更迭上，有一个特别的相似性，就是大乱后经过一个短的统一朝代（都是只有两世）紧接就是一个很长的强盛朝代，而出现真正的高峰前都有所谓的“女祸”。<br>如春秋战国后有秦（只有两世），后有汉、吕后，然后文景直至武帝大盛；三国两晋南北朝后有隋（只有两世），后有唐、武则天，然后到玄宗大盛。<br>而从1840年后一个大乱，民国统一，也是两世（孙和蒋），后共和国成立、江青，然后就是一个真正的强盛时期的出现，显然，中华民族正处在这个向上冲击中华民族继汉武帝、唐开元以来第三个高峰的历史大趋势中。</p>
-<p>　　</p>
-<h2 id="二、从马克思的五阶段学说看全球目前所处的历史阶段"><a href="#二、从马克思的五阶段学说看全球目前所处的历史阶段" class="headerlink" title="二、从马克思的五阶段学说看全球目前所处的历史阶段"></a>二、从马克思的五阶段学说看全球目前所处的历史阶段</h2><p>　　<br>　　1、老马的五阶段论是建立在现实中人与人和人与自然关系的一个完全分类<br>　　<br>　　这个统一分类基础是现实社会中现实人与人以及人与自然的处境的一个分类：1、社会中不存在一部分人对另一部分人的依附，但全社会必须整体性地依附于自然界，就是原始社会；2、在对自然的依附前提下，社会中一部分人对另一部分人存在以人身为前提的依附关系，就是做奴隶社会。3、在对自然的依附前提下，社会中一部分人对另一部分人的依附不再以人身为前提，而是换成身外之物，如：土地、官爵等等，就叫做封建社会；4、社会中一部分人对另一部分人不再存在依附关系，而是全社会的人都毫不例外地依附于一个非自然的身外之物：资本，就叫做资本主义社会；5、把4中最后那个依附也给去掉，达成现实中人和社会、人和自然的完全和解，就是共产主义社会。<br>　　<br>　　2、列宁式社会主义是一个基于民族主义的策略性误读，是一个反资本主义的资本主义过程。<br>　　<br>　　老列大概有意无意地误解了“共产党宣言”里面“消灭私有制”的话，把公私有制之类的东西作为了区分的标准（这里就可以看出其黑格尔的特色）；但老马是站在人与人和人与自然这两重现实关系中分析这个问题的，两者有着本质的区别。而公私标准只是一个特定前提下的推论，只有必要性而没有充分性。社会主义必然是公有制，但公有制不一定是社会主义。如果把推论变成前提甚至是唯一的前提，将变成瘸脚的名言，最终掩盖真实。<br>　　<br>　　列宁式的社会主义都是从封建社会直接跳过来的，最终都有转向斯大林式的倾向。只要把“资本主义社会就是社会中一部分人对另一部分人不再存在依附关系，而是全社会的人都毫不例外地依附于一个非自然的身外之物：资本。”中的资本换成权力或权力资本,就成了斯大林式的最好定义。由此就不难明白下面这句可能有点不可思议的话:斯大林式社会主义只是某种类型的资本主义。由此更可以明白下面这一句更触目惊心的话:二十世纪风起云涌的列宁式社会主义革命，从本质上只是一个某种类型的资本主义过程。从苏东突变后权力或权力资本迅速变成资本的过程就可以知道它们之间的同源性。<br>　　<br>　　列宁式社会主义的历史意义在于它是当时一种最好的民族主义的策略，一个落后的封建主义的民族在当时的环境下，如果按照通常的策略，必然将面对灭顶之灾，而列宁有意无意的策略挽救了当时世界上最大多数的落后民族，给了他们一个喘息追赶的机会。从本质上说, 列宁式社会主义是一个民族主义的过程，是一个落后民族为避免被先进入资本主义的民族吞食的反资本主义的资本主义运动。在这一点上，列宁是不朽的，是全世界弱小民族的导师。<br>　　<br>　　3、对列宁式必然导致斯大林式的宿命的反抗，构成了毛泽东文革思路的最基本逻辑。<br>　　<br>　　文革是毛泽东力图摆脱列宁式必将导致斯大林式这一历史宿命的伟大尝试，而其失败却有着一种残酷的历史必然性。清醒往往是痛苦的，毛泽东文革的反抗在清醒中注定着失败的宿命。对抗斯大林化，其实也是在对抗一个资本主义化的过程。但在人与人和人与自然两重现实的关系中，人与自然的关系起着决定性的作用，人与人的关系无疑有着反作用，但力图通过调整人与人的关系来对抗人与自然关系的某种现实趋势，其不可能性就构成了所有文革型活动失败的必然性，任何偶然因素在这种必然性面前都是无关紧要的。在这一点上，毛泽东无疑是悲剧的，但却是英雄的悲剧。<br>　　<br>　　从封建社会到资本主义社会，一个关键的变化就是社会中一部分人对另一部分人不再存在依附关系，原来的依存关系被打破了，全社会的人都毫不例外地依附于一个非自然的身外之物：X。这个X有多少现实的可能性，就有多少种类型的资本主义。从17世纪到目前为止，所以的变化、斗争都只是不同类型资本主义发生、强大以及互相之间通过斗争取得最后统治地位的过程。所有现实国家层面的意识形态之争，从根本的意义上说都是在资本主义前提下进行的。二十世纪下半期冷战的实质意义就不难明白：就是英美式资本主义和斯大林式资本主义之间为争夺最终统治权的斗争。毛泽东看穿了这一切，提出三个世界的理论，但这从根本意义上说是一种民族主义的策略，和社会主义无关。</p>
-<p>　　<br>　　4、文革失败的必然性使得面对资本全球化成了无可逃避的现实。</p>
-<p>　　老马意义上的、作为共产主义初级阶段的社会主义是不可能在一国单独实现的，它只能是资本全球化后的一个全球性的事件。列宁的策略就是民族主义的策略，而邓小平的中国特色社会主义和社会主义初级阶段策略同样也应该是一个民族主义的策略。<br>　　<br>　　资本全球化是一个不容逃避、必须面对的现实，是资本主义内在发展逻辑的必然趋势，在这个大趋势面前如何发出自己的声音，甚至去主导这个过程，才是最重要的、核心的问题。</p>
-<p>　　</p>
-<h2 id="三、中国民族复兴周期与世界经济大循环周期共振产生了历史性的大机遇。"><a href="#三、中国民族复兴周期与世界经济大循环周期共振产生了历史性的大机遇。" class="headerlink" title="三、中国民族复兴周期与世界经济大循环周期共振产生了历史性的大机遇。"></a>三、中国民族复兴周期与世界经济大循环周期共振产生了历史性的大机遇。</h2><p>　　<br>　　资本主义经济循环中其总体饱和度和人口关系存在类似电子轨道量子化般5倍递增的结构。1000万和5000万人口在中古和近代是完成所谓强国的两个基本人口数量。在大不列颠王国以5000万数量级别完成其霸业后，美国和苏联在2亿5千万级别完成了它们的历史表演，而下一个级别就是12亿5千万级别，目前世界各经济体之间的联盟是为资本全球化12亿5千万级别的竞争储备力量。<br>　　<br>　　1929年，英德老的5千万级别主导循环结束，美苏2亿5千万级别主导循环开始；这个90年的循环在一半1974年形成了石油危机的中型调整，美苏这两个不同类型的资本主义之间的同级别竞争以美国的胜利结束；但该循环的高点已经在2000年出现，下面面临的巨大调整将在2019年达到如1929年般惨烈的程度，从而宣布该级别的结束，12亿5千万级别世界经济大循环周期的开始。（为了文章不太长，这里的经济分析从略，只给出相应的结论）<br>　　<br>　　1949年后，中国人口的爆炸性增长是毛泽东的最大历史功绩之一，中国因此自动进入12亿5千万级别世界经济大循环周期的有力竞争者。中国民族复兴周期与世界经济大循环周期综合产生了历史性的大机遇，如何把握就是摆在我们面前最重要的问题。</p>
-<p>　　</p>
-<h2 id="四、历史性大机遇下的中国地缘与货币战略。"><a href="#四、历史性大机遇下的中国地缘与货币战略。" class="headerlink" title="四、历史性大机遇下的中国地缘与货币战略。"></a>四、历史性大机遇下的中国地缘与货币战略。</h2><p>　　<br>　　目前以长江流域为中轴，华北、华南为两翼的战略是和所谓的韬光养晦、消气外交相配合的，不可能有大的作为，隐藏着极大的危险。从长期的角度，应以环渤海湾地区、珠江三角洲地区、秦川地区建构大的战略三角。以珠江三角洲地区为起点打通东南亚一线，以秦川地区为起点沿原丝绸之路打通中西亚一线，两者构成对印度的双线钳制。以环渤海湾地区为起点打通东北亚一线，抑制日本和俄罗斯在该地区的影响。中国以这个大三角的为基础将逐步成为亚洲之王，其领土（或附庸性质的影响）应该从乌拉尔山往东直到大海与美洲对望，从北冰洋直到太平洋俯视澳洲，形成世界的中轴，让欧洲和美洲成为其两翼。<br>　　<br>　　但在资本全球化的背景下，更重要的是国家的货币战略。所有的现代战争，从根本意义上就是货币战争，这是由现代社会的高度资本化程度所决定的。对于一个高度资本化的社会来说，任何脱离资本的活动从根本上都是无意义的，战争也不例外。<br>　　<br>　　从12亿5千万级别世界经济大循环周期的看，最有竞争力的货币将是美元、欧元、卢比和人民币。人民币在这场货币战争中最终胜出，就像用长跑中的贴跑技术，在目前阶段一定要坚持对美元采取一种不挂钩的挂钩政策，坚决长期地维持人民币对美元的币值稳定。在这个基础上逐步扩大对亚洲区的影响，使之潜移默化地取代日元的地位，逐步成为实质亚洲货币。然后利用第一个阶段形成的对美元的极大落差，配合世界经济大循环周期，选择时机释放，将美元在一次精心策划的战役中一次性击毁。最后在一个长期反复、拉锯的过程中，利用新的12亿5千万级别世界经济大循环周期确立中国对美国的领先地位，成为12亿5千万级别世界经济大循环的真正领头羊，完成民族的伟大复兴。
-　　
-　　
-　　</p>
-<h2 id="附本ID老帖：用尽量通俗的语言讲解汇率的形成机制以及美国的货币战略"><a href="#附本ID老帖：用尽量通俗的语言讲解汇率的形成机制以及美国的货币战略" class="headerlink" title="附本ID老帖：用尽量通俗的语言讲解汇率的形成机制以及美国的货币战略"></a>附本ID老帖：用尽量通俗的语言讲解汇率的形成机制以及美国的货币战略</h2><p>　　<br>　　有一些书呆子一说起汇率，就会背一大堆定义，但那没用。就象在股票市场说市赢率一样，都是一些无聊的把戏。汇率说白了就是大国间的游戏，和庄家坐庄没有什么区别。有人可能说，货币每天交易量那么大，怎么操纵？你以为坐庄都一定要靠钱去拉抬，那是最笨的方法，操纵最终只是操纵人心，只要有人就能操纵，在金融市场不明白这个，不亏钱就怪了。<br>　　<br>　　美国是汇率操纵的高手，但汇率的操纵还是为了其总体利益服务的。美国经济目前面对的最大危机就是泡沫化，而美国目前0以下的储蓄率使得其经济的危险性达到空前的地步。从某种程度说，美国这只庄股已经玩得高处不胜寒了。<br>和庄股一样，目前的关键是不能让资本大量逃离，否则就会连续崩盘跳水。<br>由于2000年的下跌速度极快，大多数游资都不能有效离场，所以大规模的资本逃离还没有出现。<br>而目前的大级别反弹正构成资本逃离的机会，一旦反弹到位，预期中的大规模资本逃离才会真正出现。<br>　　<br>　　为了避免以上情况出现，美国唯一可行的货币战略就是在该大反弹到位前把货币贬值到一个相应的地位，这样才使得美圆资本套现后不能以一个较高的汇率出逃，从某种程度上就是在货币层面为美圆资本加了一个套，这样套现出来的美圆资本逃离的决心和力度将大幅度减少。这是美国阻止美国经济这个大庄股崩盘的唯一非战争的可行办法。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">资金从美国逃离到其他经济体, 但是美元大大贬值, 使得能换取的人民币/欧元/英镑/日元/...会减少很多. 因此逃离动力减弱.</span><br></pre></td></tr></table></figure></p>
-<p><font color="#FF4500"><br>　　但是这个办法唯一的罩门就在，如果有一个容量极大的货币紧贴美圆，则美圆贬值的所有如意算盘将打不响，而人民币正好就是这种货币。<br>人民币与美圆的挂钩使得美圆资产变现以后有了一个顺畅的逃跑渠道。<br>人民币经济比美圆经济最大的优势在于泡沫化极低，储蓄率极高，这对于美国经济是一个致命的威胁。<br>只要人民币战略得到坚持，把池子挖好，则美圆的贬值战略将彻底破灭，一旦该战略破灭，美国经济将面临最巨大的冲击，这也是以前帖子里面预测2019年90年大周期世界经济大危机的现实基础，正确的人民币战略将加快、加深这个进程。<br></font><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">如果人民币挂钩美元, 美元贬值, 人民币也跟着贬值, 这些资本就可以逃离到中国.</span><br><span class="line">中国具有广阔的市场前景, 是这些资金愿意来的地方.</span><br></pre></td></tr></table></figure></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/缠中说禅-民族复兴周期与世界经济周期历史性共振下的国家地缘与货币战略/" data-id="cjjjhltt2001lx4s6m1xvgwnp" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/01/缠中说禅-货币战争和人民币战略-下/" data-id="cjjjlk8hf001s25s6tji6bj2u" class="article-share-link">Share</a>
       
       
     </footer>
@@ -595,7 +709,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/3/">&laquo; zurück</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/">weiter &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -604,7 +718,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/economics/">economics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/technique/">technique</a></li></ul>
     </div>
@@ -619,7 +733,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
     </div>
@@ -629,9 +743,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2018/07/13/对话华生——6000点论与制度改革带来的新牛市_2012-03-17/">对话华生——6000点论与制度改革带来的新牛市_2012-03-17</a>
+          </li>
         
           <li>
             <a href="/2018/07/13/缠中说禅公司分析/">缠中说禅公司分析</a>
@@ -647,10 +765,6 @@
         
           <li>
             <a href="/2018/07/05/how_to_install_virtualenv/">how_to_install_virtualenv</a>
-          </li>
-        
-          <li>
-            <a href="/2018/06/28/How_to_manage_concurrency_in_Django_models/">How to manage concurrency in Django models</a>
           </li>
         
       </ul>
