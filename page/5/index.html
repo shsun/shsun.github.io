@@ -106,7 +106,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/缠中说禅-民族复兴周期与世界经济周期历史性共振下的国家地缘与货币战略/" data-id="cjjjmludy001ma8s638ui95hw" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/01/缠中说禅-民族复兴周期与世界经济周期历史性共振下的国家地缘与货币战略/" data-id="cjjnpgkvw001nezs6wn6f51zf" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -182,7 +182,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/许善达-中国专家预判错误太多-使我们在国际上被动/" data-id="cjjjmlue6002aa8s6h9h6bg5l" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/01/许善达-中国专家预判错误太多-使我们在国际上被动/" data-id="cjjnpgkw5002bezs6jbn1qxt4" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -268,7 +268,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/许善达-谈近年经济趋势/" data-id="cjjjmluea002ka8s61gm3bwsc" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/01/许善达-谈近年经济趋势/" data-id="cjjnpgkw6002fezs632ylyf9y" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -314,7 +314,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/许善达-中国汽车业面临六大变局/" data-id="cjjjmlue7002ca8s67jkt4r9v" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/01/许善达-中国汽车业面临六大变局/" data-id="cjjnpgkw6002dezs65a8u1m7w" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -358,49 +358,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/聪明的投资者/" data-id="cjjjmlue40024a8s6t600sc80" class="article-share-link">Teilen</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-openresty_log_by_lua_file" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/02/01/openresty_log_by_lua_file/" class="article-date">
-  <time datetime="2018-02-01T02:06:43.000Z" itemprop="datePublished">2018-02-01</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/technique/">technique</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/01/openresty_log_by_lua_file/">openresty_log_by_lua_file</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="set-the-log-in-nginx-conf"><a href="#set-the-log-in-nginx-conf" class="headerlink" title="set the log in nginx.conf"></a>set the log in nginx.conf</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#location /docs/images/tomcat.png</span></span><br><span class="line">location /docs &#123;</span><br><span class="line">	keepalive_timeout 0;</span><br><span class="line">	default_type <span class="string">'text/html'</span>;</span><br><span class="line">	<span class="built_in">set</span> <span class="variable">$res</span> <span class="string">""</span>;</span><br><span class="line">	set_by_lua_file <span class="variable">$res</span> /opt/openresty/set_by.lua;</span><br><span class="line">	rewrite_by_lua_file /opt/openresty/rewrite.lua;</span><br><span class="line">	access_by_lua_file /opt/openresty/access.lua;</span><br><span class="line">	content_by_lua_file /opt/openresty/content.lua;</span><br><span class="line">	header_filter_by_lua_file /opt/openresty/header_filter.lua;</span><br><span class="line">	body_filter_by_lua_file /opt/openresty/body_filter.lua;</span><br><span class="line">	log_by_lua_file /opt/openresty/base/log.lua;</span><br><span class="line">	proxy_pass http://default_doc_upstream;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="log-by-lua-file"><a href="#log-by-lua-file" class="headerlink" title="log_by_lua_file"></a>log_by_lua_file</h3><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> cjson = <span class="built_in">require</span>(<span class="string">"cjson"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> upstream_addr = <span class="literal">nil</span>;</span><br><span class="line"><span class="keyword">if</span> <span class="literal">nil</span> ~= ngx.var.upstream_addr <span class="keyword">then</span></span><br><span class="line">    upstream_addr = ngx.var.upstream_addr;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    upstream_addr = <span class="literal">nil</span>;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">ngx.<span class="built_in">log</span>(ngx.INFO, <span class="string">"upstream_addr="</span>..upstream_addr);</span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="keyword">if</span> <span class="literal">nil</span> ~= ngx.var.upstream_response_time <span class="keyword">and</span> <span class="string">'number'</span> == <span class="built_in">type</span>(ngx.var.upstream_response_time) <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">local</span> resp_time_so_far = ngx.now() - <span class="built_in">tonumber</span>(ngx.var.upstream_response_time);</span><br><span class="line">    <span class="comment">-- 1s</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">tonumber</span>(ngx.var.upstream_response_time) &gt;= <span class="number">1</span> <span class="keyword">then</span></span><br><span class="line">        ngx.<span class="built_in">log</span>(ngx.WARN, <span class="string">"[SLOW] request_time="</span>..ngx.var.request_time..<span class="string">" upstream_response_time="</span>..ngx.var.upstream_response_time..<span class="string">", upstream_addr="</span>..upstream_addr);</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/openresty_log_by_lua_file/" data-id="cjjjmludi000fa8s6i92ehw4x" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/01/聪明的投资者/" data-id="cjjnpgkw40027ezs6hdyi9bix" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -442,7 +400,49 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/Got "ERROR sending 'cluster slots' command to redis server: {'host': '127.0.0.1', 'port': 6379}" when i use StrictRedisCluster connection/" data-id="cjjjmlud90001a8s6z1pipzqe" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/01/Got "ERROR sending 'cluster slots' command to redis server: {'host': '127.0.0.1', 'port': 6379}" when i use StrictRedisCluster connection/" data-id="cjjnpgkv20000ezs669nx1vom" class="article-share-link">Teilen</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-openresty_log_by_lua_file" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/02/01/openresty_log_by_lua_file/" class="article-date">
+  <time datetime="2018-02-01T02:06:43.000Z" itemprop="datePublished">2018-02-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/technique/">technique</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/01/openresty_log_by_lua_file/">openresty_log_by_lua_file</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="set-the-log-in-nginx-conf"><a href="#set-the-log-in-nginx-conf" class="headerlink" title="set the log in nginx.conf"></a>set the log in nginx.conf</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#location /docs/images/tomcat.png</span></span><br><span class="line">location /docs &#123;</span><br><span class="line">	keepalive_timeout 0;</span><br><span class="line">	default_type <span class="string">'text/html'</span>;</span><br><span class="line">	<span class="built_in">set</span> <span class="variable">$res</span> <span class="string">""</span>;</span><br><span class="line">	set_by_lua_file <span class="variable">$res</span> /opt/openresty/set_by.lua;</span><br><span class="line">	rewrite_by_lua_file /opt/openresty/rewrite.lua;</span><br><span class="line">	access_by_lua_file /opt/openresty/access.lua;</span><br><span class="line">	content_by_lua_file /opt/openresty/content.lua;</span><br><span class="line">	header_filter_by_lua_file /opt/openresty/header_filter.lua;</span><br><span class="line">	body_filter_by_lua_file /opt/openresty/body_filter.lua;</span><br><span class="line">	log_by_lua_file /opt/openresty/base/log.lua;</span><br><span class="line">	proxy_pass http://default_doc_upstream;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="log-by-lua-file"><a href="#log-by-lua-file" class="headerlink" title="log_by_lua_file"></a>log_by_lua_file</h3><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> cjson = <span class="built_in">require</span>(<span class="string">"cjson"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> upstream_addr = <span class="literal">nil</span>;</span><br><span class="line"><span class="keyword">if</span> <span class="literal">nil</span> ~= ngx.var.upstream_addr <span class="keyword">then</span></span><br><span class="line">    upstream_addr = ngx.var.upstream_addr;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    upstream_addr = <span class="literal">nil</span>;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">ngx.<span class="built_in">log</span>(ngx.INFO, <span class="string">"upstream_addr="</span>..upstream_addr);</span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="keyword">if</span> <span class="literal">nil</span> ~= ngx.var.upstream_response_time <span class="keyword">and</span> <span class="string">'number'</span> == <span class="built_in">type</span>(ngx.var.upstream_response_time) <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">local</span> resp_time_so_far = ngx.now() - <span class="built_in">tonumber</span>(ngx.var.upstream_response_time);</span><br><span class="line">    <span class="comment">-- 1s</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">tonumber</span>(ngx.var.upstream_response_time) &gt;= <span class="number">1</span> <span class="keyword">then</span></span><br><span class="line">        ngx.<span class="built_in">log</span>(ngx.WARN, <span class="string">"[SLOW] request_time="</span>..ngx.var.request_time..<span class="string">" upstream_response_time="</span>..ngx.var.upstream_response_time..<span class="string">", upstream_addr="</span>..upstream_addr);</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/02/01/openresty_log_by_lua_file/" data-id="cjjnpgkvb0008ezs6aga3ec5g" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -484,7 +484,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/openresty_balancer_by_lua_file/" data-id="cjjjmludh000ca8s6g3nibh45" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/01/openresty_balancer_by_lua_file/" data-id="cjjnpgkva0007ezs6j0fltqbm" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -531,7 +531,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/29/一些指标/" data-id="cjjjmludj000ha8s6gd5msdou" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/01/29/一些指标/" data-id="cjjnpgkvg000hezs68qjzwsp3" class="article-share-link">Teilen</a>
       
       
     </footer>
