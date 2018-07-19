@@ -106,7 +106,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/缠中说禅-民族复兴周期与世界经济周期历史性共振下的国家地缘与货币战略/" data-id="cjjs8ka1u001oc4s6bpgituci" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/01/缠中说禅-民族复兴周期与世界经济周期历史性共振下的国家地缘与货币战略/" data-id="cjjs8lx27001ocos6tcyliiqb" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -182,7 +182,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/许善达-中国专家预判错误太多-使我们在国际上被动/" data-id="cjjs8ka25002ec4s6q7jle33a" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/01/许善达-中国专家预判错误太多-使我们在国际上被动/" data-id="cjjs8lx2f002ccos630aass7o" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -268,7 +268,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/许善达-谈近年经济趋势/" data-id="cjjs8ka26002gc4s65db8g4n7" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/01/许善达-谈近年经济趋势/" data-id="cjjs8lx2h002icos6fx216qko" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -314,7 +314,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/许善达-中国汽车业面临六大变局/" data-id="cjjs8ka24002cc4s6v5bdl3ru" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/01/许善达-中国汽车业面临六大变局/" data-id="cjjs8lx2f002acos6chn82iw4" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -358,49 +358,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/聪明的投资者/" data-id="cjjs8ka1z0022c4s6mfsfuxgz" class="article-share-link">Teilen</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Got &#34;ERROR sending &#39;cluster slots&#39; command to redis server: {&#39;host&#39;: &#39;127.0.0.1&#39;, &#39;port&#39;: 6379}&#34; when i use StrictRedisCluster connection" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/02/01/Got "ERROR sending 'cluster slots' command to redis server: {'host': '127.0.0.1', 'port': 6379}" when i use StrictRedisCluster connection/" class="article-date">
-  <time datetime="2018-02-01T02:06:43.000Z" itemprop="datePublished">2018-02-01</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/technique/">technique</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/01/Got "ERROR sending 'cluster slots' command to redis server: {'host': '127.0.0.1', 'port': 6379}" when i use StrictRedisCluster connection/">Got &#34;ERROR sending &#39;cluster slots&#39; command to redis server&#34;</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>get the fuck execption message “ERROR sending ‘cluster slots’ command to redis server: {‘host’: ‘127.0.0.1’, ‘port’: 6379}”</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">startup_nodes = [</span><br><span class="line">		&#123;<span class="string">'host'</span>: <span class="string">'127.0.0.1'</span>, <span class="string">'port'</span>: <span class="number">6379</span>&#125;</span><br><span class="line">]</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">		app.redisconn = StrictRedisCluster(startup_nodes=startup_nodes, decode_responses=<span class="keyword">True</span>)</span><br><span class="line">		<span class="keyword">with</span> pytest.raises(RedisClusterException) <span class="keyword">as</span> e:</span><br><span class="line">				app.redisconn.initialize()</span><br><span class="line">		app.redisconn.set(<span class="string">'name'</span>, <span class="string">'admin'</span>)</span><br><span class="line">		app.redisconn.set(<span class="string">'age'</span>, <span class="number">18</span>)</span><br><span class="line"><span class="keyword">except</span> RedisClusterException, e:</span><br><span class="line">		<span class="keyword">print</span> e.message</span><br><span class="line">		<span class="comment"># sys.exit(1)</span></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/Got "ERROR sending 'cluster slots' command to redis server: {'host': '127.0.0.1', 'port': 6379}" when i use StrictRedisCluster connection/" data-id="cjjs8ka110001c4s61szaikkb" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/01/聪明的投资者/" data-id="cjjs8lx2d0026cos6r7ym7wrn" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -442,7 +400,49 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/openresty_log_by_lua_file/" data-id="cjjs8ka1b000cc4s6r1a60w13" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/01/openresty_log_by_lua_file/" data-id="cjjs8lx1p000fcos6uuzbcp31" class="article-share-link">Teilen</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Got &#34;ERROR sending &#39;cluster slots&#39; command to redis server: {&#39;host&#39;: &#39;127.0.0.1&#39;, &#39;port&#39;: 6379}&#34; when i use StrictRedisCluster connection" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/02/01/Got "ERROR sending 'cluster slots' command to redis server: {'host': '127.0.0.1', 'port': 6379}" when i use StrictRedisCluster connection/" class="article-date">
+  <time datetime="2018-02-01T02:06:43.000Z" itemprop="datePublished">2018-02-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/technique/">technique</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/01/Got "ERROR sending 'cluster slots' command to redis server: {'host': '127.0.0.1', 'port': 6379}" when i use StrictRedisCluster connection/">Got &#34;ERROR sending &#39;cluster slots&#39; command to redis server&#34;</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>get the fuck execption message “ERROR sending ‘cluster slots’ command to redis server: {‘host’: ‘127.0.0.1’, ‘port’: 6379}”</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">startup_nodes = [</span><br><span class="line">		&#123;<span class="string">'host'</span>: <span class="string">'127.0.0.1'</span>, <span class="string">'port'</span>: <span class="number">6379</span>&#125;</span><br><span class="line">]</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">		app.redisconn = StrictRedisCluster(startup_nodes=startup_nodes, decode_responses=<span class="keyword">True</span>)</span><br><span class="line">		<span class="keyword">with</span> pytest.raises(RedisClusterException) <span class="keyword">as</span> e:</span><br><span class="line">				app.redisconn.initialize()</span><br><span class="line">		app.redisconn.set(<span class="string">'name'</span>, <span class="string">'admin'</span>)</span><br><span class="line">		app.redisconn.set(<span class="string">'age'</span>, <span class="number">18</span>)</span><br><span class="line"><span class="keyword">except</span> RedisClusterException, e:</span><br><span class="line">		<span class="keyword">print</span> e.message</span><br><span class="line">		<span class="comment"># sys.exit(1)</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/02/01/Got "ERROR sending 'cluster slots' command to redis server: {'host': '127.0.0.1', 'port': 6379}" when i use StrictRedisCluster connection/" data-id="cjjs8lx1g0001cos6fm22kzr0" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -484,7 +484,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/openresty_balancer_by_lua_file/" data-id="cjjs8ka170008c4s68ugq539f" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/01/openresty_balancer_by_lua_file/" data-id="cjjs8lx1o000ccos6y1sce1ol" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -531,7 +531,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/29/一些指标/" data-id="cjjs8ka1f000kc4s6f0dms817" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/01/29/一些指标/" data-id="cjjs8lx1q000hcos6iu3w744j" class="article-share-link">Teilen</a>
       
       
     </footer>
