@@ -121,9 +121,9 @@
 <h1 id="What-are-metaclasses-finally"><a href="#What-are-metaclasses-finally" class="headerlink" title="What are metaclasses (finally)"></a>What are metaclasses (finally)</h1><p>Metaclasses are the ‘stuff’ that creates classes.</p>
 <p>You define classes in order to create objects, right?</p>
 <p>But we learned that Python classes are objects.</p>
-<p>Well, metaclasses are what create these objects. They are the classes’ classes, you can picture them this way:</p>
-<p> MyClass = MetaClass()<br> MyObject = MyClass()<br>You’ve seen that type lets you do something like this:</p>
-<p> MyClass = type(‘MyClass’, (), {})<br>It’s because the function type is in fact a metaclass. type is the metaclass Python uses to create all classes behind the scenes.</p>
+<p>Well, metaclasses are what create these objects. They are the classes’ classes, you can picture them this way:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MyClass = MetaClass()</span><br><span class="line">MyObject = MyClass()</span><br></pre></td></tr></table></figure></p>
+<p>You’ve seen that type lets you do something like this:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyClass = type(<span class="string">'MyClass'</span>, (), &#123;&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>It’s because the function type is in fact a metaclass. type is the metaclass Python uses to create all classes behind the scenes.</p>
 <p>Now you wonder why the heck is it written in lowercase, and not Type?</p>
 <p>Well, I guess it’s a matter of consistency with str, the class that creates strings objects, and int the class that creates integer objects. type is just the class that creates class objects.</p>
 <p>You see that by checking the <strong>class</strong> attribute.</p>
@@ -190,7 +190,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/09/Metaclass_in_Python/" data-id="cjkm87c7z000733s6ev6x4voz" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/08/09/Metaclass_in_Python/" data-id="cjkm89jef00053os6minwbi8m" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -324,7 +324,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/25/靳海涛：一级市场估值的拐点即将到来，建议行业集体放缓投资/" data-id="cjkm87c92002m33s6spvkyv5m" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/25/靳海涛：一级市场估值的拐点即将到来，建议行业集体放缓投资/" data-id="cjkm89jfe002m3os6s2e2c0sn" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -426,7 +426,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/13/对话华生——6000点论与制度改革带来的新牛市_2012-03-17/" data-id="cjkm87c8g001233s6zst7w71g" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/13/对话华生——6000点论与制度改革带来的新牛市_2012-03-17/" data-id="cjkm89jeu00123os6exvedys8" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -489,7 +489,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/13/缠中说禅公司分析/" data-id="cjkm87c8u002433s6edua5sne" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/13/缠中说禅公司分析/" data-id="cjkm89jf900263os6o5nu1akc" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -535,7 +535,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/05/重温股市大辩论的是是非非/" data-id="cjkm87c90002g33s6nfqrl8f6" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/05/重温股市大辩论的是是非非/" data-id="cjkm89jfc002g3os6f53q6p4n" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -761,7 +761,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/05/庙堂经济学家的权力江湖/" data-id="cjkm87c8h001633s62l0ymdqc" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/05/庙堂经济学家的权力江湖/" data-id="cjkm89jev00143os6qv8633cn" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -820,7 +820,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/05/how_to_install_virtualenv/" data-id="cjkm87c83000c33s63bhbhncx" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/05/how_to_install_virtualenv/" data-id="cjkm89jek000c3os6m73slwoz" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -970,7 +970,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/28/How_to_manage_concurrency_in_Django_models/" data-id="cjkm87c7x000433s6gxz85ey7" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/06/28/How_to_manage_concurrency_in_Django_models/" data-id="cjkm89jef00043os6leiwbizm" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -1112,7 +1112,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/28/Bullet_Proofing_Django_Models/" data-id="cjkm87c7u000133s61hazd13n" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/06/28/Bullet_Proofing_Django_Models/" data-id="cjkm89jeb00013os6gilsvuge" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -1159,7 +1159,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/21/阿里云SLB显示用户真实IP/" data-id="cjkm87c90002i33s63p15k6r1" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/05/21/阿里云SLB显示用户真实IP/" data-id="cjkm89jfe002k3os60jiy2dri" class="article-share-link">Teilen</a>
       
       
     </footer>

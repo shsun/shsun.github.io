@@ -13,7 +13,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/08/09/Metaclass_in_Python/index.html">
 <meta property="og:site_name" content="谢谢这个世界">
 <meta property="og:description" content="I pick this post from stackoverflow, it’s really awesome, thanks for e-satis . Here is the original link : http://stackoverflow.com/questions/100003/what-is-a-metaclass-in-python Classes as objectsBef">
-<meta property="og:updated_time" content="2018-08-09T07:13:12.000Z">
+<meta property="og:updated_time" content="2018-08-09T07:14:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Metaclass_in_Python">
 <meta name="twitter:description" content="I pick this post from stackoverflow, it’s really awesome, thanks for e-satis . Here is the original link : http://stackoverflow.com/questions/100003/what-is-a-metaclass-in-python Classes as objectsBef">
@@ -123,9 +123,9 @@
 <h1 id="What-are-metaclasses-finally"><a href="#What-are-metaclasses-finally" class="headerlink" title="What are metaclasses (finally)"></a>What are metaclasses (finally)</h1><p>Metaclasses are the ‘stuff’ that creates classes.</p>
 <p>You define classes in order to create objects, right?</p>
 <p>But we learned that Python classes are objects.</p>
-<p>Well, metaclasses are what create these objects. They are the classes’ classes, you can picture them this way:</p>
-<p> MyClass = MetaClass()<br> MyObject = MyClass()<br>You’ve seen that type lets you do something like this:</p>
-<p> MyClass = type(‘MyClass’, (), {})<br>It’s because the function type is in fact a metaclass. type is the metaclass Python uses to create all classes behind the scenes.</p>
+<p>Well, metaclasses are what create these objects. They are the classes’ classes, you can picture them this way:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MyClass = MetaClass()</span><br><span class="line">MyObject = MyClass()</span><br></pre></td></tr></table></figure></p>
+<p>You’ve seen that type lets you do something like this:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyClass = type(<span class="string">'MyClass'</span>, (), &#123;&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>It’s because the function type is in fact a metaclass. type is the metaclass Python uses to create all classes behind the scenes.</p>
 <p>Now you wonder why the heck is it written in lowercase, and not Type?</p>
 <p>Well, I guess it’s a matter of consistency with str, the class that creates strings objects, and int the class that creates integer objects. type is just the class that creates class objects.</p>
 <p>You see that by checking the <strong>class</strong> attribute.</p>
@@ -192,7 +192,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/09/Metaclass_in_Python/" data-id="cjkm87c7z000733s6ev6x4voz" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/08/09/Metaclass_in_Python/" data-id="cjkm89jef00053os6minwbi8m" class="article-share-link">Teilen</a>
       
       
     </footer>
