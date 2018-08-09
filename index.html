@@ -61,6 +61,140 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Metaclass_in_Python" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/09/Metaclass_in_Python/" class="article-date">
+  <time datetime="2018-08-09T07:03:04.000Z" itemprop="datePublished">2018-08-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/technique/">technique</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/09/Metaclass_in_Python/">Metaclass_in_Python</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I pick this post from stackoverflow, it’s really awesome, thanks for e-satis .</p>
+<p> Here is the original link : <a href="http://stackoverflow.com/questions/100003/what-is-a-metaclass-in-python" target="_blank" rel="noopener">http://stackoverflow.com/questions/100003/what-is-a-metaclass-in-python</a></p>
+<p>Classes as objects<br>Before understanding metaclasses, you need to master classes in Python. And Python has a very peculiar idea of what classes are, borrowed from the Smalltalk language.</p>
+<p>In most languages, classes are just pieces of code that describe how to produce an object. That’s kinda true in Python too:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">ObjectCreator</span><span class="params">(object)</span>:</span></span><br><span class="line"><span class="meta">... </span>      <span class="keyword">pass</span></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>my_object = ObjectCreator()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> my_object</span><br><span class="line">&lt;__main__.ObjectCreator object at <span class="number">0x8974f2c</span>&gt;</span><br></pre></td></tr></table></figure></p>
+<p>But classes are more than that in Python. Classes are objects too.</p>
+<p>Yes, objects.</p>
+<p>As soon as you use the keyword class, Python executes it and creates an OBJECT. The instruction<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">ObjectCreator</span><span class="params">(object)</span>:</span></span><br><span class="line"><span class="meta">... </span>      <span class="keyword">pass</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>creates in memory an object with the name ObjectCreator.</p>
+<p>This object (the class) is itself capable of creating objects (the instances), and this is why it’s a class.</p>
+<p>But still, it’s an object, and therefore:</p>
+<p>you can assign it to a variable<br>you can copy it<br>you can add attributes to it<br>you can pass it as a function parameter<br>e.g.:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> ObjectCreator <span class="comment"># you can print a class because it's an object</span></span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">__main__</span>.<span class="title">ObjectCreator</span>'&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">def</span> <span class="title">echo</span><span class="params">(o)</span>:</span></span><br><span class="line"><span class="meta">... </span>      <span class="keyword">print</span> o</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>echo(ObjectCreator) <span class="comment"># you can pass a class as a parameter</span></span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">__main__</span>.<span class="title">ObjectCreator</span>'&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">print</span> <span class="title">hasattr</span><span class="params">(ObjectCreator, <span class="string">'new_attribute'</span>)</span></span></span><br><span class="line"><span class="class"><span class="title">False</span></span></span><br><span class="line">&gt;&gt;&gt; ObjectCreator.new_attribute = 'foo' # you can add attributes to a class</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> hasattr(ObjectCreator, <span class="string">'new_attribute'</span>)</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> ObjectCreator.new_attribute</span><br><span class="line">foo</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ObjectCreatorMirror = ObjectCreator <span class="comment"># you can assign a class to a variable</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> ObjectCreatorMirror.new_attribute</span><br><span class="line">foo</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> ObjectCreatorMirror()</span><br><span class="line">&lt;__main__.ObjectCreator object at <span class="number">0x8997b4c</span>&gt;</span><br></pre></td></tr></table></figure></p>
+<p>Creating classes dynamically<br>Since classes are objects, you can create them on the fly, like any object.</p>
+<p>First, you can create a class in a function using class:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; def choose_class(name):</span><br><span class="line">...     if name == &apos;foo&apos;:</span><br><span class="line">...         class Foo(object):</span><br><span class="line">...             pass</span><br><span class="line">...         return Foo # return the class, not an instance</span><br><span class="line">...     else:</span><br><span class="line">...         class Bar(object):</span><br><span class="line">...             pass</span><br><span class="line">...         return Bar</span><br><span class="line">...     </span><br><span class="line">&gt;&gt;&gt; MyClass = choose_class(&apos;foo&apos;)</span><br><span class="line">&gt;&gt;&gt; print MyClass # the function returns a class, not an instance</span><br><span class="line">&lt;class &apos;__main__.Foo&apos;&gt;</span><br><span class="line">&gt;&gt;&gt; print MyClass() # you can create an object from this class</span><br><span class="line">&lt;__main__.Foo object at 0x89c6d4c&gt;</span><br></pre></td></tr></table></figure></p>
+<p>But it’s not so dynamic, since you still have to write the whole class yourself.</p>
+<p>Since classes are objects, they must be generated by something.</p>
+<p>When you use the class keyword, Python creates this object automatically. But as with most things in Python, it gives you a way to do it manually.</p>
+<p>Remember the function type? The good old function that lets you know what type an object is:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; print type(1)</span><br><span class="line">&lt;type &apos;int&apos;&gt;</span><br><span class="line">&gt;&gt;&gt; print type(&quot;1&quot;)</span><br><span class="line">&lt;type &apos;str&apos;&gt;</span><br><span class="line">&gt;&gt;&gt; print type(ObjectCreator)</span><br><span class="line">&lt;type &apos;type&apos;&gt;</span><br><span class="line">&gt;&gt;&gt; print type(ObjectCreator())</span><br><span class="line">&lt;class &apos;__main__.ObjectCreator&apos;&gt;</span><br></pre></td></tr></table></figure></p>
+<p>Well, type has a completely different ability, it can also create classes on the fly. type can take the description of a class as parameters, and return a class.</p>
+<p>(I know, it’s silly that the same function can have two completely different uses according to the parameters you pass to it. It’s an issue due to backwards compatibility in Python)</p>
+<p>type works this way:</p>
+<p> type(name of the class,<br>      tuple of the parent class (for inheritance, can be empty),<br>      dictionary containing attributes names and values)<br>e.g.:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">MyShinyClass</span><span class="params">(object)</span>:</span></span><br><span class="line"><span class="meta">... </span>      <span class="keyword">pass</span></span><br></pre></td></tr></table></figure></p>
+<p>can be created manually this way:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>MyShinyClass = type(<span class="string">'MyShinyClass'</span>, (), &#123;&#125;) <span class="comment"># returns a class object</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> MyShinyClass</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">__main__</span>.<span class="title">MyShinyClass</span>'&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">print</span> <span class="title">MyShinyClass</span><span class="params">()</span> # <span class="title">create</span> <span class="title">an</span> <span class="title">instance</span> <span class="title">with</span> <span class="title">the</span> <span class="title">class</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">__main__</span>.<span class="title">MyShinyClass</span> <span class="title">object</span> <span class="title">at</span> 0<span class="title">x8997cec</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>You’ll notice that we use “MyShinyClass” as the name of the class and as the variable to hold the class reference. They can be different, but there is no reason to complicate things.</p>
+<p>type accepts a dictionary to define the attributes of the class. So:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">Foo</span><span class="params">(object)</span>:</span></span><br><span class="line"><span class="meta">... </span>      bar = <span class="keyword">True</span></span><br></pre></td></tr></table></figure></p>
+<p>Can be translated to:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>Foo = type(<span class="string">'Foo'</span>, (), &#123;<span class="string">'bar'</span>:<span class="keyword">True</span>&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>And used as a normal class:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> Foo</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">__main__</span>.<span class="title">Foo</span>'&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">print</span> <span class="title">Foo</span>.<span class="title">bar</span></span></span><br><span class="line"><span class="class"><span class="title">True</span></span></span><br><span class="line">&gt;&gt;&gt; f = Foo()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> f</span><br><span class="line">&lt;__main__.Foo object at <span class="number">0x8a9b84c</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> f.bar</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure></p>
+<p>And of course, you can inherit from it, so:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>  <span class="class"><span class="keyword">class</span> <span class="title">FooChild</span><span class="params">(Foo)</span>:</span></span><br><span class="line"><span class="meta">... </span>        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure></p>
+<p>would be:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>FooChild = type(<span class="string">'FooChild'</span>, (Foo,), &#123;&#125;)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> FooChild</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">__main__</span>.<span class="title">FooChild</span>'&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">print</span> <span class="title">FooChild</span>.<span class="title">bar</span> # <span class="title">bar</span> <span class="title">is</span> <span class="title">inherited</span> <span class="title">from</span> <span class="title">Foo</span></span></span><br><span class="line"><span class="class"><span class="title">True</span></span></span><br></pre></td></tr></table></figure></p>
+<p>Eventually you’ll want to add methods to your class. Just define a function with the proper signature and assign it as an attribute.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">echo_bar</span><span class="params">(self)</span>:</span></span><br><span class="line"><span class="meta">... </span>      <span class="keyword">print</span> self.bar</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>FooChild = type(<span class="string">'FooChild'</span>, (Foo,), &#123;<span class="string">'echo_bar'</span>: echo_bar&#125;)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>hasattr(Foo, <span class="string">'echo_bar'</span>)</span><br><span class="line"><span class="keyword">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>hasattr(FooChild, <span class="string">'echo_bar'</span>)</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>my_foo = FooChild()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>my_foo.echo_bar()</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure></p>
+<p>You see where we are going: in Python, classes are objects, and you can create a class on the fly, dynamically.</p>
+<p>This is what Python does when you use the keyword class, and it does so by using a metaclass.</p>
+<p>What are metaclasses (finally)<br>Metaclasses are the ‘stuff’ that creates classes.</p>
+<p>You define classes in order to create objects, right?</p>
+<p>But we learned that Python classes are objects.</p>
+<p>Well, metaclasses are what create these objects. They are the classes’ classes, you can picture them this way:</p>
+<p> MyClass = MetaClass()<br> MyObject = MyClass()<br>You’ve seen that type lets you do something like this:</p>
+<p> MyClass = type(‘MyClass’, (), {})<br>It’s because the function type is in fact a metaclass. type is the metaclass Python uses to create all classes behind the scenes.</p>
+<p>Now you wonder why the heck is it written in lowercase, and not Type?</p>
+<p>Well, I guess it’s a matter of consistency with str, the class that creates strings objects, and int the class that creates integer objects. type is just the class that creates class objects.</p>
+<p>You see that by checking the <strong>class</strong> attribute.</p>
+<p>Everything, and I mean everything, is an object in Python. That includes ints, strings, functions and classes. All of them are objects. And all of them have been created from a class:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>age = <span class="number">35</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>age.__class__</span><br><span class="line">&lt;type <span class="string">'int'</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>name = <span class="string">'bob'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>name.__class__</span><br><span class="line">&lt;type <span class="string">'str'</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">()</span>:</span> <span class="keyword">pass</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo.__class__</span><br><span class="line">&lt;type <span class="string">'function'</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">Bar</span><span class="params">(object)</span>:</span> <span class="keyword">pass</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = Bar()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.__class__</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">__main__</span>.<span class="title">Bar</span>'&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>Now, what is the <strong>class</strong> of any <strong>class</strong> ?<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>age.__class__.__class__</span><br><span class="line">&lt;type <span class="string">'type'</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>name.__class__.__class__</span><br><span class="line">&lt;type <span class="string">'type'</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo.__class__.__class__</span><br><span class="line">&lt;type <span class="string">'type'</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.__class__.__class__</span><br><span class="line">&lt;type <span class="string">'type'</span>&gt;</span><br></pre></td></tr></table></figure></p>
+<p>So, a metaclass is just the stuff that creates class objects.</p>
+<p>You can call it a ‘class factory’ if you wish.</p>
+<p>type is the built-in metaclass Python uses, but of course, you can create your own metaclass.</p>
+<p>The <strong>metaclass</strong> attribute<br>You can add a <strong>metaclass</strong> attribute when you write a class:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span><span class="params">(object)</span>:</span></span><br><span class="line"> __metaclass__ = something...</span><br><span class="line"> [...]</span><br></pre></td></tr></table></figure></p>
+<p>If you do so, Python will use the metaclass to create the class Foo.</p>
+<p>Careful, it’s tricky.</p>
+<p>You write class Foo(object) first, but the class object Foo is not created in memory yet.</p>
+<p>Python will look for <strong>metaclass</strong> in the class definition. If it finds it, it will use it to create the object class Foo. If it doesn’t, it will use type to create the class.</p>
+<p>Read that several times.</p>
+<p>When you do:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span><span class="params">(Bar)</span>:</span></span><br><span class="line"> <span class="keyword">pass</span></span><br></pre></td></tr></table></figure></p>
+<p>Python does the following:</p>
+<p>Is there a <strong>metaclass</strong> attribute in Foo?</p>
+<p>If yes, create in memory a class object (I said a class object, stay with me here), with the name Foo by using what is in <strong>metaclass</strong>.</p>
+<p>If Python can’t find <strong>metaclass</strong>, it will look for a <strong>metaclass</strong> in Bar (the parent class), and try to do the same.</p>
+<p>If Python can’t find <strong>metaclass</strong> in any parent, it will look for a <strong>metaclass</strong> at the MODULE level, and try to do the same.</p>
+<p>Then if it can’t find any <strong>metaclass</strong> at all, it will use type to create the class object.</p>
+<p>Now the big question is, what can you put in <strong>metaclass</strong> ?</p>
+<p>The answer is: something that can create a class.</p>
+<p>And what can create a class? type, or anything that subclasses or uses it.</p>
+<p>Custom metaclasses<br>The main purpose of a metaclass is to change the class automatically, when it’s created.</p>
+<p>You usually do this for APIs, where you want to create classes matching the current context.</p>
+<p>Imagine a stupid example, where you decide that all classes in your module should have their attributes written in uppercase. There are several ways to do this, but one way is to set <strong>metaclass</strong> at the module level.</p>
+<p>This way, all classes of this module will be created using this metaclass, and we just have to tell the metaclass to turn all attributes to uppercase.</p>
+<p>Luckily, <strong>metaclass</strong> can actually be any callable, it doesn’t need to be a formal class (I know, something with ‘class’ in its name doesn’t need to be a class, go figure… but it’s helpful).</p>
+<p>So we will start with a simple example, by using a function.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># the metaclass will automatically get passed the same argument</span></span><br><span class="line"><span class="comment"># that you usually pass to `type`</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">upper_attr</span><span class="params">(future_class_name, future_class_parents, future_class_attr)</span>:</span></span><br><span class="line"> <span class="string">"""</span></span><br><span class="line"><span class="string">   Return a class object, with the list of its attribute turned</span></span><br><span class="line"><span class="string">   into uppercase.</span></span><br><span class="line"><span class="string"> """</span></span><br><span class="line"></span><br><span class="line"> <span class="comment"># pick up any attribute that doesn't start with '__' and uppercase it</span></span><br><span class="line"> uppercase_attr = &#123;&#125;</span><br><span class="line"> <span class="keyword">for</span> name, val <span class="keyword">in</span> future_class_attr.items():</span><br><span class="line">     <span class="keyword">if</span> <span class="keyword">not</span> name.startswith(<span class="string">'__'</span>):</span><br><span class="line">         uppercase_attr[name.upper()] = val</span><br><span class="line">     <span class="keyword">else</span>:</span><br><span class="line">         uppercase_attr[name] = val</span><br><span class="line"></span><br><span class="line"> <span class="comment"># let `type` do the class creation</span></span><br><span class="line"> <span class="keyword">return</span> type(future_class_name, future_class_parents, uppercase_attr)</span><br><span class="line"></span><br><span class="line">__metaclass__ = upper_attr <span class="comment"># this will affect all classes in the module</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span><span class="params">()</span>:</span> <span class="comment"># global __metaclass__ won't work with "object" though</span></span><br><span class="line"> <span class="comment"># but we can define __metaclass__ here instead to affect only this class</span></span><br><span class="line"> <span class="comment"># and this will work with "object" children</span></span><br><span class="line"> bar = <span class="string">'bip'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> hasattr(Foo, <span class="string">'bar'</span>)</span><br><span class="line"><span class="comment"># Out: False</span></span><br><span class="line"><span class="keyword">print</span> hasattr(Foo, <span class="string">'BAR'</span>)</span><br><span class="line"><span class="comment"># Out: True</span></span><br><span class="line"></span><br><span class="line">f = Foo()</span><br><span class="line"><span class="keyword">print</span> f.BAR</span><br><span class="line"><span class="comment"># Out: 'bip'</span></span><br></pre></td></tr></table></figure></p>
+<p>Now, let’s do exactly the same, but using a real class for a metaclass:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># remember that `type` is actually a class like `str` and `int`</span></span><br><span class="line"><span class="comment"># so you can inherit from it</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UpperAttrMetaclass</span><span class="params">(type)</span>:</span></span><br><span class="line">   <span class="comment"># __new__ is the method called before __init__</span></span><br><span class="line">   <span class="comment"># it's the method that creates the object and returns it</span></span><br><span class="line">   <span class="comment"># while __init__ just initializes the object passed as parameter</span></span><br><span class="line">   <span class="comment"># you rarely use __new__, except when you want to control how the object</span></span><br><span class="line">   <span class="comment"># is created.</span></span><br><span class="line">   <span class="comment"># here the created object is the class, and we want to customize it</span></span><br><span class="line">   <span class="comment"># so we override __new__</span></span><br><span class="line">   <span class="comment"># you can do some stuff in __init__ too if you wish</span></span><br><span class="line">   <span class="comment"># some advanced use involves overriding __call__ as well, but we won't</span></span><br><span class="line">   <span class="comment"># see this</span></span><br><span class="line">   <span class="function"><span class="keyword">def</span> <span class="title">__new__</span><span class="params">(upperattr_metaclass, future_class_name,</span></span></span><br><span class="line"><span class="function"><span class="params">               future_class_parents, future_class_attr)</span>:</span></span><br><span class="line"></span><br><span class="line">       uppercase_attr = &#123;&#125;</span><br><span class="line">       <span class="keyword">for</span> name, val <span class="keyword">in</span> future_class_attr.items():</span><br><span class="line">           <span class="keyword">if</span> <span class="keyword">not</span> name.startswith(<span class="string">'__'</span>):</span><br><span class="line">               uppercase_attr[name.upper()] = val</span><br><span class="line">           <span class="keyword">else</span>:</span><br><span class="line">               uppercase_attr[name] = val</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> type(future_class_name, future_class_parents, uppercase_attr)</span><br></pre></td></tr></table></figure></p>
+<p>But this is not really OOP. We call type directly and we don’t override call the parent <strong>new</strong>. Let’s do it:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UpperAttrMetaclass</span><span class="params">(type)</span>:</span></span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">def</span> <span class="title">__new__</span><span class="params">(upperattr_metaclass, future_class_name,</span></span></span><br><span class="line"><span class="function"><span class="params">               future_class_parents, future_class_attr)</span>:</span></span><br><span class="line"></span><br><span class="line">       uppercase_attr = &#123;&#125;</span><br><span class="line">       <span class="keyword">for</span> name, val <span class="keyword">in</span> future_class_attr.items():</span><br><span class="line">           <span class="keyword">if</span> <span class="keyword">not</span> name.startswith(<span class="string">'__'</span>):</span><br><span class="line">               uppercase_attr[name.upper()] = val</span><br><span class="line">           <span class="keyword">else</span>:</span><br><span class="line">               uppercase_attr[name] = val</span><br><span class="line"></span><br><span class="line">       <span class="comment"># reuse the type.__new__ method</span></span><br><span class="line">       <span class="comment"># this is basic OOP, nothing magic in there</span></span><br><span class="line">       <span class="keyword">return</span> type.__new__(upperattr_metaclass, future_class_name,</span><br><span class="line">                           future_class_parents, uppercase_attr)</span><br></pre></td></tr></table></figure></p>
+<p>You may have noticed the extra argument upperattr_metaclass. There is nothing special about it: a method always receives the current instance as first parameter. Just like you have self for ordinary methods.</p>
+<p>Of course, the names I used here are long for the sake of clarity, but like for self, all the arguments have conventional names. So a real production metaclass would look like this:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UpperAttrMetaclass</span><span class="params">(type)</span>:</span></span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">def</span> <span class="title">__new__</span><span class="params">(cls, clsname, bases, dct)</span>:</span></span><br><span class="line"></span><br><span class="line">       uppercase_attr = &#123;&#125;</span><br><span class="line">       <span class="keyword">for</span> name, val <span class="keyword">in</span> dct.items():</span><br><span class="line">           <span class="keyword">if</span> <span class="keyword">not</span> name.startswith(<span class="string">'__'</span>):</span><br><span class="line">               uppercase_attr[name.upper()] = val</span><br><span class="line">           <span class="keyword">else</span>:</span><br><span class="line">               uppercase_attr[name] = val</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> type.__new__(cls, clsname, bases, uppercase_attr)</span><br></pre></td></tr></table></figure></p>
+<p>We can make it even cleaner by using super, which will ease inheritance (because yes, you can have metaclasses, inheriting from metaclasses, inheriting from type):<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UpperAttrMetaclass</span><span class="params">(type)</span>:</span></span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">def</span> <span class="title">__new__</span><span class="params">(cls, clsname, bases, dct)</span>:</span></span><br><span class="line"></span><br><span class="line">       uppercase_attr = &#123;&#125;</span><br><span class="line">       <span class="keyword">for</span> name, val <span class="keyword">in</span> dct.items():</span><br><span class="line">           <span class="keyword">if</span> <span class="keyword">not</span> name.startswith(<span class="string">'__'</span>):</span><br><span class="line">               uppercase_attr[name.upper()] = val</span><br><span class="line">           <span class="keyword">else</span>:</span><br><span class="line">               uppercase_attr[name] = val</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> super(UpperAttrMetaclass, cls).__new__(cls, clsname, bases, uppercase_attr)</span><br></pre></td></tr></table></figure></p>
+<p>That’s it. There is really nothing more about metaclasses.</p>
+<p>The reason behind the complexity of the code using metaclasses is not because of metaclasses, it’s because you usually use metaclasses to do twisted stuff relying on introspection, manipulating inheritance, vars such as <strong>dict</strong>, etc.</p>
+<p>Indeed, metaclasses are especially useful to do black magic, and therefore complicated stuff. But by themselves, they are simple:</p>
+<p>intercept a class creation<br>modify the class<br>return the modified class<br>Why would you use metaclasses classes instead of functions?<br>Since <strong>metaclass</strong> can accept any callable, why would you use a class since it’s obviously more complicated?</p>
+<p>There are several reasons to do so:</p>
+<p>The intention is clear. When you read UpperAttrMetaclass(type), you know what’s going to follow<br>You can use OOP. Metaclass can inherit from metaclass, override parent methods. Metaclasses can even use metaclasses.<br>You can structure your code better. You never use metaclasses for something as trivial as the above example. It’s usually for something complicated. Having the ability to make several methods and group them in one class is very useful to make the code easier to read.<br>You can hook on <strong>new</strong>, <strong>init</strong> and <strong>call</strong>. Which will allow you to do different stuff. Even if usually you can do it all in <strong>new</strong>, some people are just more comfortable using<strong>init</strong>.<br>These are called metaclasses, damn it! It must mean something!<br>Why the hell would you use metaclasses?<br>Now the big question. Why would you use some obscure error prone feature?</p>
+<p>Well, usually you don’t:</p>
+<p>Metaclasses are deeper magic than 99% of users should ever worry about. If you wonder whether you need them, you don’t (the people who actually need them know with certainty that they need them, and don’t need an explanation about why).</p>
+<p>Python Guru Tim Peters</p>
+<p>The main use case for a metaclass is creating an API. A typical example of this is the Django ORM.</p>
+<p>It allows you to define something like this:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">  name = models.CharField(max_length=<span class="number">30</span>)</span><br><span class="line">  age = models.IntegerField()</span><br></pre></td></tr></table></figure></p>
+<p>But if you do this:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">guy = Person(name=<span class="string">'bob'</span>, age=<span class="string">'35'</span>)</span><br><span class="line"><span class="keyword">print</span> guy.age</span><br></pre></td></tr></table></figure></p>
+<p>It won’t return an IntegerField object. It will return an int, and can even take it directly from the database.</p>
+<p>This is possible because models.Model defines <strong>metaclass</strong> and it uses some magic that will turn the Person you just defined with simple statements into a complex hook to a database field.</p>
+<p>Django makes something complex look simple by exposing a simple API and using metaclasses, recreating code from this API to do the real job behind the scenes.</p>
+<p>The last word<br>First, you know that classes are objects that can create instances.</p>
+<p>Well in fact, classes are themselves instances. Of metaclasses.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> &gt;&gt;&gt; <span class="class"><span class="keyword">class</span> <span class="title">Foo</span><span class="params">(object)</span>:</span> <span class="keyword">pass</span></span><br><span class="line"> &gt;&gt;&gt; id(Foo)</span><br><span class="line"> <span class="number">142630324</span></span><br><span class="line">Everything <span class="keyword">is</span> an object <span class="keyword">in</span> Python, <span class="keyword">and</span> they are all either instances of classes <span class="keyword">or</span> instances of metaclasses.</span><br></pre></td></tr></table></figure></p>
+<p>Except for type.</p>
+<p>type is actually its own metaclass. This is not something you could reproduce in pure Python, and is done by cheating a little bit at the implementation level.</p>
+<p>Secondly, metaclasses are complicated. You may not want to use them for very simple class alterations. You can change classes by using two different techniques:</p>
+<p>monkey patching<br>class decorators<br>99% of the time you need class alteration, you are better off using these.</p>
+<p>But 99% of the time, you don’t need class alteration at all :-)</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/08/09/Metaclass_in_Python/" data-id="cjkm83cya00072as6mc4eczix" class="article-share-link">Teilen</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-靳海涛：一级市场估值的拐点即将到来，建议行业集体放缓投资" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/07/25/靳海涛：一级市场估值的拐点即将到来，建议行业集体放缓投资/" class="article-date">
@@ -185,7 +319,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/25/靳海涛：一级市场估值的拐点即将到来，建议行业集体放缓投资/" data-id="cjk1391im002iuls6ibo2w41l" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/25/靳海涛：一级市场估值的拐点即将到来，建议行业集体放缓投资/" data-id="cjkm83cz7002m2as6e262eie2" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -287,7 +421,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/13/对话华生——6000点论与制度改革带来的新牛市_2012-03-17/" data-id="cjk1391i20012uls639exyxwc" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/13/对话华生——6000点论与制度改革带来的新牛市_2012-03-17/" data-id="cjkm83cyn00142as6stw1rzsu" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -350,7 +484,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/13/缠中说禅公司分析/" data-id="cjk1391ih0026uls6jrzwuvde" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/13/缠中说禅公司分析/" data-id="cjkm83cz5002e2as6yggspr3a" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -396,7 +530,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/05/重温股市大辩论的是是非非/" data-id="cjk1391ik002euls6ga8anpvc" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/05/重温股市大辩论的是是非非/" data-id="cjkm83czu002w2as62e4jt1e1" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -622,7 +756,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/05/庙堂经济学家的权力江湖/" data-id="cjk1391i7001guls6fzl90tna" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/05/庙堂经济学家的权力江湖/" data-id="cjkm83cyq001a2as64vnz44lc" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -681,7 +815,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/05/how_to_install_virtualenv/" data-id="cjk1391hr000buls6zscv5n46" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/05/how_to_install_virtualenv/" data-id="cjkm83cy900052as63069rc6d" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -831,7 +965,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/28/How_to_manage_concurrency_in_Django_models/" data-id="cjk1391hn0004uls60kq4qhob" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/06/28/How_to_manage_concurrency_in_Django_models/" data-id="cjkm83cy700032as6he0mi8u3" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -973,7 +1107,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/28/Bullet_Proofing_Django_Models/" data-id="cjk1391hj0001uls6wvafzs39" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/06/28/Bullet_Proofing_Django_Models/" data-id="cjkm83cya00082as6g6ultd7t" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -1020,66 +1154,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/21/阿里云SLB显示用户真实IP/" data-id="cjk1391il002guls6vftwfphg" class="article-share-link">Teilen</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Nginx获取真实IP方案" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/05/21/Nginx获取真实IP方案/" class="article-date">
-  <time datetime="2018-05-21T12:27:09.000Z" itemprop="datePublished">2018-05-21</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/technique/">technique</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/21/Nginx获取真实IP方案/">Nginx获取真实IP方案</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="问题根源："><a href="#问题根源：" class="headerlink" title="问题根源："></a>问题根源：</h3><p>基于七层的负载均衡系统，获取IP的原理都是通过XRI和XFF进行处理，从中选出“正常情况下”的源头IP，然而这两个Header都是普通的HTTP头，任何代理程序都可以轻易修改伪造它们，使得获取IP的逻辑失效。</p>
-<h3 id="解决依据："><a href="#解决依据：" class="headerlink" title="解决依据："></a>解决依据：</h3><p>TCP协议需要建立真实的网络链路，因此其信息可以认为是真实可靠难以伪造的。根据阿里SLB文档中获取真实IP的方法（<a href="https://help.aliyun.com/document_detail/slb/best-practice/get-real-ipaddress.html）得知，如果采用四层负载均衡，则SLB的后端系统可直接通过" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/slb/best-practice/get-real-ipaddress.html）得知，如果采用四层负载均衡，则SLB的后端系统可直接通过</a> remote address 获取到IP，如果采用七层负载均衡，后续系统需配合 http_realip_module 使用。</p>
-<h3 id="设置步骤："><a href="#设置步骤：" class="headerlink" title="设置步骤："></a>设置步骤：</h3><p>1、在阿里SLB中将负载均衡模式设置为四层，并且打开获取真实IP的选项（默认打开）；<br>2、在SLB后端的转发 nginx 中使用 $remote_addr 参数填写 XRI 和 XFF；<br>3、在应用中即可可通过 XRI 或 XFF 获取真实 IP；</p>
-<h3 id="试验环境："><a href="#试验环境：" class="headerlink" title="试验环境："></a>试验环境：</h3><p>客户端：Chrome ＋ Postman<br>本地模拟：本地 nginx ＋ 测试环境 nginx ＋ 测试环境 app<br>四层负载均衡：阿里 SLB ＋ 测试环境 nginx ＋ 测试环境 app<br>七层负载均衡：阿里 SLB ＋ release nginx ＋ release app</p>
-<h3 id="试验步骤："><a href="#试验步骤：" class="headerlink" title="试验步骤："></a>试验步骤：</h3><ol>
-<li>在测试环境 customer 应用中部署 test.jsp，内容为获取 request 信息；</li>
-<li><p>双 nginx 模拟<br> a. 在测试环境 nginx 中设置 XFF 规则如下：</p>
-<pre><code><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br></pre></td></tr></table></figure>
-</code></pre><p> b. 在本地 nginx 中设置负载均衡到测试环境 nginx 地址，XFF 规则同上；<br> c. 使用 Postman 直接发送请求：可以发现XFF的第一个IP是正确的地址（由于本试验中本地 nginx 是系统的一部分，所以127.0.0.1算正确IP）；<br> d. 在请求中加入伪造的 XFF：发现此时获取到的 XFF 已经被污染。</p>
-</li>
-<li>四层SLB测试<br> a. 将测试环境 nginx 中的 XFF 规则设置为： proxy_set_header X-Forwarded-For $remote_addr;<br> b. 正常发送请求 发现获取了正确的 IP；<br> c. 伪造 XFF 请求：发现依然可以获取到正确的 IP；</li>
-<li><p>七层SLB + http_realip_module 模块测试<br> a. 将 release 环境 nginx 相关配置修改为（其中100.97.0.0/16为SLB所在网段）：</p>
-<pre><code><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set_real_ip_from <span class="number">100.97</span><span class="number">.0</span><span class="number">.0</span>/<span class="number">16</span>;</span><br><span class="line">real_ip_header X-Forwarded-For;</span><br><span class="line">real_ip_recursive on;</span><br></pre></td></tr></table></figure>
-</code></pre><p> b. 伪造XFF请求：可以发现：HTTP头中多了一个 remoteip 的字段，其值始终为正确的客户 IP；同时，XFF 字段保留了所有代理链路信息（包括伪造的部分）。</p>
-</li>
-</ol>
-<h3 id="试验总结："><a href="#试验总结：" class="headerlink" title="试验总结："></a>试验总结：</h3><p>1、无论哪种方案其实核心原理大同小异，都是利用四层TCP的连接信息获取实际IP参数，区别只在于：获取到的这个IP在何时、用何种方式传递到后面系统，以及后面系统如何接收该参数。<br>2、双 nginx 只是为了在可控环境模拟 HTTP IP 欺骗的原理；<br>3、四层 SLB 负载均衡方案思路是在整个系统入口（即SLB的四层处）覆盖掉原始的 XRI 或 XFF，在系统的后面部分便可充分信任这些参数；<br>4、七层 SLB 负载均衡方案思路是把系统入口处拿到的真实IP放在独立的 remoteip 参数中（当然如果需要也可在后续nginx中用该参数覆写 XRI 或 XFF，和上一个方案相同）；</p>
-<h3 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h3><p>阿里云SLB获取真实IP的配置方法：<br><a href="https://help.aliyun.com/document_detail/slb/best-practice/get-real-ipaddress.html" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/slb/best-practice/get-real-ipaddress.html</a><br>http_realip_module官方文档：<br><a href="http://nginx.org/en/docs/http/ngx_http_realip_module.html" target="_blank" rel="noopener">http://nginx.org/en/docs/http/ngx_http_realip_module.html</a><br>http_realip_module实现代码：<br><a href="https://github.com/nginx/nginx/blob/master/src/http/modules/ngx_http_realip_module.c" target="_blank" rel="noopener">https://github.com/nginx/nginx/blob/master/src/http/modules/ngx_http_realip_module.c</a><br>阿里SLB原理：<br><a href="http://blog.aliyun.com/149" target="_blank" rel="noopener">http://blog.aliyun.com/149</a><br>SLB官负载均衡配置：<br><a href="https://help.aliyun.com/document_detail/slb/slb-use-guide/slb-listen-config.html" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/slb/slb-use-guide/slb-listen-config.html</a></p>
-<h3 id="测试用页面代码："><a href="#测试用页面代码：" class="headerlink" title="测试用页面代码："></a>测试用页面代码：</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@page contentType=<span class="string">"text/html"</span> pageEncoding=<span class="string">"GBK"</span>%&gt;</span><br><span class="line">&lt;%@page <span class="keyword">import</span>=<span class="string">"java.util.*"</span>%&gt;&lt;!--使用Enumeration导入此包--&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;接收全部请求参数的名称及对应的内容&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;%</span><br><span class="line">    Enumeration enu=request.getHeaderNames();//取得全部头信息</span><br><span class="line">    while(enu.hasMoreElements())&#123;//以此取出头信息</span><br><span class="line">        String headerName=(String)enu.nextElement();</span><br><span class="line">        String headerValue=request.getHeader(headerName);//取出头信息内容</span><br><span class="line">%&gt;</span><br><span class="line">        &lt;h5&gt;&lt;%=headerName%&gt;&lt;font color="red"&gt;--&gt;&lt;/font&gt;</span><br><span class="line">        &lt;font color="blue"&gt;&lt;%=headerValue%&gt;&lt;/font&gt;&lt;/h5&gt;</span><br><span class="line">&lt;%</span><br><span class="line">    &#125;</span><br><span class="line">%&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/21/Nginx获取真实IP方案/" data-id="cjk1391ho0005uls6ayagis45" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/05/21/阿里云SLB显示用户真实IP/" data-id="cjkm83czs002v2as688qz2wzc" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -1093,7 +1168,7 @@
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">weiter &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/">weiter &raquo;</a>
   </nav>
 
 </section>
@@ -1119,7 +1194,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archiv</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
     </div>
   </div>
 
@@ -1130,6 +1205,10 @@
     <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2018/08/09/Metaclass_in_Python/">Metaclass_in_Python</a>
+          </li>
         
           <li>
             <a href="/2018/07/25/靳海涛：一级市场估值的拐点即将到来，建议行业集体放缓投资/">靳海涛：一级市场估值的拐点即将到来，建议行业集体放缓投资</a>
@@ -1145,10 +1224,6 @@
         
           <li>
             <a href="/2018/07/05/重温股市大辩论的是是非非/">重温股市大辩论的是是非非</a>
-          </li>
-        
-          <li>
-            <a href="/2018/07/05/庙堂经济学家的权力江湖/">庙堂经济学家的权力江湖</a>
           </li>
         
       </ul>
