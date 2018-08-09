@@ -88,8 +88,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>I pick this post from stackoverflow, it’s really awesome, thanks for e-satis .</p>
-<p> Here is the original link : <a href="http://stackoverflow.com/questions/100003/what-is-a-metaclass-in-python" target="_blank" rel="noopener">http://stackoverflow.com/questions/100003/what-is-a-metaclass-in-python</a></p>
-<p>Classes as objects<br>Before understanding metaclasses, you need to master classes in Python. And Python has a very peculiar idea of what classes are, borrowed from the Smalltalk language.</p>
+<p>Here is the original link : <a href="http://stackoverflow.com/questions/100003/what-is-a-metaclass-in-python" target="_blank" rel="noopener">http://stackoverflow.com/questions/100003/what-is-a-metaclass-in-python</a></p>
+<h1 id="Classes-as-objects"><a href="#Classes-as-objects" class="headerlink" title="Classes as objects"></a>Classes as objects</h1><p>Before understanding metaclasses, you need to master classes in Python. And Python has a very peculiar idea of what classes are, borrowed from the Smalltalk language.</p>
 <p>In most languages, classes are just pieces of code that describe how to produce an object. That’s kinda true in Python too:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">ObjectCreator</span><span class="params">(object)</span>:</span></span><br><span class="line"><span class="meta">... </span>      <span class="keyword">pass</span></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>my_object = ObjectCreator()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> my_object</span><br><span class="line">&lt;__main__.ObjectCreator object at <span class="number">0x8974f2c</span>&gt;</span><br></pre></td></tr></table></figure></p>
 <p>But classes are more than that in Python. Classes are objects too.</p>
 <p>Yes, objects.</p>
@@ -98,12 +98,12 @@
 <p>This object (the class) is itself capable of creating objects (the instances), and this is why it’s a class.</p>
 <p>But still, it’s an object, and therefore:</p>
 <p>you can assign it to a variable<br>you can copy it<br>you can add attributes to it<br>you can pass it as a function parameter<br>e.g.:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> ObjectCreator <span class="comment"># you can print a class because it's an object</span></span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">__main__</span>.<span class="title">ObjectCreator</span>'&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">def</span> <span class="title">echo</span><span class="params">(o)</span>:</span></span><br><span class="line"><span class="meta">... </span>      <span class="keyword">print</span> o</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>echo(ObjectCreator) <span class="comment"># you can pass a class as a parameter</span></span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">__main__</span>.<span class="title">ObjectCreator</span>'&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">print</span> <span class="title">hasattr</span><span class="params">(ObjectCreator, <span class="string">'new_attribute'</span>)</span></span></span><br><span class="line"><span class="class"><span class="title">False</span></span></span><br><span class="line">&gt;&gt;&gt; ObjectCreator.new_attribute = 'foo' # you can add attributes to a class</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> hasattr(ObjectCreator, <span class="string">'new_attribute'</span>)</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> ObjectCreator.new_attribute</span><br><span class="line">foo</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ObjectCreatorMirror = ObjectCreator <span class="comment"># you can assign a class to a variable</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> ObjectCreatorMirror.new_attribute</span><br><span class="line">foo</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> ObjectCreatorMirror()</span><br><span class="line">&lt;__main__.ObjectCreator object at <span class="number">0x8997b4c</span>&gt;</span><br></pre></td></tr></table></figure></p>
-<p>Creating classes dynamically<br>Since classes are objects, you can create them on the fly, like any object.</p>
-<p>First, you can create a class in a function using class:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; def choose_class(name):</span><br><span class="line">...     if name == &apos;foo&apos;:</span><br><span class="line">...         class Foo(object):</span><br><span class="line">...             pass</span><br><span class="line">...         return Foo # return the class, not an instance</span><br><span class="line">...     else:</span><br><span class="line">...         class Bar(object):</span><br><span class="line">...             pass</span><br><span class="line">...         return Bar</span><br><span class="line">...     </span><br><span class="line">&gt;&gt;&gt; MyClass = choose_class(&apos;foo&apos;)</span><br><span class="line">&gt;&gt;&gt; print MyClass # the function returns a class, not an instance</span><br><span class="line">&lt;class &apos;__main__.Foo&apos;&gt;</span><br><span class="line">&gt;&gt;&gt; print MyClass() # you can create an object from this class</span><br><span class="line">&lt;__main__.Foo object at 0x89c6d4c&gt;</span><br></pre></td></tr></table></figure></p>
+<h1 id="Creating-classes-dynamically"><a href="#Creating-classes-dynamically" class="headerlink" title="Creating classes dynamically"></a>Creating classes dynamically</h1><p>Since classes are objects, you can create them on the fly, like any object.</p>
+<p>First, you can create a class in a function using class:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">choose_class</span><span class="params">(name)</span>:</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">if</span> name == <span class="string">'foo'</span>:</span><br><span class="line"><span class="meta">... </span>        <span class="class"><span class="keyword">class</span> <span class="title">Foo</span><span class="params">(object)</span>:</span></span><br><span class="line"><span class="meta">... </span>            <span class="keyword">pass</span></span><br><span class="line"><span class="meta">... </span>        <span class="keyword">return</span> Foo <span class="comment"># return the class, not an instance</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">else</span>:</span><br><span class="line"><span class="meta">... </span>        <span class="class"><span class="keyword">class</span> <span class="title">Bar</span><span class="params">(object)</span>:</span></span><br><span class="line"><span class="meta">... </span>            <span class="keyword">pass</span></span><br><span class="line"><span class="meta">... </span>        <span class="keyword">return</span> Bar</span><br><span class="line"><span class="meta">... </span>    </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>MyClass = choose_class(<span class="string">'foo'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> MyClass <span class="comment"># the function returns a class, not an instance</span></span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">__main__</span>.<span class="title">Foo</span>'&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">print</span> <span class="title">MyClass</span><span class="params">()</span> # <span class="title">you</span> <span class="title">can</span> <span class="title">create</span> <span class="title">an</span> <span class="title">object</span> <span class="title">from</span> <span class="title">this</span> <span class="title">class</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">__main__</span>.<span class="title">Foo</span> <span class="title">object</span> <span class="title">at</span> 0<span class="title">x89c6d4c</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>But it’s not so dynamic, since you still have to write the whole class yourself.</p>
 <p>Since classes are objects, they must be generated by something.</p>
 <p>When you use the class keyword, Python creates this object automatically. But as with most things in Python, it gives you a way to do it manually.</p>
-<p>Remember the function type? The good old function that lets you know what type an object is:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; print type(1)</span><br><span class="line">&lt;type &apos;int&apos;&gt;</span><br><span class="line">&gt;&gt;&gt; print type(&quot;1&quot;)</span><br><span class="line">&lt;type &apos;str&apos;&gt;</span><br><span class="line">&gt;&gt;&gt; print type(ObjectCreator)</span><br><span class="line">&lt;type &apos;type&apos;&gt;</span><br><span class="line">&gt;&gt;&gt; print type(ObjectCreator())</span><br><span class="line">&lt;class &apos;__main__.ObjectCreator&apos;&gt;</span><br></pre></td></tr></table></figure></p>
+<p>Remember the function type? The good old function that lets you know what type an object is:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> type(<span class="number">1</span>)</span><br><span class="line">&lt;type <span class="string">'int'</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> type(<span class="string">"1"</span>)</span><br><span class="line">&lt;type <span class="string">'str'</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> type(ObjectCreator)</span><br><span class="line">&lt;type <span class="string">'type'</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> type(ObjectCreator())</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">__main__</span>.<span class="title">ObjectCreator</span>'&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>Well, type has a completely different ability, it can also create classes on the fly. type can take the description of a class as parameters, and return a class.</p>
 <p>(I know, it’s silly that the same function can have two completely different uses according to the parameters you pass to it. It’s an issue due to backwards compatibility in Python)</p>
 <p>type works this way:</p>
@@ -118,7 +118,7 @@
 <p>Eventually you’ll want to add methods to your class. Just define a function with the proper signature and assign it as an attribute.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">echo_bar</span><span class="params">(self)</span>:</span></span><br><span class="line"><span class="meta">... </span>      <span class="keyword">print</span> self.bar</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>FooChild = type(<span class="string">'FooChild'</span>, (Foo,), &#123;<span class="string">'echo_bar'</span>: echo_bar&#125;)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>hasattr(Foo, <span class="string">'echo_bar'</span>)</span><br><span class="line"><span class="keyword">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>hasattr(FooChild, <span class="string">'echo_bar'</span>)</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>my_foo = FooChild()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>my_foo.echo_bar()</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure></p>
 <p>You see where we are going: in Python, classes are objects, and you can create a class on the fly, dynamically.</p>
 <p>This is what Python does when you use the keyword class, and it does so by using a metaclass.</p>
-<p>What are metaclasses (finally)<br>Metaclasses are the ‘stuff’ that creates classes.</p>
+<h1 id="What-are-metaclasses-finally"><a href="#What-are-metaclasses-finally" class="headerlink" title="What are metaclasses (finally)"></a>What are metaclasses (finally)</h1><p>Metaclasses are the ‘stuff’ that creates classes.</p>
 <p>You define classes in order to create objects, right?</p>
 <p>But we learned that Python classes are objects.</p>
 <p>Well, metaclasses are what create these objects. They are the classes’ classes, you can picture them this way:</p>
@@ -132,7 +132,7 @@
 <p>So, a metaclass is just the stuff that creates class objects.</p>
 <p>You can call it a ‘class factory’ if you wish.</p>
 <p>type is the built-in metaclass Python uses, but of course, you can create your own metaclass.</p>
-<p>The <strong>metaclass</strong> attribute<br>You can add a <strong>metaclass</strong> attribute when you write a class:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span><span class="params">(object)</span>:</span></span><br><span class="line"> __metaclass__ = something...</span><br><span class="line"> [...]</span><br></pre></td></tr></table></figure></p>
+<h1 id="The-metaclass-attribute"><a href="#The-metaclass-attribute" class="headerlink" title="The metaclass attribute"></a>The <strong>metaclass</strong> attribute</h1><p>You can add a <strong>metaclass</strong> attribute when you write a class:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span><span class="params">(object)</span>:</span></span><br><span class="line"> __metaclass__ = something...</span><br><span class="line"> [...]</span><br></pre></td></tr></table></figure></p>
 <p>If you do so, Python will use the metaclass to create the class Foo.</p>
 <p>Careful, it’s tricky.</p>
 <p>You write class Foo(object) first, but the class object Foo is not created in memory yet.</p>
@@ -148,7 +148,7 @@
 <p>Now the big question is, what can you put in <strong>metaclass</strong> ?</p>
 <p>The answer is: something that can create a class.</p>
 <p>And what can create a class? type, or anything that subclasses or uses it.</p>
-<p>Custom metaclasses<br>The main purpose of a metaclass is to change the class automatically, when it’s created.</p>
+<h1 id="Custom-metaclasses"><a href="#Custom-metaclasses" class="headerlink" title="Custom metaclasses"></a>Custom metaclasses</h1><p>The main purpose of a metaclass is to change the class automatically, when it’s created.</p>
 <p>You usually do this for APIs, where you want to create classes matching the current context.</p>
 <p>Imagine a stupid example, where you decide that all classes in your module should have their attributes written in uppercase. There are several ways to do this, but one way is to set <strong>metaclass</strong> at the module level.</p>
 <p>This way, all classes of this module will be created using this metaclass, and we just have to tell the metaclass to turn all attributes to uppercase.</p>
@@ -162,9 +162,11 @@
 <p>That’s it. There is really nothing more about metaclasses.</p>
 <p>The reason behind the complexity of the code using metaclasses is not because of metaclasses, it’s because you usually use metaclasses to do twisted stuff relying on introspection, manipulating inheritance, vars such as <strong>dict</strong>, etc.</p>
 <p>Indeed, metaclasses are especially useful to do black magic, and therefore complicated stuff. But by themselves, they are simple:</p>
-<p>intercept a class creation<br>modify the class<br>return the modified class<br>Why would you use metaclasses classes instead of functions?<br>Since <strong>metaclass</strong> can accept any callable, why would you use a class since it’s obviously more complicated?</p>
+<p>intercept a class creation<br>modify the class<br>return the modified class</p>
+<h1 id="Why-would-you-use-metaclasses-classes-instead-of-functions"><a href="#Why-would-you-use-metaclasses-classes-instead-of-functions" class="headerlink" title="Why would you use metaclasses classes instead of functions?"></a>Why would you use metaclasses classes instead of functions?</h1><p>Since <strong>metaclass</strong> can accept any callable, why would you use a class since it’s obviously more complicated?</p>
 <p>There are several reasons to do so:</p>
-<p>The intention is clear. When you read UpperAttrMetaclass(type), you know what’s going to follow<br>You can use OOP. Metaclass can inherit from metaclass, override parent methods. Metaclasses can even use metaclasses.<br>You can structure your code better. You never use metaclasses for something as trivial as the above example. It’s usually for something complicated. Having the ability to make several methods and group them in one class is very useful to make the code easier to read.<br>You can hook on <strong>new</strong>, <strong>init</strong> and <strong>call</strong>. Which will allow you to do different stuff. Even if usually you can do it all in <strong>new</strong>, some people are just more comfortable using<strong>init</strong>.<br>These are called metaclasses, damn it! It must mean something!<br>Why the hell would you use metaclasses?<br>Now the big question. Why would you use some obscure error prone feature?</p>
+<p>The intention is clear. When you read UpperAttrMetaclass(type), you know what’s going to follow<br>You can use OOP. Metaclass can inherit from metaclass, override parent methods. Metaclasses can even use metaclasses.<br>You can structure your code better. You never use metaclasses for something as trivial as the above example. It’s usually for something complicated. Having the ability to make several methods and group them in one class is very useful to make the code easier to read.<br>You can hook on <strong>new</strong>, <strong>init</strong> and <strong>call</strong>. Which will allow you to do different stuff. Even if usually you can do it all in <strong>new</strong>, some people are just more comfortable using<strong>init</strong>.<br>These are called metaclasses, damn it! It must mean something!</p>
+<h1 id="Why-the-hell-would-you-use-metaclasses"><a href="#Why-the-hell-would-you-use-metaclasses" class="headerlink" title="Why the hell would you use metaclasses?"></a>Why the hell would you use metaclasses?</h1><p>Now the big question. Why would you use some obscure error prone feature?</p>
 <p>Well, usually you don’t:</p>
 <p>Metaclasses are deeper magic than 99% of users should ever worry about. If you wonder whether you need them, you don’t (the people who actually need them know with certainty that they need them, and don’t need an explanation about why).</p>
 <p>Python Guru Tim Peters</p>
@@ -174,18 +176,21 @@
 <p>It won’t return an IntegerField object. It will return an int, and can even take it directly from the database.</p>
 <p>This is possible because models.Model defines <strong>metaclass</strong> and it uses some magic that will turn the Person you just defined with simple statements into a complex hook to a database field.</p>
 <p>Django makes something complex look simple by exposing a simple API and using metaclasses, recreating code from this API to do the real job behind the scenes.</p>
-<p>The last word<br>First, you know that classes are objects that can create instances.</p>
+<h1 id="The-last-word"><a href="#The-last-word" class="headerlink" title="The last word"></a>The last word</h1><p>First, you know that classes are objects that can create instances.</p>
 <p>Well in fact, classes are themselves instances. Of metaclasses.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> &gt;&gt;&gt; <span class="class"><span class="keyword">class</span> <span class="title">Foo</span><span class="params">(object)</span>:</span> <span class="keyword">pass</span></span><br><span class="line"> &gt;&gt;&gt; id(Foo)</span><br><span class="line"> <span class="number">142630324</span></span><br><span class="line">Everything <span class="keyword">is</span> an object <span class="keyword">in</span> Python, <span class="keyword">and</span> they are all either instances of classes <span class="keyword">or</span> instances of metaclasses.</span><br></pre></td></tr></table></figure></p>
 <p>Except for type.</p>
 <p>type is actually its own metaclass. This is not something you could reproduce in pure Python, and is done by cheating a little bit at the implementation level.</p>
 <p>Secondly, metaclasses are complicated. You may not want to use them for very simple class alterations. You can change classes by using two different techniques:</p>
-<p>monkey patching<br>class decorators<br>99% of the time you need class alteration, you are better off using these.</p>
+<ul>
+<li>monkey patching</li>
+<li>class decorators<br>99% of the time you need class alteration, you are better off using these.</li>
+</ul>
 <p>But 99% of the time, you don’t need class alteration at all :-)</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/09/Metaclass_in_Python/" data-id="cjkm83cya00072as6mc4eczix" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/08/09/Metaclass_in_Python/" data-id="cjkm87c7z000733s6ev6x4voz" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -319,7 +324,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/25/靳海涛：一级市场估值的拐点即将到来，建议行业集体放缓投资/" data-id="cjkm83cz7002m2as6e262eie2" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/25/靳海涛：一级市场估值的拐点即将到来，建议行业集体放缓投资/" data-id="cjkm87c92002m33s6spvkyv5m" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -421,7 +426,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/13/对话华生——6000点论与制度改革带来的新牛市_2012-03-17/" data-id="cjkm83cyn00142as6stw1rzsu" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/13/对话华生——6000点论与制度改革带来的新牛市_2012-03-17/" data-id="cjkm87c8g001233s6zst7w71g" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -484,7 +489,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/13/缠中说禅公司分析/" data-id="cjkm83cz5002e2as6yggspr3a" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/13/缠中说禅公司分析/" data-id="cjkm87c8u002433s6edua5sne" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -530,7 +535,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/05/重温股市大辩论的是是非非/" data-id="cjkm83czu002w2as62e4jt1e1" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/05/重温股市大辩论的是是非非/" data-id="cjkm87c90002g33s6nfqrl8f6" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -756,7 +761,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/05/庙堂经济学家的权力江湖/" data-id="cjkm83cyq001a2as64vnz44lc" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/05/庙堂经济学家的权力江湖/" data-id="cjkm87c8h001633s62l0ymdqc" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -815,7 +820,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/05/how_to_install_virtualenv/" data-id="cjkm83cy900052as63069rc6d" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/05/how_to_install_virtualenv/" data-id="cjkm87c83000c33s63bhbhncx" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -965,7 +970,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/28/How_to_manage_concurrency_in_Django_models/" data-id="cjkm83cy700032as6he0mi8u3" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/06/28/How_to_manage_concurrency_in_Django_models/" data-id="cjkm87c7x000433s6gxz85ey7" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -1107,7 +1112,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/28/Bullet_Proofing_Django_Models/" data-id="cjkm83cya00082as6g6ultd7t" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/06/28/Bullet_Proofing_Django_Models/" data-id="cjkm87c7u000133s61hazd13n" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -1154,7 +1159,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/21/阿里云SLB显示用户真实IP/" data-id="cjkm83czs002v2as688qz2wzc" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/05/21/阿里云SLB显示用户真实IP/" data-id="cjkm87c90002i33s63p15k6r1" class="article-share-link">Teilen</a>
       
       
     </footer>
