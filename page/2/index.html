@@ -61,6 +61,53 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-阿里云SLB显示用户真实IP" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/21/阿里云SLB显示用户真实IP/" class="article-date">
+  <time datetime="2018-05-21T12:28:41.000Z" itemprop="datePublished">2018-05-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/technique/">technique</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/21/阿里云SLB显示用户真实IP/">阿里云SLB显示用户真实IP</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>其实解决方法挺简单的，配合Nginx的Realip模块就行，主要是配置问题，我之前折腾CDN的时候就搞过，不过来源IP各家都有所不同，所以这边记录下吧，辣鸡阿里云自己的文档里都不写，简直智障。</p>
+<ul>
+<li>首先确保你的Nginx安装了realip模块，nginx -V然后看看有没有http_realip_module就行，没有的话需要重新编译安装，在./configure后面添加–with-http_realip_module 然后一顿操作就行</li>
+<li>修改nginx.conf配置文件，在http区块部分添加如下内容（如果你还是不知道是哪部分，那就找一堆fastcgi那边，在最后一行fastcgi下面添加）</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">set_real_ip_from <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>;</span><br><span class="line">set_real_ip_from <span class="number">10.49</span><span class="number">.0</span><span class="number">.0</span>/<span class="number">16</span>;</span><br><span class="line">set_real_ip_from <span class="number">10.158</span><span class="number">.0</span><span class="number">.0</span>/<span class="number">16</span>;</span><br><span class="line">set_real_ip_from <span class="number">10.159</span><span class="number">.0</span><span class="number">.0</span>/<span class="number">16</span>;</span><br><span class="line">set_real_ip_from <span class="number">100.64</span><span class="number">.0</span><span class="number">.0</span>/<span class="number">10</span>;</span><br><span class="line">real_ip_header X-Forwarded-For;</span><br><span class="line">real_ip_recursive on;</span><br></pre></td></tr></table></figure>
+<p>然后重启下nginx就行，这个对lnmpa也行，在nginx里面会显示真实ip，在apache那儿会显示127.0.0.1+真实ip<br>直接使用apache处理的情况下需要安装mod_rpaf这个模块，我就不多提了，网上搜下就有然后重启下nginx就行，这个对lnmpa也行，在nginx里面会显示真实ip，在apache那儿会显示127.0.0.1+真实ip<br>直接使用apache处理的情况下需要安装mod_rpaf这个模块，我就不多提了，网上搜下就有</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/05/21/阿里云SLB显示用户真实IP/" data-id="cjlutk1cm002ksqha6mhnzmbd" class="article-share-link">Teilen</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Nginx获取真实IP方案" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/05/21/Nginx获取真实IP方案/" class="article-date">
@@ -110,7 +157,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/21/Nginx获取真实IP方案/" data-id="cjlnq0w080007jwhalp6ehyks" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/05/21/Nginx获取真实IP方案/" data-id="cjlutk1b9000csqhahxn7nm1i" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -157,7 +204,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/21/一些牛人/" data-id="cjlnq0w0i000mjwha544ww02e" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/21/一些牛人/" data-id="cjlutk1bk000qsqhayra3jaw2" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -244,7 +291,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/21/不畏浮云遮望眼：黄江南关于十九大的四个解读和十个判断/" data-id="cjlnq0w0k000qjwhatiufhszo" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/21/不畏浮云遮望眼：黄江南关于十九大的四个解读和十个判断/" data-id="cjlutk1bl000ssqhaz8kyrldh" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -320,7 +367,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/21/高粱：两种根本不同的经济改革观/" data-id="cjlnq0w1n002qjwhapx48d06v" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/21/高粱：两种根本不同的经济改革观/" data-id="cjlutk1cp002qsqha11lfb72h" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -367,7 +414,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/21/从市盈率看创业板/" data-id="cjlnq0w0j000ojwha7s4cj7h4" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/21/从市盈率看创业板/" data-id="cjlutk1bg000msqhaoqfnp855" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -438,7 +485,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/21/华生--01--改革最忌欲速而不达，成功取决于路径和方法/" data-id="cjlnq0w0l000sjwhajujg72hm" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/21/华生--01--改革最忌欲速而不达，成功取决于路径和方法/" data-id="cjlutk1bm000usqhaa7i6etrg" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -522,7 +569,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/20/华生--怎样建设一个强大的资本市场/" data-id="cjlnq0w0o000yjwhaii8bmmlh" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/20/华生--怎样建设一个强大的资本市场/" data-id="cjlutk1bw001esqhatcnoivsu" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -630,7 +677,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/20/华生--02--谨防疯牛失蹄和踩踏悲剧/" data-id="cjlnq0w0m000ujwhapoa8bwvk" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/20/华生--02--谨防疯牛失蹄和踩踏悲剧/" data-id="cjlutk1bn000wsqhaj7sld7qc" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -688,49 +735,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/20/华生--03--A股市场的真问题与假问题/" data-id="cjlnq0w0n000wjwhaxmoanhgu" class="article-share-link">Teilen</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-思想史的轴心时代" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/02/20/思想史的轴心时代/" class="article-date">
-  <time datetime="2018-02-20T10:47:27.000Z" itemprop="datePublished">2018-02-20</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/economics/">economics</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/20/思想史的轴心时代/">思想史的轴心时代</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>TODO</p>
-<p>。其实，在思想历史上，也有同样的情况出现。思想历史上的奴隶社会阶段，是所有文化形态中最有活力的时代，这个时代，也就是所谓思想历史上的轴心时代，人类其后的所有思想，从根本上，从来没有超越那个时代。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/20/思想史的轴心时代/" data-id="cjlnq0w0t0016jwhamulgp2kz" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/20/华生--03--A股市场的真问题与假问题/" data-id="cjlutk1bo000ysqha5qop95b0" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -770,7 +775,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archiv</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
     </div>
   </div>
 
@@ -781,6 +786,10 @@
     <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2018/09/09/深创投李守宇-创投之道在于双赢-企业喜欢有智慧的VC_PE/">深创投李守宇-创投之道在于双赢-企业喜欢有智慧的VC_PE</a>
+          </li>
         
           <li>
             <a href="/2018/08/09/Metaclass_in_Python/">Metaclass_in_Python</a>
@@ -796,10 +805,6 @@
         
           <li>
             <a href="/2018/07/13/缠中说禅公司分析/">缠中说禅公司分析</a>
-          </li>
-        
-          <li>
-            <a href="/2018/07/05/重温股市大辩论的是是非非/">重温股市大辩论的是是非非</a>
           </li>
         
       </ul>
