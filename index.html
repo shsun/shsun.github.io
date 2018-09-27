@@ -127,23 +127,7 @@
 <p>如果希望Redmine作为服务运行，加上-d参数即可：ruby script/rails server webrick -e production –d</p>
 <p> 修改redmine的端口号：</p>
 <pre><code>在redmine/vendor/rails/railties/lib/commands/servers.rb文件中：
-
-  options = {
-
-    :Port        =&gt; 3000,
-
-    :Host        =&gt; “0.0.0.0″,
-
-    :environment =&gt; (ENV[&apos;RAILS_ENV&apos;] || “development”).dup,
-
-    :config      =&gt; RAILS_ROOT + “/config.ru”,
-
-    :detach      =&gt; false,
-
-    :debugger    =&gt; false,
-
-    :path        =&gt; nil
-</code></pre><p>}</p>
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">        options = &#123;</span><br><span class="line"></span><br><span class="line">          :Port        =&gt; 3000,</span><br><span class="line"></span><br><span class="line">          :Host        =&gt; “0.0.0.0″,</span><br><span class="line"></span><br><span class="line">          :environment =&gt; (ENV['RAILS_ENV'] || “development”).dup,</span><br><span class="line"></span><br><span class="line">          :config      =&gt; RAILS_ROOT + “/config.ru”,</span><br><span class="line"></span><br><span class="line">          :detach      =&gt; false,</span><br><span class="line"></span><br><span class="line">          :debugger    =&gt; false,</span><br><span class="line"></span><br><span class="line">          :path        =&gt; nil</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>port就是端口。将其值改为4000即可。</p>
 <p>解决使用访问慢的问题</p>
 <p>安装好后，本机运行很顺畅，但是用IP访问，一个页面30秒读不出来。</p>
@@ -155,7 +139,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/28/install_redmine_on_ubunut_16/" data-id="cjmks3u8q000bjthawmas04ii" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/09/28/install_redmine_on_ubunut_16/" data-id="cjmks6xdn000hkohaf2fw484j" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -249,7 +233,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/26/中欧基金是我职业生涯的最后一站/" data-id="cjmks3u9u0010jthaagbq9s66" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/09/26/中欧基金是我职业生涯的最后一站/" data-id="cjmks6xdx000wkohakrt3eazj" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -306,7 +290,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/10/good-resources-4-tech/" data-id="cjmks3u8j0004jthawk193vh4" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/09/10/good-resources-4-tech/" data-id="cjmks6xde000bkohaickhv5qj" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -381,7 +365,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/09/深创投李守宇-创投之道在于双赢-企业喜欢有智慧的VC_PE/" data-id="cjmks3ua1001ejthavrlb1x1e" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/09/09/深创投李守宇-创投之道在于双赢-企业喜欢有智慧的VC_PE/" data-id="cjmks6xeb001gkohaxsm4awo9" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -520,7 +504,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/09/Metaclass_in_Python/" data-id="cjmks3u8s000cjthazbn1mc2t" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/08/09/Metaclass_in_Python/" data-id="cjmks6xd50004kohajw5orb1t" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -654,7 +638,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/25/靳海涛：一级市场估值的拐点即将到来，建议行业集体放缓投资/" data-id="cjmks3uas002sjthaqdoy9mum" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/25/靳海涛：一级市场估值的拐点即将到来，建议行业集体放缓投资/" data-id="cjmks6xff002ukohauuuhasyz" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -756,7 +740,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/13/对话华生——6000点论与制度改革带来的新牛市_2012-03-17/" data-id="cjmks3u9w0014jtha6m06d9ul" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/13/对话华生——6000点论与制度改革带来的新牛市_2012-03-17/" data-id="cjmks6xe70018kohae9eagsl0" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -819,7 +803,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/13/缠中说禅公司分析/" data-id="cjmks3uaj002cjthaoqwa777z" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/13/缠中说禅公司分析/" data-id="cjmks6xf5002ekohai548i7td" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -865,7 +849,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/05/重温股市大辩论的是是非非/" data-id="cjmks3uar002qjthau4u9s9nz" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/05/重温股市大辩论的是是非非/" data-id="cjmks6xfe002skoha8zd2hh2z" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -1091,7 +1075,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/05/庙堂经济学家的权力江湖/" data-id="cjmks3ua3001gjtha02n7w0al" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/05/庙堂经济学家的权力江湖/" data-id="cjmks6xe8001akoha3vkeyfzq" class="article-share-link">Teilen</a>
       
       
     </footer>
