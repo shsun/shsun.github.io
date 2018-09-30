@@ -7,16 +7,16 @@
   
   <title>install_redmine_on_ubunut_16 | 谢谢这个世界</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="首先升级一下源 apt-get update 更新完成 PS：（如果图省事，可以选择LAMP套件安装，此处指mysql和apache此处不用套件安装了 ）安装apache2和apache2的一个模块apt-get install apache2 libapache2-mod-passenger安装mysqlapt-get install mysql-server mysql-client 配置my">
+  <meta name="description" content="Ubuntu使用apt-get安装Apache2报如下错误时的解决方案Thefollowingpackageshaveunmetdependencies:apache2:Depends:apache2-bin(=2.4.7-1ubuntu4)butitisnotgoingtobeinstalledE:Unabletocorrectproblems,youhaveheldbrokenpackages">
 <meta property="og:type" content="article">
 <meta property="og:title" content="install_redmine_on_ubunut_16">
 <meta property="og:url" content="http://yoursite.com/2018/09/28/install_redmine_on_ubunut_16/index.html">
 <meta property="og:site_name" content="谢谢这个世界">
-<meta property="og:description" content="首先升级一下源 apt-get update 更新完成 PS：（如果图省事，可以选择LAMP套件安装，此处指mysql和apache此处不用套件安装了 ）安装apache2和apache2的一个模块apt-get install apache2 libapache2-mod-passenger安装mysqlapt-get install mysql-server mysql-client 配置my">
-<meta property="og:updated_time" content="2018-09-27T16:16:28.000Z">
+<meta property="og:description" content="Ubuntu使用apt-get安装Apache2报如下错误时的解决方案Thefollowingpackageshaveunmetdependencies:apache2:Depends:apache2-bin(=2.4.7-1ubuntu4)butitisnotgoingtobeinstalledE:Unabletocorrectproblems,youhaveheldbrokenpackages">
+<meta property="og:updated_time" content="2018-09-30T14:46:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="install_redmine_on_ubunut_16">
-<meta name="twitter:description" content="首先升级一下源 apt-get update 更新完成 PS：（如果图省事，可以选择LAMP套件安装，此处指mysql和apache此处不用套件安装了 ）安装apache2和apache2的一个模块apt-get install apache2 libapache2-mod-passenger安装mysqlapt-get install mysql-server mysql-client 配置my">
+<meta name="twitter:description" content="Ubuntu使用apt-get安装Apache2报如下错误时的解决方案Thefollowingpackageshaveunmetdependencies:apache2:Depends:apache2-bin(=2.4.7-1ubuntu4)butitisnotgoingtobeinstalledE:Unabletocorrectproblems,youhaveheldbrokenpackages">
   
     <link rel="alternate" href="/atom.xml" title="谢谢这个世界" type="application/atom+xml">
   
@@ -89,7 +89,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>首先升级一下源</p>
+        <p>Ubuntu使用apt-get安装Apache2报如下错误时的解决方案Thefollowingpackageshaveunmetdependencies:apache2:Depends:apache2-bin(=2.4.7-1ubuntu4)butitisnotgoingtobeinstalledE:Unabletocorrectproblems,youhaveheldbrokenpackages.运行如下命令sudoapt-get-fautoremovesudoapt-ge<br>Ubuntu使用apt-get安装Apache2报如下错误时的解决方案</p>
+<p>The following packages have unmet dependencies: apache2 : Depends: apache2-bin (= 2.4.7-1ubuntu4) but it is not going to be installedE: Unable to correct problems, you have held broken packages.</p>
+<p>运行如下命令<br>sudo apt-get -f autoremove;sudo apt-get update;sudo apt-get upgrade;sudo apt-get dist-upgrade</p>
+<p>sudo apt-get install apache2</p>
+<p>首先升级一下源</p>
 <p>apt-get update</p>
 <p>更新完成</p>
 <p>PS：（如果图省事，可以选择LAMP套件安装，此处指mysql和apache此处不用套件安装了 ）安装apache2和apache2的一个模块apt-get install apache2 libapache2-mod-passenger安装mysqlapt-get install mysql-server mysql-client</p>
@@ -141,7 +145,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/28/install_redmine_on_ubunut_16/" data-id="cjmks6xdn000hkohaf2fw484j" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/09/28/install_redmine_on_ubunut_16/" data-id="cjmozayky000btlhaffjgasov" class="article-share-link">Teilen</a>
       
       
     </footer>
