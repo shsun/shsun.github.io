@@ -95,32 +95,26 @@
 <p>两种配置情形大同小异，与第一种情形不同的是只需确认下面配置即可</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="comment"># 确认服务器端ip_forward转发开启</span></span><br><span class="line">  echo <span class="number">1</span> &gt; /proc/sys/net/ipv4/ip_forward</span><br><span class="line">  ip_forward需要设定为<span class="number">1</span></span><br><span class="line">  sysctl -a |grep -w ip_forward</span><br><span class="line">  net.ipv4.ip_forward = <span class="number">1</span></span><br><span class="line">  <span class="comment">#客户端配置</span></span><br><span class="line">  export https_proxy=http://服务端内网ip:<span class="number">3128</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>代理安装</p>
-<p>服务器端安装squid3</p>
-<p>我是在Ubuntu14.04 64位环境下使用squid3搭建的代理服务器。squid3是一个主流的可配置的、健壮、低消耗的代理服务器。</p>
+<h1 id="服务器端安装squid3"><a href="#服务器端安装squid3" class="headerlink" title="服务器端安装squid3"></a>服务器端安装squid3</h1><p>我是在Ubuntu14.04 64位环境下使用squid3搭建的代理服务器。squid3是一个主流的可配置的、健壮、低消耗的代理服务器。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install squid3</span><br></pre></td></tr></table></figure>
-<p>配置</p>
-<p>squid3的配置文件在/etc/squid3/squid.conf，我们使用vim编辑器来配置。</p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>squid3的配置文件在/etc/squid3/squid.conf，我们使用vim编辑器来配置。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/squid3/squid.conf</span><br></pre></td></tr></table></figure>
 <p>我们在配置文件的末尾加入以下几行：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#允许的客户端ip</span></span><br><span class="line">acl allcomputers src <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>/<span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line"><span class="comment">#配置用户名密码，后面会生成passwords文件</span></span><br><span class="line">auth_param basic program /usr/lib/squid3/basic_ncsa_auth /etc/squid3/passwords</span><br><span class="line">auth_param basic realm proxy</span><br><span class="line">acl authenticated proxy_auth REQUIRED</span><br><span class="line">http_access allow authenticated allcomputers</span><br></pre></td></tr></table></figure>
-<p>复制代码<br>找到http_access deny all并注释掉</p>
-<p>#http_access deny all<br>最好修改一下默认的3128端口，因为这个端口是默认的，很容易被网络上的代理爬虫探测到。</p>
-<p>http_port 8828<br>用户名密码认证</p>
+<p>复制代码<br>找到http_access deny all并注释掉<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#http_access deny all</span></span><br></pre></td></tr></table></figure></p>
+<p>最好修改一下默认的3128端口，因为这个端口是默认的，很容易被网络上的代理爬虫探测到。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http_port <span class="number">8828</span></span><br></pre></td></tr></table></figure></p>
+<p>用户名密码认证</p>
 <p>网络上有很多专门爬免认证的代理的爬虫，如果我们自己搭建的代理服务器不加认证的话，会被这些爬虫探测到然后沦为了免费代理。</p>
-<p>使用htpasswd来创建passwords文件，htpasswd命令在软件包apache2-utils中。</p>
-<p>sudo apt-get install apache2-utils<br>生成password文件</p>
-<p>sudo htpasswd -c -d /etc/squid3/passwords 自定义用户名<br>然后输入两次至少8位的密码，会在/etc/squid3/目录下生成passwords文件，要保证该文件是可读的。</p>
-<p>sudo chmod o+r /etc/squid3/passwords<br>启动服务，也可以使用restart，stop进行重启和关闭。</p>
-<p>sudo service squid3 start<br>或者<br>etc/init.d/squid start</p>
+<p>使用htpasswd来创建passwords文件，htpasswd命令在软件包apache2-utils中。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install apache2-utils</span><br></pre></td></tr></table></figure></p>
+<p>生成password文件<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo htpasswd -c -d /etc/squid3/passwords 自定义用户名</span><br></pre></td></tr></table></figure></p>
+<p>然后输入两次至少8位的密码，会在/etc/squid3/目录下生成passwords文件，要保证该文件是可读的。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod o+r /etc/squid3/passwords</span><br></pre></td></tr></table></figure></p>
+<p>启动服务，也可以使用restart，stop进行重启和关闭。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo service squid3 start</span><br><span class="line">或者</span><br><span class="line">etc/init.d/squid start</span><br></pre></td></tr></table></figure></p>
 <p>验证代理是否起作用</p>
-<p>squid3的访问日志文件在/var/log/squid3/access.log</p>
-<p>tail -f /var/log/squid3/access.log<br>1543199344.191     20 118.31.0.74 TCP_DENIED/407 444 HEAD <a href="http://www.baidu.com/" target="_blank" rel="noopener">http://www.baidu.com/</a> squid HIER_NONE/- text/html<br>1543199365.390     17 118.31.0.74 TCP_DENIED/407 444 HEAD <a href="http://www.baidu.com/" target="_blank" rel="noopener">http://www.baidu.com/</a> squid HIER_NONE/- text/html</p>
-<h1 id="客户端配置"><a href="#客户端配置" class="headerlink" title="客户端配置"></a>客户端配置</h1><p>另找一台linux机器打开shell，将我们的代理配置上：</p>
-<p>export http_proxy=”<a href="http://用户名:密码@代理IP:代理端口" target="_blank" rel="noopener">http://用户名:密码@代理IP:代理端口</a>“<br>curl -l “<a href="http://www.baidu.com" target="_blank" rel="noopener">http://www.baidu.com</a>“<br>如果代理配置正确，回输出html，同时代理服务器上的access.log会记录这次请求。</p>
+<p>squid3的访问日志文件在/var/log/squid3/access.log<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tail -f /var/log/squid3/access.log</span><br><span class="line"><span class="number">1543199344.191</span>     <span class="number">20</span> <span class="number">118.31</span><span class="number">.0</span><span class="number">.74</span> TCP_DENIED/<span class="number">407</span> <span class="number">444</span> HEAD http://www.baidu.com/ squid HIER_NONE/- text/html</span><br><span class="line"><span class="number">1543199365.390</span>     <span class="number">17</span> <span class="number">118.31</span><span class="number">.0</span><span class="number">.74</span> TCP_DENIED/<span class="number">407</span> <span class="number">444</span> HEAD http://www.baidu.com/ squid HIER_NONE/- text/html</span><br></pre></td></tr></table></figure></p>
+<h1 id="客户端配置"><a href="#客户端配置" class="headerlink" title="客户端配置"></a>客户端配置</h1><p>另找一台linux机器打开shell，将我们的代理配置上：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export http_proxy=<span class="string">"http://用户名:密码@代理IP:代理端口"</span></span><br><span class="line">curl -l <span class="string">"http://www.baidu.com"</span></span><br></pre></td></tr></table></figure></p>
+<p>如果代理配置正确，回输出html，同时代理服务器上的access.log会记录这次请求。</p>
 <p>上面的配置只会在命令行界面临时生效，如果退出命令行界面，配置会失效，接下来，我们将上面配置加入到环境变量中去</p>
-<p>加入全局环境变量</p>
-<p>#备份文件（很重要）<br>cp /etc/profile /etc/profile.bak<br>vim /etc/profile</p>
-<p>#http 代理<br>export http_proxy=”<a href="http://用户名:密码@代理服务器IP:代理端口" target="_blank" rel="noopener">http://用户名:密码@代理服务器IP:代理端口</a>“</p>
+<p>加入全局环境变量<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#备份文件（很重要）</span></span><br><span class="line">cp /etc/profile /etc/profile.bak</span><br><span class="line">vim /etc/profile</span><br><span class="line"><span class="comment">#http 代理</span></span><br><span class="line">export http_proxy=<span class="string">"http://用户名:密码@代理服务器IP:代理端口"</span></span><br></pre></td></tr></table></figure></p>
 <p>配置高匿</p>
 <p>代理分为透明代理、匿名代理、混淆代理、高匿代理，这4种代理，主要是在代理服务器端的配置不同，导致其向目标地址发送请求时，REMOTE_ADDR， HTTP_VIA，HTTP_X_FORWARDED_FOR三个变量不同。</p>
 <p>1.透明代理(Transparent Proxy)<br>REMOTE_ADDR = Proxy IP<br>HTTP_VIA = Proxy IP<br>HTTP_X_FORWARDED_FOR = Your IP<br>透明代理虽然可以直接“隐藏”你的IP地址，但是还是可以从HTTP_X_FORWARDED_FOR来查到你是谁。</p>
@@ -138,7 +132,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/02/install_proxy_server_squid3_on_ubuntu/" data-id="cjxl6zjfc000m42n4fyt2j42v" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/07/02/install_proxy_server_squid3_on_ubuntu/" data-id="cjxl72ear000m4xn44r0900vq" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -185,7 +179,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/05/基金分析_2011年08月30日/" data-id="cjxl6zjga001c42n45cg3da08" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/06/05/基金分析_2011年08月30日/" data-id="cjxl72ebn001a4xn41av82jk2" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -232,7 +226,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/05/基金分析_逃离金融街/" data-id="cjxl6zjgf001g42n4fb414sum" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/06/05/基金分析_逃离金融街/" data-id="cjxl72ebu001g4xn4h8pmj32k" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -283,7 +277,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/05/基金分析_万事静观皆自得_四时佳兴与人同/" data-id="cjxl6zjgc001e42n4ai1b4i3d" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/06/05/基金分析_万事静观皆自得_四时佳兴与人同/" data-id="cjxl72ebr001e4xn4myd1j072" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -324,7 +318,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/06/install_lib_on_venv_4_python/" data-id="cjxl6zjfa000k42n4xq0xjuon" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/05/06/install_lib_on_venv_4_python/" data-id="cjxl72eam000h4xn4rimihl4i" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -366,7 +360,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/12/ext资源/" data-id="cjxl6zjf0000b42n4drw9yyzx" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/03/12/ext资源/" data-id="cjxl72eae000b4xn4268lguxt" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -414,7 +408,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/17/一些牛人/" data-id="cjxl6zjfm000w42n4qttpm8jj" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/02/17/一些牛人/" data-id="cjxl72eb2000w4xn4wk6bhi47" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -475,7 +469,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/09/好股分析/" data-id="cjxl6zjgi001i42n4sinv3m49" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/02/09/好股分析/" data-id="cjxl72ebx001i4xn4bxogg4tf" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -567,7 +561,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/30/install_redmine_on_ubunut_16/" data-id="cjxl6zjfe000o42n4zouuzz6i" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/09/30/install_redmine_on_ubunut_16/" data-id="cjxl72eat000o4xn4acwnzz3c" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -661,7 +655,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/26/中欧基金是我职业生涯的最后一站/" data-id="cjxl6zjfw001442n4uufek6ed" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/09/26/中欧基金是我职业生涯的最后一站/" data-id="cjxl72ebg00124xn41newj6in" class="article-share-link">Teilen</a>
       
       
     </footer>
