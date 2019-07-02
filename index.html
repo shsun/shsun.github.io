@@ -50,7 +50,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -88,12 +88,12 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p><a href="https://www.cnblogs.com/dadonggg/p/10019026.html" target="_blank" rel="noopener">https://www.cnblogs.com/dadonggg/p/10019026.html</a></p>
-<h1 id="功能用途"><a href="#功能用途" class="headerlink" title="功能用途"></a>功能用途</h1><pre><code>我们在生活中见过各种代理，比如我们距离火车站较远，我们可以选择通过距离最近的火车票代售点来购买火车票。又比如商品代理商，我们拿不到厂家的直接或者，可以通过厂家授权的代理经销商来获得产品。代理服务器负责转发你的请求到目标服务器，然后将目标服务器的响应反馈给你。你可以理解为它就是个联姻的媒婆。代理服务器可以有很多用途，比如：
-</code></pre><p>作为一个网络防火墙，将内网与外网隔开。是的外网只能访问代理服务器允许的边界，这是我们常见的正向代理，比如ningx的转发。另外，在一个局域网中如果有一台主机可以上外网，那么我们就可以把这台机器作为代理服务器，为其他机器提供外网的访问功能。<br>作为反爬利器，如果爬虫爬取的目标网站具有较强的反爬机制，最常见的通过IP来限制抓取频率，如果你的爬虫抓取太快，你的IP就会被封禁一段时间甚至永久封禁。此时我们就可以通过高匿代理让抓取的网站识别不出我们的真实IP。</p>
+<h1 id="功能用途"><a href="#功能用途" class="headerlink" title="功能用途"></a>功能用途</h1><p>我们在生活中见过各种代理，比如我们距离火车站较远，我们可以选择通过距离最近的火车票代售点来购买火车票。又比如商品代理商，我们拿不到厂家的直接或者，可以通过厂家授权的代理经销商来获得产品。代理服务器负责转发你的请求到目标服务器，然后将目标服务器的响应反馈给你。你可以理解为它就是个联姻的媒婆。代理服务器可以有很多用途，比如：</p>
+<p>作为一个网络防火墙，将内网与外网隔开。是的外网只能访问代理服务器允许的边界，这是我们常见的正向代理，比如ningx的转发。另外，在一个局域网中如果有一台主机可以上外网，那么我们就可以把这台机器作为代理服务器，为其他机器提供外网的访问功能。<br>作为反爬利器，如果爬虫爬取的目标网站具有较强的反爬机制，最常见的通过IP来限制抓取频率，如果你的爬虫抓取太快，你的IP就会被封禁一段时间甚至永久封禁。此时我们就可以通过高匿代理让抓取的网站识别不出我们的真实IP。</p>
 <h1 id="本文提供两种代理情形："><a href="#本文提供两种代理情形：" class="headerlink" title="本文提供两种代理情形："></a>本文提供两种代理情形：</h1><p>1、两台都有外网IP，一台服务器请求资源通过另外一个服务器，本文重点讲第一种。</p>
 <p>2、两台服务器，其中一台服务器只有内网IP，另外一台服务器有公网和内网IP。</p>
 <p>两种配置情形大同小异，与第一种情形不同的是只需确认下面配置即可</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确认服务器端ip_forward转发开启</span></span><br><span class="line">echo <span class="number">1</span> &gt; /proc/sys/net/ipv4/ip_forward</span><br><span class="line">ip_forward需要设定为<span class="number">1</span></span><br><span class="line">sysctl -a |grep -w ip_forward</span><br><span class="line">net.ipv4.ip_forward = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#客户端配置</span></span><br><span class="line"></span><br><span class="line">export https_proxy=http://服务端内网ip:<span class="number">3128</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="comment"># 确认服务器端ip_forward转发开启</span></span><br><span class="line">  echo <span class="number">1</span> &gt; /proc/sys/net/ipv4/ip_forward</span><br><span class="line">  ip_forward需要设定为<span class="number">1</span></span><br><span class="line">  sysctl -a |grep -w ip_forward</span><br><span class="line">  net.ipv4.ip_forward = <span class="number">1</span></span><br><span class="line">  <span class="comment">#客户端配置</span></span><br><span class="line">  export https_proxy=http://服务端内网ip:<span class="number">3128</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>代理安装</p>
 <p>服务器端安装squid3</p>
 <p>我是在Ubuntu14.04 64位环境下使用squid3搭建的代理服务器。squid3是一个主流的可配置的、健壮、低消耗的代理服务器。</p>
@@ -114,8 +114,8 @@
 <p>sudo service squid3 start<br>或者<br>etc/init.d/squid start</p>
 <p>验证代理是否起作用</p>
 <p>squid3的访问日志文件在/var/log/squid3/access.log</p>
-<p>tail -f /var/log/squid3/access.log<br>1543199344.191     20 118.31.0.74 TCP_DENIED/407 444 HEAD <a href="http://www.baidu.com/" target="_blank" rel="noopener">http://www.baidu.com/</a> squid HIER_NONE/- text/html<br>1543199365.390     17 118.31.0.74 TCP_DENIED/407 444 HEAD <a href="http://www.baidu.com/" target="_blank" rel="noopener">http://www.baidu.com/</a> squid HIER_NONE/- text/html<br>客户端配置</p>
-<p>另找一台linux机器打开shell，将我们的代理配置上：</p>
+<p>tail -f /var/log/squid3/access.log<br>1543199344.191     20 118.31.0.74 TCP_DENIED/407 444 HEAD <a href="http://www.baidu.com/" target="_blank" rel="noopener">http://www.baidu.com/</a> squid HIER_NONE/- text/html<br>1543199365.390     17 118.31.0.74 TCP_DENIED/407 444 HEAD <a href="http://www.baidu.com/" target="_blank" rel="noopener">http://www.baidu.com/</a> squid HIER_NONE/- text/html</p>
+<h1 id="客户端配置"><a href="#客户端配置" class="headerlink" title="客户端配置"></a>客户端配置</h1><p>另找一台linux机器打开shell，将我们的代理配置上：</p>
 <p>export http_proxy=”<a href="http://用户名:密码@代理IP:代理端口" target="_blank" rel="noopener">http://用户名:密码@代理IP:代理端口</a>“<br>curl -l “<a href="http://www.baidu.com" target="_blank" rel="noopener">http://www.baidu.com</a>“<br>如果代理配置正确，回输出html，同时代理服务器上的access.log会记录这次请求。</p>
 <p>上面的配置只会在命令行界面临时生效，如果退出命令行界面，配置会失效，接下来，我们将上面配置加入到环境变量中去</p>
 <p>加入全局环境变量</p>
@@ -138,7 +138,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/02/install_proxy_server_squid3_on_ubuntu/" data-id="cjxl6yge7000m3jn4l05ko493" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/07/02/install_proxy_server_squid3_on_ubuntu/" data-id="cjxl6zjfc000m42n4fyt2j42v" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -185,7 +185,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/05/基金分析_2011年08月30日/" data-id="cjxl6ygf6001a3jn48hky4mzf" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/06/05/基金分析_2011年08月30日/" data-id="cjxl6zjga001c42n45cg3da08" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -232,7 +232,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/05/基金分析_逃离金融街/" data-id="cjxl6ygff001i3jn434t9b37a" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/06/05/基金分析_逃离金融街/" data-id="cjxl6zjgf001g42n4fb414sum" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -283,7 +283,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/05/基金分析_万事静观皆自得_四时佳兴与人同/" data-id="cjxl6ygf9001e3jn45c96n4ky" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/06/05/基金分析_万事静观皆自得_四时佳兴与人同/" data-id="cjxl6zjgc001e42n4ai1b4i3d" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -324,7 +324,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/06/install_lib_on_venv_4_python/" data-id="cjxl6yge5000k3jn4980l5699" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/05/06/install_lib_on_venv_4_python/" data-id="cjxl6zjfa000k42n4xq0xjuon" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -366,7 +366,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/12/ext资源/" data-id="cjxl6ygdu000b3jn43mzvdmka" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/12/ext资源/" data-id="cjxl6zjf0000b42n4drw9yyzx" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -414,7 +414,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/17/一些牛人/" data-id="cjxl6ygei000w3jn43v9sex3a" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/17/一些牛人/" data-id="cjxl6zjfm000w42n4qttpm8jj" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -475,7 +475,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/09/好股分析/" data-id="cjxl6ygfc001g3jn4l6ugoc90" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/09/好股分析/" data-id="cjxl6zjgi001i42n4sinv3m49" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -567,7 +567,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/30/install_redmine_on_ubunut_16/" data-id="cjxl6yge9000o3jn4zxb8q88p" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/30/install_redmine_on_ubunut_16/" data-id="cjxl6zjfe000o42n4zouuzz6i" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -661,7 +661,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/26/中欧基金是我职业生涯的最后一站/" data-id="cjxl6ygey00123jn4xk8m495q" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/26/中欧基金是我职业生涯的最后一站/" data-id="cjxl6zjfw001442n4uufek6ed" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -675,7 +675,7 @@
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/">weiter &raquo;</a>
   </nav>
 
 </section>
@@ -684,7 +684,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
+    <h3 class="widget-title">Kategorien</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/economics/">economics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/technique/">technique</a></li></ul>
     </div>
@@ -699,7 +699,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Archiv</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
     </div>
@@ -709,7 +709,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
         
