@@ -61,6 +61,98 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-install_redmine_on_ubunut_16" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/30/install_redmine_on_ubunut_16/" class="article-date">
+  <time datetime="2018-09-30T14:46:25.000Z" itemprop="datePublished">2018-09-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/technique/">technique</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/30/install_redmine_on_ubunut_16/">install_redmine_on_ubunut_16</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Ubuntu使用apt-get安装Apache2报如下错误时的解决方案Thefollowingpackageshaveunmetdependencies:apache2:Depends:apache2-bin(=2.4.7-1ubuntu4)butitisnotgoingtobeinstalledE:Unabletocorrectproblems,youhaveheldbrokenpackages.运行如下命令sudoapt-get-fautoremovesudoapt-ge<br>Ubuntu使用apt-get安装Apache2报如下错误时的解决方案</p>
+<p>The following packages have unmet dependencies: apache2 : Depends: apache2-bin (= 2.4.7-1ubuntu4) but it is not going to be installedE: Unable to correct problems, you have held broken packages.</p>
+<p>运行如下命令<br>sudo apt-get -f autoremove;sudo apt-get update;sudo apt-get upgrade;sudo apt-get dist-upgrade</p>
+<p>sudo apt-get install apache2</p>
+<p>首先升级一下源</p>
+<p>apt-get update</p>
+<p>更新完成</p>
+<p>PS：（如果图省事，可以选择LAMP套件安装，此处指mysql和apache此处不用套件安装了 ）安装apache2和apache2的一个模块apt-get install apache2 libapache2-mod-passenger安装mysqlapt-get install mysql-server mysql-client</p>
+<p>配置mysql数据库.</p>
+<p>数据库是mysql，为redmine建立库，库名redmine。同时创建redmine用户，把库的权限分配给这个用户。最后设置用户的密码为’123456’。当然这里的库名、用户名和密码，可以按实际情况替换。</p>
+<p>mysql -u<br> root –p</p>
+<p>mysql&gt; create database redmine character set utf8;</p>
+<p>mysql&gt; grant select,insert,delete,update,create,drop,alter,index on redmine.* to redmine;</p>
+<p>mysql&gt; SET PASSWORD FOR ‘redmine’ = PASSWORD(‘123456’);</p>
+<p>mysql&gt; flush privileges;</p>
+<p>mysql&gt; exit;</p>
+<p>安装ruby</p>
+<p>sudo apt-get install ruby-full</p>
+<p>安装后执行ruby -v，</p>
+<p>显示“ruby 1.9.3p484 (2013-11-22 revision 43786) [x86_64-linux]“</p>
+<p>如果是1.8版本以下的 安装到了/usr/lib/ruby/1.8目录，需要再安装 rubygems</p>
+<p>安装rubygems</p>
+<p>注意：不需要再手动把ruby路径加到PATH，因为已经加好了，见/usr/bin</p>
+<p>sudo apt-get install rubygems</p>
+<p>执行gem -v，显示“1.3.7”</p>
+<p>注意：ruby1.9自带gem，不需要再次安装</p>
+<p>安装 rails</p>
+<p>sudo apt-get install rails</p>
+<p>rails -v 如果报错：“程序 rails 尚未安装“。</p>
+<p>在用户的 .bashrc文件中追加export PATH=/var/lib/gems/1.8/bin:$PATH</p>
+<p>后注：应该加到全局环境变量里，因为有的命令，如rake，需要root用户执行</p>
+<p>sudo apt-get install redmine-mysql</p>
+<p>这个是redmine的mysql 插件包</p>
+<p>sudo apt-get install redmine</p>
+<p>中间按照提示输入MySQL的root的用户密码，输入正确后即可创建Mysql默认库，此处一定要保证在MySql中创建过redmine用户。</p>
+<p>运行并测试redmine</p>
+<p>Redmine默认安装目录为 /usr/share/redmine，首先检测</p>
+<p>有没有/usr/share/redmine/log/production.log文件，没有则按照目录建立</p>
+<p>切换到目录/usr/share/redmine</p>
+<p>运行命令：ruby script/rails server webrick -e production</p>
+<p>即可启动redmine，默认打开3000端口，可以通过<a href="http://localhost:3000/访问（管理员初始用户名和密码都是admin）。" target="_blank" rel="noopener">http://localhost:3000/访问（管理员初始用户名和密码都是admin）。</a></p>
+<p>如果希望Redmine作为服务运行，加上-d参数即可：ruby script/rails server webrick -e production –d</p>
+<p> 修改redmine的端口号：</p>
+<pre><code>在redmine/vendor/rails/railties/lib/commands/servers.rb文件中：
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">        options = &#123;</span><br><span class="line"></span><br><span class="line">          :Port        =&gt; 3000,</span><br><span class="line"></span><br><span class="line">          :Host        =&gt; “0.0.0.0″,</span><br><span class="line"></span><br><span class="line">          :environment =&gt; (ENV['RAILS_ENV'] || “development”).dup,</span><br><span class="line"></span><br><span class="line">          :config      =&gt; RAILS_ROOT + “/config.ru”,</span><br><span class="line"></span><br><span class="line">          :detach      =&gt; false,</span><br><span class="line"></span><br><span class="line">          :debugger    =&gt; false,</span><br><span class="line"></span><br><span class="line">          :path        =&gt; nil</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>port就是端口。将其值改为4000即可。</p>
+<p>解决使用访问慢的问题</p>
+<p>安装好后，本机运行很顺畅，但是用IP访问，一个页面30秒读不出来。</p>
+<p>后来发现是默认的服务器webrick的问题，需要解析目标地址的主机名，换个服务器用mongrel</p>
+<p>解决</p>
+<p>在终端执行指令gem install mongrel</p>
+<p>启动：ruby script/rails server webrick -e production–d</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/30/install_redmine_on_ubunut_16/" data-id="cjytfpww8000tezn4sp5cenku" class="article-share-link">Teilen</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-中欧基金是我职业生涯的最后一站" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/09/26/中欧基金是我职业生涯的最后一站/" class="article-date">
@@ -145,7 +237,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/26/中欧基金是我职业生涯的最后一站/" data-id="cjysdby4e00125rn4hjlv6u5e" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/09/26/中欧基金是我职业生涯的最后一站/" data-id="cjytfpwwo0015ezn4piuw8nl0" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -202,7 +294,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/10/good-resources-4-tech/" data-id="cjysdby3g000c5rn4ex18bben" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/09/10/good-resources-4-tech/" data-id="cjytfpwvv000jezn43j9ifjq9" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -277,7 +369,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/09/深创投李守宇-创投之道在于双赢-企业喜欢有智慧的VC_PE/" data-id="cjysdby5a001w5rn405pjcx16" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/09/09/深创投李守宇-创投之道在于双赢-企业喜欢有智慧的VC_PE/" data-id="cjytfpwxo001zezn4dob2zr4x" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -416,7 +508,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/09/Metaclass_in_Python/" data-id="cjysdby3700055rn4xs4iqboo" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/08/09/Metaclass_in_Python/" data-id="cjytfpwvj000cezn4h0aza71k" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -550,7 +642,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/25/靳海涛：一级市场估值的拐点即将到来，建议行业集体放缓投资/" data-id="cjysdby69003a5rn4g9be1s09" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/25/靳海涛：一级市场估值的拐点即将到来，建议行业集体放缓投资/" data-id="cjytfpwyo003dezn4jopal9mu" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -613,7 +705,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/19/缠中说禅公司分析/" data-id="cjysdby5z002u5rn4miuakoga" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/19/缠中说禅公司分析/" data-id="cjytfpwyh0031ezn46n1plqac" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -715,7 +807,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/13/对话华生——6000点论与制度改革带来的新牛市_2012-03-17/" data-id="cjysdby52001o5rn4zwigh9wi" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/13/对话华生——6000点论与制度改革带来的新牛市_2012-03-17/" data-id="cjytfpwxl001vezn4kmnqs3qb" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -761,7 +853,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/05/重温股市大辩论的是是非非/" data-id="cjysdby6800385rn4pvp70v4v" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/05/重温股市大辩论的是是非非/" data-id="cjytfpwyl0039ezn4vsuc8v1a" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -987,66 +1079,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/05/庙堂经济学家的权力江湖/" data-id="cjysdby55001q5rn403bfya78" class="article-share-link">Teilen</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-how_to_install_virtualenv" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/07/05/how_to_install_virtualenv/" class="article-date">
-  <time datetime="2018-07-05T02:36:32.000Z" itemprop="datePublished">2018-07-05</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/technique/">technique</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/05/how_to_install_virtualenv/">how_to_install_virtualenv</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000/001432712108300322c61f256c74803b43bfd65c6f8d0d0000" target="_blank" rel="noopener">https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000/001432712108300322c61f256c74803b43bfd65c6f8d0d0000</a></p>
-<p>which python<br>which python3<br>1 #创建python2.7虚拟环境<br>2 virtualenv -p /usr/bin/python2.7 ENV2.7<br>3<br>4 #创建python3.4虚拟环境<br>5 virtualenv -p /usr/local/bin/python3.4 ENV3.4</p>
-<p>在开发Python应用程序的时候，系统安装的Python3只有一个版本：3.4。所有第三方的包都会被pip安装到Python3的site-packages目录下。</p>
-<p>如果我们要同时开发多个应用程序，那这些应用程序都会共用一个Python，就是安装在系统的Python 3。如果应用A需要jinja 2.7，而应用B需要jinja 2.6怎么办？</p>
-<p>这种情况下，每个应用可能需要各自拥有一套“独立”的Python运行环境。virtualenv就是用来为一个应用创建一套“隔离”的Python运行环境。</p>
-<p>首先，我们用pip安装virtualenv：</p>
-<p>$ pip3 install virtualenv<br>然后，假定我们要开发一个新的项目，需要一套独立的Python运行环境，可以这么做：</p>
-<p>第一步，创建目录：</p>
-<p>Mac:~ michael$ mkdir myproject<br>Mac:~ michael$ cd myproject/<br>Mac:myproject michael$<br>第二步，创建一个独立的Python运行环境，命名为venv：</p>
-<p>Mac:myproject michael$ virtualenv –no-site-packages venv<br>Using base prefix ‘/usr/local/…/Python.framework/Versions/3.4’<br>New python executable in venv/bin/python3.4<br>Also creating executable in venv/bin/python<br>Installing setuptools, pip, wheel…done.<br>命令virtualenv就可以创建一个独立的Python运行环境，我们还加上了参数–no-site-packages，这样，已经安装到系统Python环境中的所有第三方包都不会复制过来，这样，我们就得到了一个不带任何第三方包的“干净”的Python运行环境。</p>
-<p>新建的Python环境被放到当前目录下的venv目录。有了venv这个Python环境，可以用source进入该环境：</p>
-<p>Mac:myproject michael$ source venv/bin/activate<br>(venv)Mac:myproject michael$<br>注意到命令提示符变了，有个(venv)前缀，表示当前环境是一个名为venv的Python环境。</p>
-<p>下面正常安装各种第三方包，并运行python命令：</p>
-<p>(venv)Mac:myproject michael$ pip install jinja2<br>…<br>Successfully installed jinja2-2.7.3 markupsafe-0.23<br>(venv)Mac:myproject michael$ python myapp.py<br>…<br>在venv环境下，用pip安装的包都被安装到venv这个环境下，系统Python环境不受任何影响。也就是说，venv环境是专门针对myproject这个应用创建的。</p>
-<p>退出当前的venv环境，使用deactivate命令：</p>
-<p>(venv)Mac:myproject michael$ deactivate<br>Mac:myproject michael$<br>此时就回到了正常的环境，现在pip或python均是在系统Python环境下执行。</p>
-<p>完全可以针对每个应用创建独立的Python运行环境，这样就可以对每个应用的Python环境进行隔离。</p>
-<p>virtualenv是如何创建“独立”的Python运行环境的呢？原理很简单，就是把系统Python复制一份到virtualenv的环境，用命令source venv/bin/activate进入一个virtualenv环境时，virtualenv会修改相关环境变量，让命令python和pip均指向当前的virtualenv环境。</p>
-<p>小结<br>virtualenv为应用提供了隔离的Python运行环境，解决了不同应用间多版本的冲突问题。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/05/how_to_install_virtualenv/" data-id="cjysdby3m000h5rn40gtr246u" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/07/05/庙堂经济学家的权力江湖/" data-id="cjytfpwxv0027ezn481n7i2l3" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -1086,7 +1119,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archiv</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
     </div>
   </div>
 
@@ -1097,6 +1130,10 @@
     <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/08/02/杨东来信/">杨东来信</a>
+          </li>
         
           <li>
             <a href="/2019/07/03/kulese_经典观点/">kulese_经典观点</a>
@@ -1112,10 +1149,6 @@
         
           <li>
             <a href="/2019/06/05/基金分析_逃离金融街/">基金分析_逃离金融街</a>
-          </li>
-        
-          <li>
-            <a href="/2019/06/05/基金分析_万事静观皆自得_四时佳兴与人同/">基金分析_万事静观皆自得_四时佳兴与人同</a>
           </li>
         
       </ul>

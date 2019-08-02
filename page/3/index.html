@@ -61,6 +61,65 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-how_to_install_virtualenv" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/05/how_to_install_virtualenv/" class="article-date">
+  <time datetime="2018-07-05T02:36:32.000Z" itemprop="datePublished">2018-07-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/technique/">technique</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/05/how_to_install_virtualenv/">how_to_install_virtualenv</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000/001432712108300322c61f256c74803b43bfd65c6f8d0d0000" target="_blank" rel="noopener">https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000/001432712108300322c61f256c74803b43bfd65c6f8d0d0000</a></p>
+<p>which python<br>which python3<br>1 #创建python2.7虚拟环境<br>2 virtualenv -p /usr/bin/python2.7 ENV2.7<br>3<br>4 #创建python3.4虚拟环境<br>5 virtualenv -p /usr/local/bin/python3.4 ENV3.4</p>
+<p>在开发Python应用程序的时候，系统安装的Python3只有一个版本：3.4。所有第三方的包都会被pip安装到Python3的site-packages目录下。</p>
+<p>如果我们要同时开发多个应用程序，那这些应用程序都会共用一个Python，就是安装在系统的Python 3。如果应用A需要jinja 2.7，而应用B需要jinja 2.6怎么办？</p>
+<p>这种情况下，每个应用可能需要各自拥有一套“独立”的Python运行环境。virtualenv就是用来为一个应用创建一套“隔离”的Python运行环境。</p>
+<p>首先，我们用pip安装virtualenv：</p>
+<p>$ pip3 install virtualenv<br>然后，假定我们要开发一个新的项目，需要一套独立的Python运行环境，可以这么做：</p>
+<p>第一步，创建目录：</p>
+<p>Mac:~ michael$ mkdir myproject<br>Mac:~ michael$ cd myproject/<br>Mac:myproject michael$<br>第二步，创建一个独立的Python运行环境，命名为venv：</p>
+<p>Mac:myproject michael$ virtualenv –no-site-packages venv<br>Using base prefix ‘/usr/local/…/Python.framework/Versions/3.4’<br>New python executable in venv/bin/python3.4<br>Also creating executable in venv/bin/python<br>Installing setuptools, pip, wheel…done.<br>命令virtualenv就可以创建一个独立的Python运行环境，我们还加上了参数–no-site-packages，这样，已经安装到系统Python环境中的所有第三方包都不会复制过来，这样，我们就得到了一个不带任何第三方包的“干净”的Python运行环境。</p>
+<p>新建的Python环境被放到当前目录下的venv目录。有了venv这个Python环境，可以用source进入该环境：</p>
+<p>Mac:myproject michael$ source venv/bin/activate<br>(venv)Mac:myproject michael$<br>注意到命令提示符变了，有个(venv)前缀，表示当前环境是一个名为venv的Python环境。</p>
+<p>下面正常安装各种第三方包，并运行python命令：</p>
+<p>(venv)Mac:myproject michael$ pip install jinja2<br>…<br>Successfully installed jinja2-2.7.3 markupsafe-0.23<br>(venv)Mac:myproject michael$ python myapp.py<br>…<br>在venv环境下，用pip安装的包都被安装到venv这个环境下，系统Python环境不受任何影响。也就是说，venv环境是专门针对myproject这个应用创建的。</p>
+<p>退出当前的venv环境，使用deactivate命令：</p>
+<p>(venv)Mac:myproject michael$ deactivate<br>Mac:myproject michael$<br>此时就回到了正常的环境，现在pip或python均是在系统Python环境下执行。</p>
+<p>完全可以针对每个应用创建独立的Python运行环境，这样就可以对每个应用的Python环境进行隔离。</p>
+<p>virtualenv是如何创建“独立”的Python运行环境的呢？原理很简单，就是把系统Python复制一份到virtualenv的环境，用命令source venv/bin/activate进入一个virtualenv环境时，virtualenv会修改相关环境变量，让命令python和pip均指向当前的virtualenv环境。</p>
+<p>小结<br>virtualenv为应用提供了隔离的Python运行环境，解决了不同应用间多版本的冲突问题。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/07/05/how_to_install_virtualenv/" data-id="cjytfpwvx000lezn4satesxxd" class="article-share-link">Teilen</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Bullet_Proofing_Django_Models" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/06/28/Bullet_Proofing_Django_Models/" class="article-date">
@@ -193,7 +252,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/28/Bullet_Proofing_Django_Models/" data-id="cjysdby3100035rn4cuw7sj4r" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/06/28/Bullet_Proofing_Django_Models/" data-id="cjytfpwuj0001ezn4pvfn5xg2" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -343,7 +402,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/28/How_to_manage_concurrency_in_Django_models/" data-id="cjysdby3300045rn4ch0gq4z4" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/06/28/How_to_manage_concurrency_in_Django_models/" data-id="cjytfpwut0004ezn4ibw2kgqa" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -402,7 +461,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/21/Nginx获取真实IP方案/" data-id="cjysdby3a00075rn4p8usvboo" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/05/21/Nginx获取真实IP方案/" data-id="cjytfpwvl000dezn4a5vv9ui0" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -449,7 +508,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/21/阿里云SLB显示用户真实IP/" data-id="cjysdby6600345rn4xl4f90hq" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/05/21/阿里云SLB显示用户真实IP/" data-id="cjytfpwym003bezn4ftxn3lqv" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -536,7 +595,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/21/不畏浮云遮望眼：黄江南关于十九大的四个解读和十个判断/" data-id="cjysdby4d00105rn4qkg6684s" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/21/不畏浮云遮望眼：黄江南关于十九大的四个解读和十个判断/" data-id="cjytfpwwm0013ezn4ysa7tikc" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -612,7 +671,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/21/高粱：两种根本不同的经济改革观/" data-id="cjysdby6c003e5rn4hvbpxbel" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/21/高粱：两种根本不同的经济改革观/" data-id="cjytfpwyq003hezn4s5i6q0ih" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -659,7 +718,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/21/从市盈率看创业板/" data-id="cjysdby4g00145rn4dpfste2t" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/21/从市盈率看创业板/" data-id="cjytfpwwx0017ezn44trmnwp7" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -730,7 +789,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/21/华生--01--改革最忌欲速而不达，成功取决于路径和方法/" data-id="cjysdby4h00165rn47kq65tnv" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/21/华生--01--改革最忌欲速而不达，成功取决于路径和方法/" data-id="cjytfpwx2001dezn4a7gi2sad" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -814,115 +873,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/20/华生--怎样建设一个强大的资本市场/" data-id="cjysdby4t001e5rn4yv05llev" class="article-share-link">Teilen</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-华生--02--谨防疯牛失蹄和踩踏悲剧" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/02/20/华生--02--谨防疯牛失蹄和踩踏悲剧/" class="article-date">
-  <time datetime="2018-02-20T12:34:25.000Z" itemprop="datePublished">2018-02-20</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/economics/">economics</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/20/华生--02--谨防疯牛失蹄和踩踏悲剧/">华生--02--谨防疯牛失蹄和踩踏悲剧</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>再转发一篇牛市顶部的文章，准确预言，现在再来看看文中的一些逻辑思考，依然值得借鉴。</p>
-<p>原文标题《谨防疯牛失蹄和踩踏悲剧》表发于2015年5月</p>
-<p>2001年7月，他在股市接近最高点时发表《漫漫熊市的信号》一文；2005年前后，华生在媒体先后五次以头版通栏发表长篇论文，成为推动股改的洪亮声音；2005年5月，当股指逼近1000点时，华生发表《市场转折的信号》一文，断言市场将见底转折；2006年5月，即股改一周年之际，他慷慨激昂，发表了《迎接证券市场的新时代》一文。2007年随着股市不断创出新高，他连续发表“市场过热的信号”、“市场远超GDP的隐忧与警示”。2008年当股市开始从6000多点高位下行时，他又提出“这次股市调整，不是以天，不是以月，而是会以年来计量”。两年前华生就预言房价物极必反，十年楼市将向十年股市转化。2013年7月8日，在经济下滑、银行股价不断创新低之际，华生接受本报专访，认为不应对中国经济前景过于悲观、我国银行体系总体上不会出现危机、金融股几倍市盈率是不正常现象。</p>
-<p>当下，中国股市重返4000点，上冲5000点，甚至不排除逼近上次历史性高点之际，市场上充斥着各种不理性观点。中国证监会也多次提醒股民尤其是新股民要保持理性、冷静，要充分估计股市投资风险，不盲从不跟风。为此，本报记者再次专访了华生。</p>
-<p>华生预警，要谨防疯牛失蹄和踩踏悲剧发生。</p>
-<p>判断：股市是长期机会，疯牛必然失蹄。</p>
-<p>上海证券报：中国股市从去年11月份开始，进入一波上涨行情，近期有快速拉升态势。您对目前市场作何评价？是估值合理还是有泡沫？</p>
-<p>华生：我个人认为现在市场除了银行等个别蓝筹板块外，已普遍泡沫化。当然，泡沫化的市场是不是就要破裂，这是另外一个问题。现在的市场已经不是牛市的起步阶段，特别是小盘股有向疯牛发展的趋势。</p>
-<p>两年多前，我曾经说过，过去十年是楼市的，未来十年是股市的，这是当时批评中国楼市过热时说的话。但是，应该看见，股市的机会是长期性的机会，是伴随着中国经济改革的深化和结构的调整出现的长期走势。现在，我们经济还在探底的过程中，改革也还在摸索中前进。对外开放的亚投行和一带一路战略开局很好，但距离实施还有很长的路。（评：现在看已经是事实）但是，股市却在半年中涨幅已经翻了一番，大部分中小盘股票表现得更加疯狂，这不是一个健康的市场应有的表现，是不可持续的。</p>
-<p>判断一个市场是有价值支撑或者是出现泡沫，有着客观标准，这个标准不是我们自己拍脑袋想象出来的。西方股市存在了几百年，经过长期牛熊转换，人们逐步形成了一些判断标准，即市盈率、市净率、换手率，这三个最基本的衡量尺度。当然，这是判断市场整体水平而非个股的综合指标。</p>
-<p>我国股市发展时间较短，但西方股市已经有几百年历史了。几百年来，西方股市经历了各种泡沫和起伏。如，美国道指从100多点上到万点，已经涨了100倍，但上市公司的市盈率和市净率还保持在10多倍和2倍多的区间，这表明人家企业盈利能力与股指的上涨保持大体同步。</p>
-<p>按照国际上通用的标准，我们的股市是过热了，除去银行股，目前市场整体市盈率和市净率普遍是别人的两倍甚至更多。在香港国际市场上，同样一家中国公司的股票，除银行等少数大蓝筹外，股价只有A股一半。</p>
-<p>客观而言，股市上涨和企业盈利关系密切。企业盈利与股价表现未必亦步亦趋，就像人和狗的关系一样，有时狗跑在主人前面，有时跑在后面，但不会相差太远。（评：认同）美国纳市，在2000年狂热时，市场的平均市盈率达到70、80倍，但好景不长，股指出现大幅度回落。尽管现在股指又快回到当初的点位，但花费了15年时间。有人说，美国的股市也涨了很长时间了，人家也没说泡沫。其实，对美国股市也有不同看法，但总体上人家的市场，特别是真正领先全球的科技型企业估值，远在我们之下。况且，欧美搞量化宽松、央行的利率已降到至近乎于零，而中国的银行利率还在6%以上，实体经济实际借贷利息还远高于此。在这种情况下，我们的股市估值远高于西方和周边市场，显然是不合理的。</p>
-<p>另外，从换手率看，我国股市换手率非常惊人，最近十多天可流通股就换手一次，这种热度在国际市场上是不可想象的。</p>
-<p>当然，估值标准不是死的，是波动的。当一国经济从底部刚起来时，股市的市盈率通常会偏高。但是，中国的经济还在探底过程中，下行压力较大，目前也看不出企业盈利会有爆发性增长的可能。截至目前，已披露一季报的上市公司业绩，同比还有所下降，也看不出企业未来利润在中短期会大幅度增长的前景。</p>
-<p>因此，监管层现在提醒风险是非常及时的。当前由于股市的赚钱效应，各路资金蜂拥入市，生产性企业和上市公司的资金从实体经济中抽出不断投入股市，新投资者排队开户、借钱炒股的人数和数量都不断升高，这都是市场过热的明显标志。</p>
-<p>原因：不是经济牛而是资金牛</p>
-<p>上海证券报：那么，牛市是如何启动的呢？谁是股指上扬的推手？</p>
-<p>华生：客观地说，这次牛市是资金市。</p>
-<p>目前，我国经济基本面并不支持中国股市马上出现大的牛市，但随着中国楼市热度消退，在中国深化改革和转型升级过程中，证券市场确实迎来了长期发展的空间。</p>
-<p>但这次股市的走热，客观地看，并不是因为经济或改革的推动，而是源于货币政策推动，央行的降息成了牛市起爆点。这里有几点：</p>
-<p>一是基于货币政策的放松以及未来不断放松的一致预期。市场中流传这样的说法，正是因为经济不好，所以货币政策会不断放松；</p>
-<p>二是股市的杠杆融资特征明显，借钱买股票发展到过去从来未曾有过的水平。这很值得忧虑。现在普遍的情况是企业和机构借钱给中小投资者，这与政策鼓励和扶持有直接关系。</p>
-<p>本来一个稳定上升的牛市对于实体经济之所以有积极作用，是企业通过融资和再融资，获得充裕和相对合理的发展资金。因此，股市对实体经济作用，主要体现在活跃的股市为公司提供融资和再融资的市场机会。</p>
-<p>但这里最重要的是，我国与西方市场不一样。西方股市，一旦市场走牛，市场本身会有一种平衡力量。即随着股价升高，上市公司会纷纷进行再融资。还有很多公司会抓住机会积极推进IPO。但我国融资和再融资是受到管制的，市场本身无法自我平衡。由于市场赚钱效应吸引大量投资者进入，包括从来没有炒过股的，听说别人赚了钱，也纷纷进入乃至借钱进入。这表现为新增资金源源不断进入股市。就像水库一样，水不断地往里注入，而库容又不能相应扩大，最后的结果只能是水位不断上升，形成股市脱离实体经济的自我循环怪现象。</p>
-<p>在市场经济中，调节价格的主要机制是供求关系。因此，目前中国股市的繁荣，不完全是市场行为，带有很强资金市、政策市的特点。甚至市场中很多人喊出股市上升是国家战略，是政府鼓励做多，是政策牛市。在我看来这是很大的误读，会有不好的后遗症。</p>
-<p>评价：股市过于亢奋对于实体经济弊大于利</p>
-<p>上海证券报：大家好像都是赚钱的，难道政策牛市不好吗？</p>
-<p>华生：股市最终要为实体经济服务。无论是什么样的牛市，对实体经济真的带来正效应是唯一标准。</p>
-<p>客观地说，一个活跃而健康的牛市当然对经济有互补作用，是很积极的。从长期看股市也确实是投资和财富积累的重要场合。但股市一旦过于亢奋成为疯牛，对实体经济并没有积极的作用。这就如同过去低迷的股市对于实体经济没有正面效果一样。</p>
-<p>现在股市过热，对于实体经济不仅没有正面，甚至还有负面作用。主要表现在以下方面：（评：现在全部上演）</p>
-<p>一是过热股市挤压了实体经济所需要的资金。大量的资金进入股市，涌入二级市场，带来的结果是股价上去了，但是，实体经济的钱反而流出被股市吸走，实际利率水平不降反升。从目前股票市场融资利率看，用股票做抵押，10%以上的利率都很难借到钱，而这个水平对于实体经济来说，当然很难承受。由于没有流动性好的股票做抵押，实体经济中实际市场利率比这还高很多。</p>
-<p>因此，市场上有一种说法，称股市上涨是源于无风险利率的下降。这并不成立。因为虽然央行降息，对政府欠债和大国企有利，但对大多数企业利率负担影响很小。从去年到今年，企业融资成本并没有发生多大变化。所以，现在股市赚钱效应带来的结果是，大量机构把资金从实体经济中抽出来，用于股市投资，以至很多证券公司把钱都外借光了。</p>
-<p>一个市场中，机构纷纷加大融资额度往外大量借钱，而散户投资者借别人钱炒股票，这当然是个危险信号。</p>
-<p>二是由于股市过热，财富创造和分配都出现了扭曲，生产企业一年赚不出做股票的一个零头，上班的劳动报酬与炒股赚钱相比不值一提，谁还会安心费力搞生产、搞技术创新、老老实实地上班呢？其实，这和2007年的情况很相似，当时市场火爆让人都想赚大钱快钱，对任何风险警示都嗤之以鼻。实际上世界上任何市场来钱很快很容易的时候，都是到了危险的时候。因为市场经济没有免费的午餐。这种亢奋也会扭曲人的价值理念和不同阶层的收入分配。由于疯牛最终获利的只是资本大鳄和少数幸运的炒家，摔得最重的往往是散户投资者和借钱炒股者，这样，也会进一步恶化社会的收入分配不均。</p>
-<p>从舆论上看，更有不理性流言误导：卖房子炒股可再买大房子，炒股赚钱可以买兰博基尼等。在这种气氛中，人心自然容易漂浮。</p>
-<p>三是政策和政府信用捆绑，带来不必要损失。（评：信誉，民心啊）这次市场发动源于政策松动。许多人就把这次牛市解读为政策需要、政府背书，乃至国家战略，宣称“炒股要听党的话”。在这里，2007年牛市泡沫的教训值得吸取。2007年5月30日，政府先是用行政手段简单粗暴打压市场，导致市场大幅震荡和普遍怨气，后又出面安抚市场、转变态度，结果市场从4000点继续大幅上攻至6000多点。其后的股市暴跌和长期熊市对投资者和实体经济反而产生了更大伤害。这次牛市由于被人有意无意打上了太多政策烙印，一旦市场转熊（物极必反，这不可避免），人们必然将自己的不理性行为和投资损失归咎于政府政策及官媒误导，因此，政策信誉也要遭受更大损失。</p>
-<p>预计：暴跌拐点总是不期而至</p>
-<p>上海证券报：按照现有的发展态势，股市未来趋势会是什么样的？</p>
-<p>华生：对于市场中有泡沫的问题，大部分人都不否认。但有观点认为要享受泡沫，因为政策鼓励做多，所以泡沫不会破灭，至少在很长时间内不会破灭。这种观点是错误的，没有任何人可以预先准确预知股市的转折点。</p>
-<p>随着赚钱效应不断放大，外部资金源源不断流入，加上由于实体经济比较困难，银根有继续放松的预期，在这种情况下，股市可能还会继续上涨。就像2007年的时候，股市过了4000多点，我们就提示风险，但最后股市还是冲到了6000点。但是，要记住的是，最后股市回到了1600多点。</p>
-<p>当赚钱效应导致资金涌入进一步推高市场时，市场总会达到一个拐点或临界点。是4500点、是5000点、还是6000点，现在不知道，但总会达到一个临界点，即所有推动市场上行的力量，未来都变成加速下行的压力。</p>
-<p>值得注意的是，与2007年不同，这次杠杆效应很大，尤其是使用者多数是中小投资者。随着疯牛狂奔带来暴跌的可能性会不断增加，加上杠杆效应，以及港股通、新三板等资金分流新渠道的建立，一旦疯牛失蹄，对于中小投资者的冲击和踩踏带来的伤害，将远大于2007年的股灾。（评：已经三轮股灾了，你咋这么神呢，哈哈）</p>
-<p>上海证券报：有人说这仅是大牛市的前中期，年内股市根本没有风险，就是出现调整，调整后反而是更好的买入机会。你怎么看？</p>
-<p>华生：从世界股市和中国股市的历史看，市场上除银行外，整体市盈率市净率到这样高的水平，市场炒作热到这个程度，从来都是泡沫破灭的征兆，而不是牛市前期的信号。况且今年内还有两个重大因素都会促成或加速市场下跌：</p>
-<p>1、上面说到这次牛市是赚钱效应导致股市需求即资金激增，而股票供应的行政控制，人为造成股票供需失衡。中国的股市。并不是企业上市融资需求都能得到合理满足，资金多的用不了还要外溢流出到境外市场，去援助解放人家的投资者。中国鼓励大众创新、万众创业的资金需求远远得不到满足，实体经济嗷嗷待哺。甚至已上市公司再融资审批也要等一年多，600多家待上市企业都等了多年无法上市。故下半年一旦启动市场化的的注册制改革，市场供求关系就会逆转，股票价值必然回归。</p>
-<p>2、美联储年内加息箭在弦上，到时必吸引全球资金回流，形成对发展中国家汇率、利率的很大压力。（评：预测就是这么准）因此若A股的疯牛趋势得不到遏制，下半年股指高位跳水，会对投资者和中国经济都造成负面冲击。</p>
-<p>上海证券报：有人说这次和以往不同，不会重复股市的历史。</p>
-<p>华生：要知道，华尔街几百年实践证明，每次都有人说“这次不一样”，但每次都没有逃脱这个规律。（评：说的我无言以对，哈哈）</p>
-<p>和以往不同的，政策鼓励的牛市，一旦暴跌，带来的不仅是人们财富的缩水，更是要政府信誉代价的支付。</p>
-<p>上海证券报：有人说，现在能赚钱白不赚钱，等市场开始跌再撤也来得及。</p>
-<p>华生：每次都有一些“股市高手”这样想，许多普通投资者也跟随其中。其实，未来是不可知的。股市每次下跌是调整冲高的前奏，还是继续下降的喘息，人们事先并不知道。（评：一看就是炒股老手）因此，市场的任何调整还会被很多人认为是进入的好机会，结果越陷越深。2007年股市泡沫破灭，许多人都是在不断抄底的过程中最后输得很惨。</p>
-<p>办法：警示风险缩小杠杆让市场发挥作用</p>
-<p>上海证券报：据我所知，周边很多人炒股都使用了杠杆，且融资利率已经上升至10%，还难以融到资金。对此，有什么办法可以降温呢？</p>
-<p>华生：由于这次牛市被普遍认为是政策导向和国家意志，因此，政府有关部门明确地向投资者提示风险格外重要，实际上现在这也是很多老道的投资者决定进退的主要观察指标。其次，监管者还要采取实际步骤，对中小投资者的杠杆使用加以必要限制。特别是对市场已经过热之后中小投资者与进入股市的新投资者的新增融资加以限制。这就像为什么要禁止赌博，因为人性有贪婪不理智的一面。</p>
-<p>当然，最根本的是推进市场化改革，让市场力量自己发挥平衡供求的作用。严格地说，我们从中央正式文件和报告中看到的，所谓股市的国家战略，并不是要搞人造牛市，而是要大力发展直接融资，让资本市场更好地发挥推动实体发展的作用。就股市本身而言，首先要积极推进注册制改革。对于注册制的概念在提出之初我是有不同意见的，主要是它的内涵并不清楚。但无论如何，不管是与国际上的哪一种注册制更靠近，或者是我们自创和自己定义的注册制，它总的含义都是要进一步大大的市场化，这是没有争议的。现在我们融资再融资实行严格行政审批，公司上市的发行价格、发行资格难以摆脱行政控制，甚至非常僵化死板，与实体经济需求和股票市场供求关系严重脱节。人们很难想象，融资再融资怎么可能在下半年一下子从严格行政审批跳到完全的市场化方式发行。</p>
-<p>在市场经济中，价格从来是靠供求关系来调节的，今天，由于股票供给受限，供求失衡，股票价格必然失真和虚高。因此，需要从现在起就开始实行向市场化注册制逐步过渡。就如我国的成品油价格，过去完全由政府控制，后来与国际原油价格挂钩，从大致一月调一次，过渡到10个工作日一调，价格的市场化程度就提高了。目前，已上市公司搞再融资，一批都要一年多时间，真实市场情况早就面目全非。企业上市排了那么长的队，现在变更为一个月上二批，数量虽有所增加，但每次发行，对资金市场都产生了人为冲击，且远远不能满足需要，也和巨额资金入市的市场失衡完全不相称。</p>
-<p>建议应当与年内的注册制改革相衔接，从每月批量发行改为多批发行或每周批量发行，平衡市场供求，减少企业上市排队时间，支持实体经济发展。这样，并不需要政府部门进行行政干预，也不需要犹犹豫豫地喊话，市场供求就可更好发挥调节作用。</p>
-<p>就像经济高速运行时难以调结构一样，市场供求进一步平衡，股市价格结构自然就会趋向合理，疯牛就会失去动力。</p>
-<p>归根结底，赚钱赔钱是最好的老师。要想投资者行为理性，价格这个指挥棒比任何说教都要管用。（评：散户不能被教育，只能被消灭）这样，政府希望股市慢牛的愿望才有可能实现，否则，疯牛狂奔，最后只能失蹄踩踏。若下半年股市从高位急剧下跌，市场环境严重恶化，筹备了多年的注册制难免又要延误流产。那样就会形成战略实施上的重大失误。</p>
-<p>上海证券报：新三板是否也可起一些分流作用，它现在的火爆，您如何看待？</p>
-<p>华生：我认为在大众创业万众创新中，新三板的步子可以迈得再大一些。（这个观点值得注意哦）</p>
-<p>如成熟的资本市场，美国已经形成低层根基很大的多层次市场。像纳市等基础层次市场上市公司以万家计，而主板上经过几百年的发展，也只有几千家上市公司。</p>
-<p>所以，新三板尽管发展的速度已经不慢了，已经挂牌了2000多家企业，但是，相对主板市场，还是有点头重脚轻的感觉。</p>
-<p>我从来主张大力发展新三板，因为新三板不是针对普通投资者的，也不是竞价交易的，再融资是对机构和大户投资人，风险相对较小，可以发展得更快点。</p>
-<p>听说现在新三板已经出现炒壳卖壳的现象，可能是个炒作。如果有，就说明上市的行政审查过严了。新三板还能卖壳，说明还是有门槛，很多企业挂不上去。否则的话，壳资源不会值钱。</p>
-<p>值得关注的是，新三板在目前情况下，基础比较薄弱，各方面投机性强，这时候提出新三板要推行竞价交易，应慎重。</p>
-<p>总之，只要我们沿着市场化方向，从今天起就开始行动，一个健康和长期有活力的证券市场就会与实体经济相辅相成，乘风破浪向前发展，从而也能给投资者带来长期稳定的回报。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/20/华生--02--谨防疯牛失蹄和踩踏悲剧/" data-id="cjysdby4k00185rn4cs8v0d35" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/02/20/华生--怎样建设一个强大的资本市场/" data-id="cjytfpwx5001hezn44po09lw0" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -962,7 +913,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archiv</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
     </div>
   </div>
 
@@ -973,6 +924,10 @@
     <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/08/02/杨东来信/">杨东来信</a>
+          </li>
         
           <li>
             <a href="/2019/07/03/kulese_经典观点/">kulese_经典观点</a>
@@ -988,10 +943,6 @@
         
           <li>
             <a href="/2019/06/05/基金分析_逃离金融街/">基金分析_逃离金融街</a>
-          </li>
-        
-          <li>
-            <a href="/2019/06/05/基金分析_万事静观皆自得_四时佳兴与人同/">基金分析_万事静观皆自得_四时佳兴与人同</a>
           </li>
         
       </ul>
