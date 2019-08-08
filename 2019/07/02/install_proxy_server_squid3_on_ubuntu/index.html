@@ -7,16 +7,16 @@
   
   <title>install_proxy_server_squid3_on_ubuntu | 谢谢这个世界</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="https://www.cnblogs.com/dadonggg/p/10019026.html 功能用途我们在生活中见过各种代理，比如我们距离火车站较远，我们可以选择通过距离最近的火车票代售点来购买火车票。又比如商品代理商，我们拿不到厂家的直接或者，可以通过厂家授权的代理经销商来获得产品。代理服务器负责转发你的请求到目标服务器，然后将目标服务器的响应反馈给你。你可以理解为它就是个联姻的媒婆。代理">
+  <meta name="description" content="set http proxy on centos ~/.bash_profile12345678910111213# wan#export http_proxy=&quot;http://192.168.1.112:3128&quot;# lan#export http_proxy=&quot;http://192.2.113.103:3128&quot;#export https_proxy=&quot;https://192.2.113.10">
 <meta property="og:type" content="article">
 <meta property="og:title" content="install_proxy_server_squid3_on_ubuntu">
 <meta property="og:url" content="http://yoursite.com/2019/07/02/install_proxy_server_squid3_on_ubuntu/index.html">
 <meta property="og:site_name" content="谢谢这个世界">
-<meta property="og:description" content="https://www.cnblogs.com/dadonggg/p/10019026.html 功能用途我们在生活中见过各种代理，比如我们距离火车站较远，我们可以选择通过距离最近的火车票代售点来购买火车票。又比如商品代理商，我们拿不到厂家的直接或者，可以通过厂家授权的代理经销商来获得产品。代理服务器负责转发你的请求到目标服务器，然后将目标服务器的响应反馈给你。你可以理解为它就是个联姻的媒婆。代理">
-<meta property="og:updated_time" content="2019-07-02T02:29:49.000Z">
+<meta property="og:description" content="set http proxy on centos ~/.bash_profile12345678910111213# wan#export http_proxy=&quot;http://192.168.1.112:3128&quot;# lan#export http_proxy=&quot;http://192.2.113.103:3128&quot;#export https_proxy=&quot;https://192.2.113.10">
+<meta property="og:updated_time" content="2019-08-08T08:44:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="install_proxy_server_squid3_on_ubuntu">
-<meta name="twitter:description" content="https://www.cnblogs.com/dadonggg/p/10019026.html 功能用途我们在生活中见过各种代理，比如我们距离火车站较远，我们可以选择通过距离最近的火车票代售点来购买火车票。又比如商品代理商，我们拿不到厂家的直接或者，可以通过厂家授权的代理经销商来获得产品。代理服务器负责转发你的请求到目标服务器，然后将目标服务器的响应反馈给你。你可以理解为它就是个联姻的媒婆。代理">
+<meta name="twitter:description" content="set http proxy on centos ~/.bash_profile12345678910111213# wan#export http_proxy=&quot;http://192.168.1.112:3128&quot;# lan#export http_proxy=&quot;http://192.2.113.103:3128&quot;#export https_proxy=&quot;https://192.2.113.10">
   
     <link rel="alternate" href="/atom.xml" title="谢谢这个世界" type="application/atom+xml">
   
@@ -52,9 +52,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Buscar"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -89,7 +89,9 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a href="https://www.cnblogs.com/dadonggg/p/10019026.html" target="_blank" rel="noopener">https://www.cnblogs.com/dadonggg/p/10019026.html</a></p>
+        <h1 id="set-http-proxy-on-centos-bash-profile"><a href="#set-http-proxy-on-centos-bash-profile" class="headerlink" title="set http proxy on centos ~/.bash_profile"></a>set http proxy on centos ~/.bash_profile</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># wan</span></span><br><span class="line"><span class="comment">#export http_proxy="http://192.168.1.112:3128"</span></span><br><span class="line"><span class="comment"># lan</span></span><br><span class="line"><span class="comment">#export http_proxy="http://192.2.113.103:3128"</span></span><br><span class="line"><span class="comment">#export https_proxy="https://192.2.113.103:3128"</span></span><br><span class="line">export http_proxy=<span class="string">"http://proxy_server_ip:3128"</span></span><br><span class="line">export http_proxys=<span class="string">"https://proxy_server_ip:3128"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#https_proxy=proxy.361way.com:8080</span></span><br><span class="line"><span class="comment">#export https_proxy</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#ftp_proxy=proxy.361way.com:8080</span></span><br><span class="line"><span class="comment">#export ftp_proxy</span></span><br></pre></td></tr></table></figure>
+<h1 id="use-new-yum"><a href="#use-new-yum" class="headerlink" title="use new yum"></a>use new yum</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span> add proxy <span class="keyword">in</span> /etc/yum.conf</span><br><span class="line">  <span class="comment"># The proxy server - proxy server:port number</span></span><br><span class="line">  proxy=http://proxy_server_ip:<span class="number">3128</span></span><br><span class="line"></span><br><span class="line"><span class="number">2.</span> copy the custom repo files to /ect/yum.repos.d/   </span><br><span class="line">like:</span><br><span class="line">centos-base<span class="number">-163.</span>repo</span><br><span class="line">centos-base-ali.repo</span><br></pre></td></tr></table></figure>
+<p><a href="https://www.cnblogs.com/dadonggg/p/10019026.html" target="_blank" rel="noopener">https://www.cnblogs.com/dadonggg/p/10019026.html</a></p>
 <h1 id="功能用途"><a href="#功能用途" class="headerlink" title="功能用途"></a>功能用途</h1><p>我们在生活中见过各种代理，比如我们距离火车站较远，我们可以选择通过距离最近的火车票代售点来购买火车票。又比如商品代理商，我们拿不到厂家的直接或者，可以通过厂家授权的代理经销商来获得产品。代理服务器负责转发你的请求到目标服务器，然后将目标服务器的响应反馈给你。你可以理解为它就是个联姻的媒婆。代理服务器可以有很多用途，比如：</p>
 <p>作为一个网络防火墙，将内网与外网隔开。是的外网只能访问代理服务器允许的边界，这是我们常见的正向代理，比如ningx的转发。另外，在一个局域网中如果有一台主机可以上外网，那么我们就可以把这台机器作为代理服务器，为其他机器提供外网的访问功能。<br>作为反爬利器，如果爬虫爬取的目标网站具有较强的反爬机制，最常见的通过IP来限制抓取频率，如果你的爬虫抓取太快，你的IP就会被封禁一段时间甚至永久封禁。此时我们就可以通过高匿代理让抓取的网站识别不出我们的真实IP。</p>
 <h1 id="本文提供两种代理情形："><a href="#本文提供两种代理情形：" class="headerlink" title="本文提供两种代理情形："></a>本文提供两种代理情形：</h1><p>1、两台都有外网IP，一台服务器请求资源通过另外一个服务器，本文重点讲第一种。</p>
@@ -134,7 +136,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/02/install_proxy_server_squid3_on_ubuntu/" data-id="cjz0njf3f000klyn40j47zg2i" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/07/02/install_proxy_server_squid3_on_ubuntu/" data-id="cjz2frbrc000mugn4evu0b451" class="article-share-link">Compartir</a>
       
       
     </footer>
@@ -144,7 +146,7 @@
 <nav id="article-nav">
   
     <a href="/2019/07/03/kulese_经典观点/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Neuer</strong>
+      <strong class="article-nav-caption">Nuevo</strong>
       <div class="article-nav-title">
         
           kulese_经典观点
@@ -154,7 +156,7 @@
   
   
     <a href="/2019/06/05/基金分析_2011年08月30日/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Älter</strong>
+      <strong class="article-nav-caption">Viejo</strong>
       <div class="article-nav-title">基金分析_2011年08月30日</div>
     </a>
   
@@ -169,7 +171,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categorías</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/economics/">economics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/technique/">technique</a></li></ul>
     </div>
@@ -184,7 +186,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archivos</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
     </div>
@@ -194,9 +196,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Posts recientes</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/08/07/前海母基金情况汇集/">前海母基金情况汇集</a>
+          </li>
         
           <li>
             <a href="/2019/08/02/杨东来信/">杨东来信</a>
@@ -214,10 +220,6 @@
             <a href="/2019/06/05/基金分析_2011年08月30日/">基金分析_2011年08月30日</a>
           </li>
         
-          <li>
-            <a href="/2019/06/05/基金分析_逃离金融街/">基金分析_逃离金融街</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -231,7 +233,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2019 John Doe<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Construido por <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
