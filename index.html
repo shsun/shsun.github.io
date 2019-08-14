@@ -87,15 +87,34 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="on-the-same-server"><a href="#on-the-same-server" class="headerlink" title="on the same server"></a>on the same server</h3><p>based on redis 5.0.0</p>
-<p><a href="https://my.oschina.net/ruoli/blog/2252393" target="_blank" rel="noopener">https://my.oschina.net/ruoli/blog/2252393</a></p>
+        <h1 id="on-the-same-server"><a href="#on-the-same-server" class="headerlink" title="on the same server"></a>on the same server</h1><p>based on redis 5.0.0<br><a href="https://my.oschina.net/ruoli/blog/2252393" target="_blank" rel="noopener">https://my.oschina.net/ruoli/blog/2252393</a></p>
+<ol>
+<li><p>create dir /root/software/redis</p>
+</li>
+<li><p>download the source code and compile</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">​wget http://download.redis.io/releases/redis<span class="number">-5.0</span><span class="number">.0</span>.tar.gz</span><br><span class="line">tar xzf redis<span class="number">-5.0</span><span class="number">.0</span>.tar.gz</span><br><span class="line">cd redis<span class="number">-5.0</span><span class="number">.0</span></span><br><span class="line">make</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>create 6 redis.conf for the cluster</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/root/software/redis/redis-cluster-conf/<span class="number">7001</span>/redis.conf</span><br><span class="line">/root/software/redis/redis-cluster-conf/<span class="number">7002</span>/redis.conf</span><br><span class="line">/root/software/redis/redis-cluster-conf/<span class="number">7003</span>/redis.conf</span><br><span class="line">/root/software/redis/redis-cluster-conf/<span class="number">7004</span>/redis.conf</span><br><span class="line">/root/software/redis/redis-cluster-conf/<span class="number">7005</span>/redis.conf</span><br><span class="line">/root/software/redis/redis-cluster-conf/<span class="number">7006</span>/redis.conf</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>the conf of the 1st node as below:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">port <span class="number">7001</span>  <span class="comment">#端口</span></span><br><span class="line">cluster-enabled yes <span class="comment">#启用集群模式</span></span><br><span class="line">cluster-config-file nodes.conf</span><br><span class="line">cluster-node-timeout <span class="number">5000</span> <span class="comment">#超时时间</span></span><br><span class="line">appendonly yes</span><br><span class="line">daemonize yes <span class="comment">#后台运行</span></span><br><span class="line">protected-mode no <span class="comment">#非保护模式</span></span><br><span class="line">pidfile  /var/run/redis_7001.pid</span><br></pre></td></tr></table></figure></p>
+<p>NOTE: the port and pidfile SHOULD BE 7001/7002/…, redis_7001.pid/redis_7002.pid/…</p>
+<ol>
+<li><p>startup 6 nodes</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/root/software/redis/redis<span class="number">-5.0</span><span class="number">.0</span>/src/redis-server  /root/software/redis/redis-cluster-conf/<span class="number">7001</span>/redis.conf</span><br><span class="line">/root/software/redis/redis<span class="number">-5.0</span><span class="number">.0</span>/src/redis-server  /root/software/redis/redis-cluster-conf/<span class="number">7002</span>/redis.conf</span><br><span class="line">/root/software/redis/redis<span class="number">-5.0</span><span class="number">.0</span>/src/redis-server  /root/software/redis/redis-cluster-conf/<span class="number">7003</span>/redis.conf</span><br><span class="line">/root/software/redis/redis<span class="number">-5.0</span><span class="number">.0</span>/src/redis-server  /root/software/redis/redis-cluster-conf/<span class="number">7004</span>/redis.conf</span><br><span class="line">/root/software/redis/redis<span class="number">-5.0</span><span class="number">.0</span>/src/redis-server  /root/software/redis/redis-cluster-conf/<span class="number">7005</span>/redis.conf</span><br><span class="line">/root/software/redis/redis<span class="number">-5.0</span><span class="number">.0</span>/src/redis-server  /root/software/redis/redis-cluster-conf/<span class="number">7006</span>/redis.conf</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>startup the cluster</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># DO REMEMBER update the ip to your ip</span></span><br><span class="line">/root/software/redis/redis<span class="number">-5.0</span><span class="number">.0</span>/src/redis-cli --cluster create <span class="number">192.168</span><span class="number">.2</span><span class="number">.40</span>:<span class="number">7001</span> <span class="number">192.168</span><span class="number">.2</span><span class="number">.40</span>:<span class="number">7002</span> <span class="number">192.168</span><span class="number">.2</span><span class="number">.40</span>:<span class="number">7003</span> <span class="number">192.168</span><span class="number">.2</span><span class="number">.40</span>:<span class="number">7004</span> <span class="number">192.168</span><span class="number">.2</span><span class="number">.40</span>:<span class="number">7005</span> <span class="number">192.168</span><span class="number">.2</span><span class="number">.40</span>:<span class="number">7006</span> --cluster-replicas <span class="number">1</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
 <h3 id="on-6-servers"><a href="#on-6-servers" class="headerlink" title="on 6 servers"></a>on 6 servers</h3><p><a href="https://blog.51cto.com/13860853/2415197" target="_blank" rel="noopener">https://blog.51cto.com/13860853/2415197</a></p>
 <p>查看节点<br>./redis-5.0.0/src/redis-cli -h 127.0.0.1 -p 7001 -c cluster nodes<br>./redis-5.0.0/src/redis-cli -h 192.1.114.84 -p 7001 -c cluster nodes</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/14/redis_cluster/" data-id="cjzav7xnr000se0n4c330wuwj" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/08/14/redis_cluster/" data-id="cjzavpdz4000vpin4yiwrhbje" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -242,7 +261,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/07/前海母基金情况汇集/" data-id="cjzav7xo40012e0n409ksao6c" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/08/07/前海母基金情况汇集/" data-id="cjzavpdzj0017pin4vzd6wklq" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -289,7 +308,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/02/杨东来信/" data-id="cjzav7xp80024e0n4ky902mf9" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/08/02/杨东来信/" data-id="cjzavpe08001zpin4ctbdo5cr" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -332,7 +351,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/03/kulese_经典观点/" data-id="cjzav7xnw000we0n4r3s48mqy" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/07/03/kulese_经典观点/" data-id="cjzavpdyx000ppin4cvdfdt23" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -415,7 +434,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/02/install_proxy_server_squid3_on_ubuntu/" data-id="cjzav7xnz000ye0n4yl7n8icq" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/07/02/install_proxy_server_squid3_on_ubuntu/" data-id="cjzavpdyr000lpin4f8pbfsgo" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -462,7 +481,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/05/基金分析_2011年08月30日/" data-id="cjzav7xol001ie0n4fl3ox37b" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/06/05/基金分析_2011年08月30日/" data-id="cjzavpdzm001dpin4k1v4rbg2" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -509,7 +528,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/05/基金分析_逃离金融街/" data-id="cjzav7xoq001oe0n4ohawqlyc" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/06/05/基金分析_逃离金融街/" data-id="cjzavpdzw001npin45mmpzoz0" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -560,7 +579,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/05/基金分析_万事静观皆自得_四时佳兴与人同/" data-id="cjzav7xop001me0n4o13czrcg" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/06/05/基金分析_万事静观皆自得_四时佳兴与人同/" data-id="cjzavpdzu001jpin46evz2zy9" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -601,7 +620,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/06/install_lib_on_venv_4_python/" data-id="cjzav7xne000ie0n4yqqrd6zm" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/05/06/install_lib_on_venv_4_python/" data-id="cjzavpdyp000jpin4t1mzscl3" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -643,7 +662,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/12/ext资源/" data-id="cjzav7xmq0006e0n4v9ooo8rn" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/03/12/ext资源/" data-id="cjzavpdy80008pin43982qj7r" class="article-share-link">Teilen</a>
       
       
     </footer>

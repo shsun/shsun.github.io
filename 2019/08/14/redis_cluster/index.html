@@ -7,16 +7,16 @@
   
   <title>redis_cluster | 谢谢这个世界</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="on the same serverbased on redis 5.0.0 https://my.oschina.net/ruoli/blog/2252393 on 6 servershttps://blog.51cto.com/13860853/2415197 查看节点./redis-5.0.0/src/redis-cli -h 127.0.0.1 -p 7001 -c cluster nod">
+  <meta name="description" content="on the same serverbased on redis 5.0.0https://my.oschina.net/ruoli/blog/2252393  create dir /root/software/redis  download the source code and compile 1234​wget http://download.redis.io/releases/redis">
 <meta property="og:type" content="article">
 <meta property="og:title" content="redis_cluster">
 <meta property="og:url" content="http://yoursite.com/2019/08/14/redis_cluster/index.html">
 <meta property="og:site_name" content="谢谢这个世界">
-<meta property="og:description" content="on the same serverbased on redis 5.0.0 https://my.oschina.net/ruoli/blog/2252393 on 6 servershttps://blog.51cto.com/13860853/2415197 查看节点./redis-5.0.0/src/redis-cli -h 127.0.0.1 -p 7001 -c cluster nod">
-<meta property="og:updated_time" content="2019-08-14T06:19:19.000Z">
+<meta property="og:description" content="on the same serverbased on redis 5.0.0https://my.oschina.net/ruoli/blog/2252393  create dir /root/software/redis  download the source code and compile 1234​wget http://download.redis.io/releases/redis">
+<meta property="og:updated_time" content="2019-08-14T06:33:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="redis_cluster">
-<meta name="twitter:description" content="on the same serverbased on redis 5.0.0 https://my.oschina.net/ruoli/blog/2252393 on 6 servershttps://blog.51cto.com/13860853/2415197 查看节点./redis-5.0.0/src/redis-cli -h 127.0.0.1 -p 7001 -c cluster nod">
+<meta name="twitter:description" content="on the same serverbased on redis 5.0.0https://my.oschina.net/ruoli/blog/2252393  create dir /root/software/redis  download the source code and compile 1234​wget http://download.redis.io/releases/redis">
   
     <link rel="alternate" href="/atom.xml" title="谢谢这个世界" type="application/atom+xml">
   
@@ -89,15 +89,34 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="on-the-same-server"><a href="#on-the-same-server" class="headerlink" title="on the same server"></a>on the same server</h3><p>based on redis 5.0.0</p>
-<p><a href="https://my.oschina.net/ruoli/blog/2252393" target="_blank" rel="noopener">https://my.oschina.net/ruoli/blog/2252393</a></p>
+        <h1 id="on-the-same-server"><a href="#on-the-same-server" class="headerlink" title="on the same server"></a>on the same server</h1><p>based on redis 5.0.0<br><a href="https://my.oschina.net/ruoli/blog/2252393" target="_blank" rel="noopener">https://my.oschina.net/ruoli/blog/2252393</a></p>
+<ol>
+<li><p>create dir /root/software/redis</p>
+</li>
+<li><p>download the source code and compile</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">​wget http://download.redis.io/releases/redis<span class="number">-5.0</span><span class="number">.0</span>.tar.gz</span><br><span class="line">tar xzf redis<span class="number">-5.0</span><span class="number">.0</span>.tar.gz</span><br><span class="line">cd redis<span class="number">-5.0</span><span class="number">.0</span></span><br><span class="line">make</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>create 6 redis.conf for the cluster</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/root/software/redis/redis-cluster-conf/<span class="number">7001</span>/redis.conf</span><br><span class="line">/root/software/redis/redis-cluster-conf/<span class="number">7002</span>/redis.conf</span><br><span class="line">/root/software/redis/redis-cluster-conf/<span class="number">7003</span>/redis.conf</span><br><span class="line">/root/software/redis/redis-cluster-conf/<span class="number">7004</span>/redis.conf</span><br><span class="line">/root/software/redis/redis-cluster-conf/<span class="number">7005</span>/redis.conf</span><br><span class="line">/root/software/redis/redis-cluster-conf/<span class="number">7006</span>/redis.conf</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>the conf of the 1st node as below:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">port <span class="number">7001</span>  <span class="comment">#端口</span></span><br><span class="line">cluster-enabled yes <span class="comment">#启用集群模式</span></span><br><span class="line">cluster-config-file nodes.conf</span><br><span class="line">cluster-node-timeout <span class="number">5000</span> <span class="comment">#超时时间</span></span><br><span class="line">appendonly yes</span><br><span class="line">daemonize yes <span class="comment">#后台运行</span></span><br><span class="line">protected-mode no <span class="comment">#非保护模式</span></span><br><span class="line">pidfile  /var/run/redis_7001.pid</span><br></pre></td></tr></table></figure></p>
+<p>NOTE: the port and pidfile SHOULD BE 7001/7002/…, redis_7001.pid/redis_7002.pid/…</p>
+<ol>
+<li><p>startup 6 nodes</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/root/software/redis/redis<span class="number">-5.0</span><span class="number">.0</span>/src/redis-server  /root/software/redis/redis-cluster-conf/<span class="number">7001</span>/redis.conf</span><br><span class="line">/root/software/redis/redis<span class="number">-5.0</span><span class="number">.0</span>/src/redis-server  /root/software/redis/redis-cluster-conf/<span class="number">7002</span>/redis.conf</span><br><span class="line">/root/software/redis/redis<span class="number">-5.0</span><span class="number">.0</span>/src/redis-server  /root/software/redis/redis-cluster-conf/<span class="number">7003</span>/redis.conf</span><br><span class="line">/root/software/redis/redis<span class="number">-5.0</span><span class="number">.0</span>/src/redis-server  /root/software/redis/redis-cluster-conf/<span class="number">7004</span>/redis.conf</span><br><span class="line">/root/software/redis/redis<span class="number">-5.0</span><span class="number">.0</span>/src/redis-server  /root/software/redis/redis-cluster-conf/<span class="number">7005</span>/redis.conf</span><br><span class="line">/root/software/redis/redis<span class="number">-5.0</span><span class="number">.0</span>/src/redis-server  /root/software/redis/redis-cluster-conf/<span class="number">7006</span>/redis.conf</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>startup the cluster</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># DO REMEMBER update the ip to your ip</span></span><br><span class="line">/root/software/redis/redis<span class="number">-5.0</span><span class="number">.0</span>/src/redis-cli --cluster create <span class="number">192.168</span><span class="number">.2</span><span class="number">.40</span>:<span class="number">7001</span> <span class="number">192.168</span><span class="number">.2</span><span class="number">.40</span>:<span class="number">7002</span> <span class="number">192.168</span><span class="number">.2</span><span class="number">.40</span>:<span class="number">7003</span> <span class="number">192.168</span><span class="number">.2</span><span class="number">.40</span>:<span class="number">7004</span> <span class="number">192.168</span><span class="number">.2</span><span class="number">.40</span>:<span class="number">7005</span> <span class="number">192.168</span><span class="number">.2</span><span class="number">.40</span>:<span class="number">7006</span> --cluster-replicas <span class="number">1</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
 <h3 id="on-6-servers"><a href="#on-6-servers" class="headerlink" title="on 6 servers"></a>on 6 servers</h3><p><a href="https://blog.51cto.com/13860853/2415197" target="_blank" rel="noopener">https://blog.51cto.com/13860853/2415197</a></p>
 <p>查看节点<br>./redis-5.0.0/src/redis-cli -h 127.0.0.1 -p 7001 -c cluster nodes<br>./redis-5.0.0/src/redis-cli -h 192.1.114.84 -p 7001 -c cluster nodes</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/14/redis_cluster/" data-id="cjzav7xnr000se0n4c330wuwj" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/08/14/redis_cluster/" data-id="cjzavpdz4000vpin4yiwrhbje" class="article-share-link">Teilen</a>
       
       
     </footer>
