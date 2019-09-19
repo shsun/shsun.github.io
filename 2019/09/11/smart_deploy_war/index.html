@@ -13,7 +13,7 @@
 <meta property="og:url" content="http://yoursite.com/2019/09/11/smart_deploy_war/index.html">
 <meta property="og:site_name" content="谢谢这个世界">
 <meta property="og:description" content="install jdk1.8.0_192 to /usr/local/ set the classpath in /etc/profile ln -s /usr/local/jdk1.8.0_192/bin/java /bin/java scp apache-tomcat-8.5.35 to the target server (/usr/local/apache-tomcat-8.5.35)">
-<meta property="og:updated_time" content="2019-09-11T09:24:13.000Z">
+<meta property="og:updated_time" content="2019-09-19T05:41:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="smart_deploy_war">
 <meta name="twitter:description" content="install jdk1.8.0_192 to /usr/local/ set the classpath in /etc/profile ln -s /usr/local/jdk1.8.0_192/bin/java /bin/java scp apache-tomcat-8.5.35 to the target server (/usr/local/apache-tomcat-8.5.35)">
@@ -95,14 +95,20 @@
 <li>ln -s /usr/local/jdk1.8.0_192/bin/java /bin/java</li>
 <li>scp apache-tomcat-8.5.35 to the target server (/usr/local/apache-tomcat-8.5.35)</li>
 <li>chmod -R 777 /usr/local/apache-tomcat-8.5.35</li>
-<li>stop firewalld<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 停止并禁用firewalld开机启动</span></span><br><span class="line">sytemctl disable firewalld</span><br><span class="line">chkconfig iptables off</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看防火状态</span></span><br><span class="line">systemctl status firewalld</span><br><span class="line">service  iptables status</span><br></pre></td></tr></table></figure>
+<li><p>stop firewalld</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 停止并禁用firewalld开机启动</span></span><br><span class="line">sytemctl disable firewalld</span><br><span class="line">chkconfig iptables off</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看防火状态</span></span><br><span class="line">systemctl status firewalld</span><br><span class="line">service  iptables status</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>/data/docker_volumes/jenkins/.ssh/192.1.114.170_jenkins_id_rsa.pub &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; user@ip–&gt;authorized_keys</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FYI https://www.cnblogs.com/weifeng1463/p/<span class="number">7878366.</span>html</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>~/.ssh/id_rsa.pub &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; user@ip–&gt;authorized_keys</p>
 </li>
 </ol>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/09/11/smart_deploy_war/" data-id="ck0f251mv000ylvn4d4lxtso9" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/09/11/smart_deploy_war/" data-id="ck0q9weja000sivn4avavzgd3" class="article-share-link">Teilen</a>
       
       
     </footer>
