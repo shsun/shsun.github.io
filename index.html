@@ -48,9 +48,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Buscar"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -60,6 +60,63 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-smart_deploy_war" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/11/smart_deploy_war/" class="article-date">
+  <time datetime="2019-09-11T09:16:20.000Z" itemprop="datePublished">2019-09-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/technique/">technique</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/11/smart_deploy_war/">smart_deploy_war</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li>install jdk1.8.0_192 to /usr/local/</li>
+<li>set the classpath in /etc/profile</li>
+<li>ln -s /usr/local/jdk1.8.0_192/bin/java /bin/java</li>
+<li>scp apache-tomcat-8.5.35 to the target server (/usr/local/apache-tomcat-8.5.35)</li>
+<li>chmod -R 777 /usr/local/apache-tomcat-8.5.35</li>
+<li>stop firewalld</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 停止并禁用firewalld开机启动</span></span><br><span class="line">sytemctl disable firewalld</span><br><span class="line">chkconfig iptables off</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看防火状态</span></span><br><span class="line">systemctl status firewalld</span><br><span class="line">service  iptables status</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>/data/docker_volumes/jenkins/.ssh/192.1.114.170_jenkins_id_rsa.pub &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; user@ip–&gt;authorized_keys</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FYI https://www.cnblogs.com/weifeng1463/p/<span class="number">7878366.</span>html</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>~/.ssh/id_rsa.pub &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; user@ip–&gt;authorized_keys</p>
+</li>
+<li>target-server  /etc/ssh/ssh_config 中的 StrictHostKeyChecking ask 改成 StrictHostKeyChecking no</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/09/11/smart_deploy_war/" data-id="ck0z0rlvx000s1kn40ukg8ad6" class="article-share-link">Compartir</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-spring-cloud-gateway-paper" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -515,7 +572,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/29/spring-cloud-gateway-paper/" data-id="ck0z0puv20012tgn4ybze40ne" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/08/29/spring-cloud-gateway-paper/" data-id="ck0z0rlvz000u1kn45o87cz4t" class="article-share-link">Compartir</a>
       
       
     </footer>
@@ -578,7 +635,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/14/redis_cluster/" data-id="ck0z0puuu000wtgn4mvqx0oqd" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/08/14/redis_cluster/" data-id="ck0z0rlvv000q1kn45jaaks2x" class="article-share-link">Compartir</a>
       
       
     </footer>
@@ -725,7 +782,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/07/前海母基金情况汇集/" data-id="ck0z0puvj001ctgn446l1xhva" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/08/07/前海母基金情况汇集/" data-id="ck0z0rlwb00141kn4tai9bvmu" class="article-share-link">Compartir</a>
       
       
     </footer>
@@ -772,7 +829,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/02/杨东来信/" data-id="ck0z0puwg0024tgn44y8hjxao" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/08/02/杨东来信/" data-id="ck0z0rlxi00261kn4053z0xo8" class="article-share-link">Compartir</a>
       
       
     </footer>
@@ -815,7 +872,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/03/kulese_经典观点/" data-id="ck0z0puun000qtgn47mgxf0bu" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/07/03/kulese_经典观点/" data-id="ck0z0rlw900121kn4re2g742t" class="article-share-link">Compartir</a>
       
       
     </footer>
@@ -906,7 +963,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/02/install_proxy_server_squid3_on_ubuntu/" data-id="ck0z0puuh000mtgn4memgpq3a" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/07/02/install_proxy_server_squid3_on_ubuntu/" data-id="ck0z0rlvi000f1kn46mgkcxfb" class="article-share-link">Compartir</a>
       
       
     </footer>
@@ -953,7 +1010,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/05/基金分析_2011年08月30日/" data-id="ck0z0puvs001itgn4inobe3wr" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/06/05/基金分析_2011年08月30日/" data-id="ck0z0rlww001o1kn4w2leodx2" class="article-share-link">Compartir</a>
       
       
     </footer>
@@ -1000,7 +1057,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/05/基金分析_逃离金融街/" data-id="ck0z0puvx001otgn41sihhtb6" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/06/05/基金分析_逃离金融街/" data-id="ck0z0rlx4001s1kn42vtyj377" class="article-share-link">Compartir</a>
       
       
     </footer>
@@ -1051,48 +1108,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/05/基金分析_万事静观皆自得_四时佳兴与人同/" data-id="ck0z0puvv001mtgn4s1bbl9hy" class="article-share-link">Teilen</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-install_lib_on_venv_4_python" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/05/06/install_lib_on_venv_4_python/" class="article-date">
-  <time datetime="2019-05-06T09:21:01.000Z" itemprop="datePublished">2019-05-06</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/technique/">technique</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/06/install_lib_on_venv_4_python/">install_lib_on_venv_4_python</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> x</span></span><br><span class="line">pip install virtualenv / pip3 install virtualenv</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> create venv <span class="keyword">for</span> new project</span></span><br><span class="line">cd my_project_dir</span><br><span class="line">virtualenv venv　　# any dir name is ok, venv by default</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> x</span></span><br><span class="line">source venv/bin/activate</span><br><span class="line"><span class="meta">#</span><span class="bash"> windows</span></span><br><span class="line">source venv/Scripts/activate</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"></span></span><br><span class="line">pip install -r requirements.txt / pip3 install -r requirements.txt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> stop venv</span></span><br><span class="line">deactivate</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/06/install_lib_on_venv_4_python/" data-id="ck0z0puuf000ktgn4uy9nvne5" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/06/05/基金分析_万事静观皆自得_四时佳兴与人同/" data-id="ck0z0rlx1001q1kn4w15km2uk" class="article-share-link">Compartir</a>
       
       
     </footer>
@@ -1106,7 +1122,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/">weiter &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/">Siguiente &raquo;</a>
   </nav>
 
 </section>
@@ -1115,7 +1131,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categorías</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/economics/">economics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/technique/">technique</a></li></ul>
     </div>
@@ -1130,9 +1146,9 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archivos</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
     </div>
   </div>
 
@@ -1140,9 +1156,13 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Posts recientes</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/09/11/smart_deploy_war/">smart_deploy_war</a>
+          </li>
         
           <li>
             <a href="/2019/08/29/spring-cloud-gateway-paper/">spring-cloud-gateway-paper</a>
@@ -1160,10 +1180,6 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
             <a href="/2019/08/02/杨东来信/">杨东来信</a>
           </li>
         
-          <li>
-            <a href="/2019/07/03/kulese_经典观点/">kulese_经典观点</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -1177,7 +1193,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2019 John Doe<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Construido por <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
