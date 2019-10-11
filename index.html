@@ -48,9 +48,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -60,6 +60,50 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-authorized_keys不生效的解决方法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/11/authorized_keys不生效的解决方法/" class="article-date">
+  <time datetime="2019-10-11T01:58:37.000Z" itemprop="datePublished">2019-10-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/technique/">technique</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/11/authorized_keys不生效的解决方法/">authorized_keys不生效的解决方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>配置用户的公钥登陆时，配置完authorized_keys居然一直不生效，于是google之，发现原来是因为.ssh目录和下面文件的权限问题导致的，</p>
+<p>因为目录的权限已经超过了sshd的要求权限。</p>
+<p>如果希望ssh公钥生效需满足至少下面两个条件：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>) .ssh目录的权限必须是<span class="number">700</span></span><br><span class="line"><span class="number">2</span>) .ssh/authorized_keys文件权限必须是<span class="number">600</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/10/11/authorized_keys不生效的解决方法/" data-id="ck1lhhdc30005y2n4sfd129hm" class="article-share-link">Teilen</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-smart_deploy_war" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -108,7 +152,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/09/11/smart_deploy_war/" data-id="ck104e4d60010kzn4xqw9ppb6" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2019/09/11/smart_deploy_war/" data-id="ck1lhhdd3000ty2n4rr8qlsfc" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -572,7 +616,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/29/spring-cloud-gateway-paper/" data-id="ck104e4df0014kzn4bktonnjf" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2019/08/29/spring-cloud-gateway-paper/" data-id="ck1lhhdd8000xy2n47vk0pu41" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -635,7 +679,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/14/redis_cluster/" data-id="ck104e4cp000ukzn4e0a4k2wc" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2019/08/14/redis_cluster/" data-id="ck1lhhdd2000ry2n4y8whcym3" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -782,7 +826,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/07/前海母基金情况汇集/" data-id="ck104e4hy001xkzn4gy5il48h" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2019/08/07/前海母基金情况汇集/" data-id="ck1lhhddi0017y2n4mxfojcmv" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -829,7 +873,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/02/杨东来信/" data-id="ck104e4ir0026kzn4s7ljynnd" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2019/08/02/杨东来信/" data-id="ck1lhhdef0025y2n43g047fne" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -872,7 +916,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/03/kulese_经典观点/" data-id="ck104e4cs000wkzn4l8zjbaf5" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2019/07/03/kulese_经典观点/" data-id="ck1lhhddm001dy2n4bgmbhwe3" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -966,7 +1010,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/02/install_proxy_server_squid3_on_ubuntu/" data-id="ck104e4cd000qkzn472ljxpos" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2019/07/02/install_proxy_server_squid3_on_ubuntu/" data-id="ck1lhhdcl000hy2n4gq94gmk9" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -1013,7 +1057,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/05/基金分析_2011年08月30日/" data-id="ck104e4gu001kkzn4260a6rv1" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2019/06/05/基金分析_2011年08月30日/" data-id="ck1lhhddw001ly2n4jzibu955" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -1060,58 +1104,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/05/基金分析_逃离金融街/" data-id="ck104e4h2001okzn4g4f1u3zq" class="article-share-link">Partager</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-基金分析_万事静观皆自得_四时佳兴与人同" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/06/05/基金分析_万事静观皆自得_四时佳兴与人同/" class="article-date">
-  <time datetime="2019-06-05T07:27:35.000Z" itemprop="datePublished">2019-06-05</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/economics/">economics</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/05/基金分析_万事静观皆自得_四时佳兴与人同/">基金分析_万事静观皆自得_四时佳兴与人同</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>2011-6-28 12:04 来自 新浪博客</p>
-<p>原文地址：万事静观皆自得 四时佳兴与人同作者：基金分析<br>    我们欢迎市场下跌,因为它使我们能以新的、令人感到恐慌的便宜价格拣到更多的股票。<br>——沃伦·巴菲特</p>
-<p>刚刚过去的6月给很多投资者都留下了不愉快的记忆。股市的谚语“五穷六绝”在延续着，5月的行情本已经压的很多投资者喘不过气来，6月的市场则雪上加霜将众人逼上梁山，很多的公募基金今年以来陷入了亏损，而不少的私募大佬也纷纷清盘。一时间，绝望笼罩着股市。</p>
-<p>今年4月，在年报的喜悦之后，大盘开始从高位回落。先是中东北非各国暴乱，利比亚内战引发原油等大宗商品价格飙升，而后日本地震和核危机，供应链受损，紧接着拉登突然被杀，原油下挫，银价非理性的上涨之后，被狠狠地打压，从而引发大宗商品全面回落，而在这时，各国市场又都恰好赶上企业业绩披露完毕，出现了真空期。</p>
-<p>而在国内很多企业在一季报中显示了之前的高通胀导致了今年的业绩同比或环比下降，国家从去年就开始的紧缩政策开始彰显威力。原材料价格上涨，人工成本上涨，企业运营的成本压力陡然增加，而银行收紧贷款，企业贷不到新的资金去维持运行，因此，很多中小企业纷纷倒闭，国内经济增速开始放缓。</p>
-<p>与此同时，美国两轮的货币宽松并未收到预期效果，欧债危机，美国自身债务风险，两党之间争权夺利，经济虽然不够好，但是也不敢再放款了，可以说全球没有一件能够令人振奋的事情。<br>从金融危机开始到目前的世界经济局势，就像是一个高烧的病人为了退烧，吃了很多的退烧药，然后烧还没完全退，却因为吃药太多胃开始疼了，不敢再吃药了，只能静养，这是药副作用，全球此前的治病政策也出现了副作用。</p>
-<p>此时，大家都在问那股市何时会好？</p>
-<p>我只能说不要去预测股市，没有人能够预测准。因为我们尚且预测不了一个人的行为，更何况是股市——这一群人的行为。每个人都会有不理性的时候，股市也会有不理性的时候，你预测股市的同时，根据索罗斯的反身性原理，市场也会因为你的预测而改变。</p>
-<p>那为何说是在市场过头的时候股市会逆转呢？2007年、2008年的大牛市可以说涨的过头了，那时的信贷很松，随后银行开始收紧银根，同时股价也在逐渐偏移着其内在价值，最后还是转向了。2008年底，市场同样也跌的过头了，偏离了其价值，随即反转；2009年、2010年，全球政策宽松的过头了，股市则由最低点一路向上。</p>
-<p>目前看2011年的资金又开始变得很紧，市场也跌的有些过头。当然不是说市场已经跌到了一个合理或者超值的位置，其实大盘中剔除银行地产股之外，很多股票还有下跌空间，只是这一段时间的急跌让市场没有喘息的机会，这样的表现似乎有些过头，因此酝酿出一个反弹很正常，当然我们认为这只是一个反弹，而非反转。</p>
-<p>市场并不是自始至终保持理性的，虽然其最初由理性出发，也因为人们理性的判断启动或终止，但由于外界各种力量的助推及市场本身的惯性，其走势最终往往会矫枉过正，而价值的引力会将其再次拉回正轨，但当其再次经过和到达正轨时又会再次因为惯性和新的预期而继续前行，最后在后知后觉的人（力量）的推动下过了头，但任何事物都有其边际，下一次的引力又在等待着它。周而复始，当市场下一次矫枉过正的时候，也就是大盘反转的时刻。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/05/基金分析_万事静观皆自得_四时佳兴与人同/" data-id="ck104e4gx001mkzn4kuv854jb" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2019/06/05/基金分析_逃离金融街/" data-id="ck1lhhde4001ry2n41f6dyljo" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -1125,7 +1118,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/">Suivant &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/">weiter &raquo;</a>
   </nav>
 
 </section>
@@ -1134,7 +1127,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Catégories</h3>
+    <h3 class="widget-title">Kategorien</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/economics/">economics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/technique/">technique</a></li></ul>
     </div>
@@ -1149,9 +1142,9 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Archiv</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
     </div>
   </div>
 
@@ -1159,9 +1152,13 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Articles récents</h3>
+    <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/10/11/authorized_keys不生效的解决方法/">authorized_keys不生效的解决方法</a>
+          </li>
         
           <li>
             <a href="/2019/09/11/smart_deploy_war/">smart_deploy_war</a>
@@ -1179,10 +1176,6 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
             <a href="/2019/08/07/前海母基金情况汇集/">前海母基金情况汇集</a>
           </li>
         
-          <li>
-            <a href="/2019/08/02/杨东来信/">杨东来信</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -1196,7 +1189,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2019 John Doe<br>
-      Propulsé par <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
