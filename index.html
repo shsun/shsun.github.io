@@ -50,7 +50,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -60,6 +60,51 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Assign_arrow_keys_to_history_search_in_bash" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/20/Assign_arrow_keys_to_history_search_in_bash/" class="article-date">
+  <time datetime="2019-12-20T04:52:43.000Z" itemprop="datePublished">2019-12-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/technique/">technique</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/20/Assign_arrow_keys_to_history_search_in_bash/">Assign_arrow_keys_to_history_search_in_bash</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"\e[A"</span>: history-search-backward</span><br><span class="line"><span class="string">"\e[B"</span>:history-search-forward</span><br><span class="line">set show-all-<span class="keyword">if</span>-ambiguous on</span><br><span class="line">set completion-ignore-case on</span><br></pre></td></tr></table></figure>
+<p>在 /etc/inputrc<br>或者 ~/.inputrc 里加上如上配置，重新登录shell就行了</p>
+<p><a href="http://hints.macworld.com/article.php?story=20031026174236860" target="_blank" rel="noopener">http://hints.macworld.com/article.php?story=20031026174236860</a></p>
+<p>With Panther, the default shell is now Bash. I had customized my tcsh shell using this hint In bash you can get similar results by adding this to your .bash_profile<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bind <span class="string">'"M-[A":history-search-backward'</span></span><br><span class="line">bind <span class="string">'"M-[B":history-search-forward'</span></span><br></pre></td></tr></table></figure></p>
+<p>where M-[A is the up key and M-[B is the down key.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/12/20/Assign_arrow_keys_to_history_search_in_bash/" data-id="ck4dolqrj00011ln447tazvlm" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-authorized_keys不生效的解决方法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -95,7 +140,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/10/11/authorized_keys不生效的解决方法/" data-id="ck1lhi6m60008yqn48ysxym6d" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/10/11/authorized_keys不生效的解决方法/" data-id="ck4dolqrs00051ln4upzayzws" class="article-share-link">Share</a>
       
       
     </footer>
@@ -152,7 +197,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/09/11/smart_deploy_war/" data-id="ck1lhi6nc0010yqn4u17ctv17" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/09/11/smart_deploy_war/" data-id="ck4dolqsh000s1ln4rw7w9uhk" class="article-share-link">Share</a>
       
       
     </footer>
@@ -616,7 +661,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/29/spring-cloud-gateway-paper/" data-id="ck1lhi6nj0016yqn4sns879wl" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/08/29/spring-cloud-gateway-paper/" data-id="ck4dolqsk000w1ln4mcs87j8a" class="article-share-link">Share</a>
       
       
     </footer>
@@ -679,7 +724,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/14/redis_cluster/" data-id="ck1lhi6n6000wyqn4x8tq18dd" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/08/14/redis_cluster/" data-id="ck4dolqsj000u1ln4ax880ntx" class="article-share-link">Share</a>
       
       
     </footer>
@@ -826,7 +871,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/07/前海母基金情况汇集/" data-id="ck1lhi6nt001eyqn41a13cqvo" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/08/07/前海母基金情况汇集/" data-id="ck4dolqu700181ln48zk9jxa7" class="article-share-link">Share</a>
       
       
     </footer>
@@ -873,7 +918,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/02/杨东来信/" data-id="ck1lhi6ol0026yqn48hlhjuwp" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/08/02/杨东来信/" data-id="ck4dolquy00281ln4ztw5xflm" class="article-share-link">Share</a>
       
       
     </footer>
@@ -916,7 +961,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/03/kulese_经典观点/" data-id="ck1lhi6mw000syqn4st4qjh44" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/07/03/kulese_经典观点/" data-id="ck4dolqsq00141ln42ej8d4d3" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1010,7 +1055,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/02/install_proxy_server_squid3_on_ubuntu/" data-id="ck1lhi6mp000oyqn40gn2eghb" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/07/02/install_proxy_server_squid3_on_ubuntu/" data-id="ck4dolqsd000m1ln4en1kqq7w" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1057,54 +1102,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/05/基金分析_2011年08月30日/" data-id="ck1lhi6o2001myqn4arc6nbg6" class="article-share-link">Teilen</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-基金分析_逃离金融街" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/06/05/基金分析_逃离金融街/" class="article-date">
-  <time datetime="2019-06-05T07:27:36.000Z" itemprop="datePublished">2019-06-05</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/economics/">economics</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/05/基金分析_逃离金融街/">基金分析_逃离金融街</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>[转载]逃离金融街 (2012-12-27 18:51:35)转载▼<br>标签： 转载    分类： 基金分析(博客20120830)</p>
-<p>原文地址：逃离金融街作者：基金分析</p>
-<pre><code>8月终于离开了金融街标志性的A5办公大楼。合约到期，房东要在原来基础上上涨2.5倍房租，且不说经济形势的好坏就是这样不讲理的暴涨也不能纵容，放弃是唯一的选择。
-</code></pre><p>　　　在金融街上混迹了这些年还依然真把自己当成了金融人士，资产管理发售基金都小有尝试，但干得最多的事情还是自己管理自己的资产。管理别人的钱是很烦的，凭借小小聪明和这么些年交给市场不菲的学费去帮着别人挣钱，实在是个不划算的事情。但是为了体现个体的存在价值也受人蛊惑，在2010年11月15日（刚好那天上海大楼着火）发行了我们的富恩德第一期基金，规模很小不足一个亿，没有更多宣传（也没有啥值得去宣传的）。记得当时瑞银证券听了我们的投资理念介绍也想发行，但同比其他明星经理还是选择了放弃，说凭借你们的名气无法去和同期公募明星经理相ＰＫ。工行领导一直支持也有券商非常积极（那个中信小小营业部的王总还是很有眼光），这个小小的基金就宣告成立了，从发行时候大盘的３０００多点到现在的２０００出头，大盘跌了这么多我们这个小小的基金还一直保持着正收益，一直在股票管理型的基金中保持不败的纪录，也算是没有辜负投资人的选择。同比那些选择名牌大腕的追星族结果可想而知。</p>
-<p>　　　早在２０１１年初我们出版的杂志上，封面文章就明确提出要抓紧钱袋子，未来几年的日子会很不好过。中国资本市场的泡沫实在是太大了。中小板创业板造就了太多的虚假亿万富翁，股票市场的抛售势不可挡。原本估值只有５－６亿的企业一上市估值竟然能增加到十倍之多。实业家们那里能撑得住这样大的金钱诱惑，卖掉企业再买三五个都不在话下。大小非的减持抛售势不可挡，这样的情况下市场有多少钱可以支撑？基金、机构都是案板上的肉，散户更不用去说了，进去就是去送钱给人家。这个市场中值得去价值投资的企业是少之又少。现在需要的就是耐心等待，寻找真正的价值投资标的。指数的点位一直在低位但是很多股票其实价格还是不便宜，没有任何投资价值。当然银行股的价格一直还算便宜，但就是不能给人投资的欲望，对中国经济的未来充满恐惧，对地方政府欠下的庞大旧帐数目心里不安。企业的经营业绩一直在下滑（不下滑才怪），经济真是走在了低增长高通胀的恶性循环之路。这种情况下能做到的就是捂紧钱袋子，耐心等待再等待。此时金融街的大房东还看不清形势，还为虚假的落潮大浪而兴奋着，想花大钱来金融街的人比比皆是，不差钱。近来苏宁京东大战虽然是个表演秀，但是也不能不让人为那些商业地产揪心，未来还有多少人喜欢去逛又贵又麻烦的店铺那？</p>
-<p>办公够用就好，面子对我们已经不再重要。在物有所值的年代虚假繁荣对我们的投资理念是一种亵渎。也学习巴菲特找个舒适的地方自由自在快乐得寻找下一个投资目标，酒好不怕巷子深。到我们投资的企业去多看看转转，帮着他们干点实际事情，空闲了再各地走走逛逛。</p>
-<p>我们的《基金分析》杂志，在木子走后这些年也有一份情感牵挂一直不肯停下，到现在分析基金已经没有任何意义，全行业亏损，无法给投资人指出挣钱的路子，报刊管理也是一片混乱，每年白白浪费那么多上缴的管理费不如拿去捐款了还用得有意义。这个博原来是想停了，也有近一年没有更新了，但是上来看看竟然还有这么多的人关注着我们，很是感动，留着这个平台，偶尔上来和大家交流一下。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/05/基金分析_逃离金融街/" data-id="ck1lhi6ob001syqn4kgwtxwns" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/06/05/基金分析_2011年08月30日/" data-id="ck4dolquk001o1ln4ktntu2r1" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1118,7 +1116,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/">weiter &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -1127,7 +1125,7 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/economics/">economics</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/technique/">technique</a></li></ul>
     </div>
@@ -1142,9 +1140,9 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
     </div>
   </div>
 
@@ -1152,9 +1150,13 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/12/20/Assign_arrow_keys_to_history_search_in_bash/">Assign_arrow_keys_to_history_search_in_bash</a>
+          </li>
         
           <li>
             <a href="/2019/10/11/authorized_keys不生效的解决方法/">authorized_keys不生效的解决方法</a>
@@ -1170,10 +1172,6 @@ public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
         
           <li>
             <a href="/2019/08/14/redis_cluster/">redis_cluster</a>
-          </li>
-        
-          <li>
-            <a href="/2019/08/07/前海母基金情况汇集/">前海母基金情况汇集</a>
           </li>
         
       </ul>
